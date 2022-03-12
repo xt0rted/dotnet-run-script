@@ -1,0 +1,20 @@
+version: 2
+
+registries:
+  nuget-github:
+    type: nuget-feed
+    url: https://nuget.pkg.github.com/xt0rted/index.json
+    token: ${{ secrets.GPR_READ_TOKEN }}
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "nuget"
+    directory: "/"
+    registries: "*"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10

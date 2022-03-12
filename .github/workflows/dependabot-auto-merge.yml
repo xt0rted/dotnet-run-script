@@ -1,0 +1,14 @@
+name: Dependabot auto-merge
+
+on: pull_request_target
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  dependabot:
+    uses: xt0rted/.github/.github/workflows/dependabot-auto-merge.yml@main
+    secrets:
+      GITHUB_APP_ID: ${{ secrets.DEPENDAMERGE_APP_ID }}
+      GITHUB_APP_PRIVATE_KEY: ${{ secrets.DEPENDAMERGE_PRIVATE_KEY }}

@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3.0.0
+
+      - name: Build version suffix (main)
+        if: github.event_name == 'push'
+        run: echo "VERSION_SUFFIX=beta.${{ github.run_number }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Build version suffix (pr)
+        if: github.event_name == 'pull_request'
+        run: echo "VERSION_SUFFIX=alpha.${{ github.event.number }}" >> $GITHUB_ENV
+        shell: bash
+
+      # This action doesn't support comments in the global.json  so for now we have to specify all sdk versions
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2.0.0
+        with:
+          source-url: https://nuget.pkg.github.com/xt0rted/index.json
+          dotnet-version: 6.0.x
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: dotnet tool restore
+
+      - run: dotnet r build:release
+
+      - run: dotnet r test:release --if-present
+
+      - run: dotnet r pack:release -- --version-suffix ${{ env.VERSION_SUFFIX }}
+
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v3.0.0
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          name: nupkg
+          path: ./artifacts/*.nupkg
+
+  release:
+    if: github.event_name == 'push'
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Download nupkg
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: nupkg
+
+      - name: Publish to GPR
+        run: |
+          dotnet nuget push "./*.nupkg" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --source https://nuget.pkg.github.com/${{ github.repository_owner }}

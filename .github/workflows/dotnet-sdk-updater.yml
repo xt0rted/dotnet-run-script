@@ -1,0 +1,13 @@
+name: .NET SDK updater
+
+on:
+  schedule:
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  update:
+    uses: xt0rted/.github/.github/workflows/dotnet-sdk-updater.yml@main
+    secrets:
+      DOTNET_SDK_UPDATER_APP_ID: ${{ secrets.DOTNET_SDK_UPDATER_APP_ID }}
+      DOTNET_SDK_UPDATER_PRIVATE_KEY: ${{ secrets.DOTNET_SDK_UPDATER_PRIVATE_KEY }}

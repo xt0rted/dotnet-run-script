@@ -1,0 +1,10 @@
+name: Block on fixup commits
+
+on: pull_request_target
+
+permissions:
+  pull-requests: read
+
+jobs:
+  message:
+    uses: xt0rted/.github/.github/workflows/fixup-commits.yml@main

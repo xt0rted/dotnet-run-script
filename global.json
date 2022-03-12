@@ -1,0 +1,26 @@
+{
+  "sdk": {
+    "version": "6.0.201"
+  },
+  //"scriptShell": "pwsh",
+  "scripts": {
+    // project scripts
+    "build": "dotnet build",
+    "test": "dotnet test --no-build",
+    "pack": "dotnet pack --no-build --output ./artifacts",
+    "ci": "dotnet r build && dotnet r test && dotnet r pack",
+
+    "build:release": "dotnet build --configuration Release",
+    "test:release": "dotnet test --configuration Release --no-build",
+    "pack:release": "dotnet pack --configuration Release --no-build --output ./artifacts",
+    "ci:release": "dotnet r build:release && dotnet r test:release && dotnet r pack:release",
+
+    // test scripts
+    "info": "dotnet r dotnet:version && dotnet r dotnet:info",
+    "dotnet:info": "dotnet --info",
+    "dotnet:version": "dotnet --version",
+    "prestuff": "pwsh -c echo \"`u{001b}[34mpre-stuff`u{001b}[0m\"",
+    "stuff": "pwsh -c echo \"`u{001b}[35mstuff`u{001b}[0m\"",
+    "poststuff": "pwsh -c echo \"`u{001b}[36mpost-stuff`u{001b}[0m\""
+  }
+}

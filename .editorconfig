@@ -1,0 +1,184 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+indent_style = space
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_size = 4
+
+# Xml project files
+[*.csproj]
+charset = utf-8
+indent_size = 2
+
+# Xml config files
+[*.{props,config}]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
+[*.yml]
+indent_size = 2
+
+# Dotnet code style settings:
+[*.{cs,vb}]
+# Add a blank line between using and Import directives based on their name
+dotnet_separate_import_directive_groups = true
+# Sort using and Import directives with System.* appearing first
+dotnet_sort_system_directives_first = true
+dotnet_style_coalesce_expression = true:error
+dotnet_style_collection_initializer = true:error
+dotnet_style_explicit_tuple_names = true:error
+dotnet_style_null_propagation = true:error
+dotnet_style_object_initializer = true:error
+# Prefer parentheses for improved clarity
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:error
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:error
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:error
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:error
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+dotnet_style_predefined_type_for_member_access = true:error
+# Avoid "this." and "Me." if not necessary
+dotnet_style_qualification_for_field = false:error
+dotnet_style_qualification_for_property = false:error
+dotnet_style_qualification_for_method = false:error
+dotnet_style_qualification_for_event = false:error
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = error
+
+## Naming Conventions
+[*.{cs,vb}]
+
+## Naming styles
+
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+
+# PascalCase with I prefix
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
+
+# camelCase with _ prefix
+dotnet_naming_style._camelCase.capitalization = camel_case
+dotnet_naming_style._camelCase.required_prefix = _
+
+## Rules
+
+# Namespaces
+dotnet_naming_rule.namespace_naming.symbols = namespace_symbol
+dotnet_naming_rule.namespace_naming.style = pascal_case_style
+dotnet_naming_rule.namespace_naming.severity = error
+dotnet_naming_symbols.namespace_symbol.applicable_kinds = namespace
+dotnet_naming_symbols.namespace_symbol.applicable_accessibilities = *
+
+# Interfaces
+dotnet_naming_rule.interface_naming.symbols = interface_symbol
+dotnet_naming_rule.interface_naming.style = interface_style
+dotnet_naming_rule.interface_naming.severity = error
+dotnet_naming_symbols.interface_symbol.applicable_kinds = interface
+dotnet_naming_symbols.interface_symbol.applicable_accessibilities = *
+
+# Classes, Structs, Enums, Properties, Methods, Events, Type Parameters
+dotnet_naming_rule.class_naming.symbols = class_symbol
+dotnet_naming_rule.class_naming.style = pascal_case_style
+dotnet_naming_rule.class_naming.severity = error
+
+dotnet_naming_symbols.class_symbol.applicable_kinds = class, struct, enum, property, method, event, type_parameter
+dotnet_naming_symbols.class_symbol.applicable_accessibilities = *
+
+# Const fields
+dotnet_naming_rule.const_field_naming.symbols = const_field_symbol
+dotnet_naming_rule.const_field_naming.style = pascal_case_style
+dotnet_naming_rule.const_field_naming.severity = error
+
+dotnet_naming_symbols.const_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.const_field_symbol.applicable_accessibilities = *
+dotnet_naming_symbols.const_field_symbol.required_modifiers = const
+
+# Public fields
+dotnet_naming_rule.public_field_naming.symbols = public_field_symbol
+dotnet_naming_rule.public_field_naming.style = pascal_case_style
+dotnet_naming_rule.public_field_naming.severity = error
+
+dotnet_naming_symbols.public_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.public_field_symbol.applicable_accessibilities = public, internal
+
+# Other fields
+dotnet_naming_rule.other_field_naming.symbols = other_field_symbol
+dotnet_naming_rule.other_field_naming.style = _camelCase
+dotnet_naming_rule.other_field_naming.severity = error
+
+dotnet_naming_symbols.other_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.other_field_symbol.applicable_accessibilities = *
+
+# Everything Else
+dotnet_naming_rule.everything_else_naming.symbols = everything_else
+dotnet_naming_rule.everything_else_naming.style = camel_case_style
+dotnet_naming_rule.everything_else_naming.severity = error
+
+dotnet_naming_symbols.everything_else.applicable_kinds = *
+dotnet_naming_symbols.everything_else.applicable_accessibilities = *
+
+# CSharp code style settings:
+[*.cs]
+# Prefer "var" everywhere
+csharp_style_var_for_built_in_types = true:error
+csharp_style_var_when_type_is_apparent = true:error
+csharp_style_var_elsewhere = true:error
+
+csharp_style_expression_bodied_accessors = true:suggestion
+csharp_style_expression_bodied_constructors = true:none
+csharp_style_expression_bodied_indexers = true:suggestion
+# IDE0022: Use block body for methods
+csharp_style_expression_bodied_methods = true:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+
+csharp_style_inlined_variable_declaration = true:error
+
+# Require using directives inside a namespace
+csharp_using_directive_placement = inside_namespace:error
+csharp_indent_case_contents = true
+csharp_indent_case_contents_when_block = false
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = true
+csharp_indent_switch_labels = true
+
+# Formatting - new line options
+
+# Place catch statements on a new line
+csharp_new_line_before_catch = true
+# Place else statements on a new line
+csharp_new_line_before_else = true
+# Require braces to be on a new line for methods, control_blocks, lambdas, types, and object_collection (also known as "Allman" style)
+csharp_new_line_before_open_brace = all
+# IDE0011: Add braces
+csharp_prefer_braces = when_multiline:error
+
+# Formatting - spacing options
+
+# Require NO space between a cast and the value
+csharp_space_after_cast = false
+# Require a space before the colon for bases or interfaces in a type declaration
+csharp_space_after_colon_in_inheritance_clause = true
+# Require a space after a keyword in a control flow statement such as a for loop
+csharp_space_after_keywords_in_control_flow_statements = true
+# Require a space before the colon for bases or interfaces in a type declaration
+csharp_space_before_colon_in_inheritance_clause = true
+# Remove space within empty argument list parentheses
+csharp_space_between_method_call_empty_parameter_list_parentheses = false
+# Remove space between method call name and opening parenthesis
+csharp_space_between_method_call_name_and_opening_parenthesis = false
+# Do not place space characters after the opening parenthesis and before the closing parenthesis of a method call
+csharp_space_between_method_call_parameter_list_parentheses = false
+# Remove space within empty parameter list parentheses for a method declaration
+csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
+# Place a space character after the opening parenthesis and before the closing parenthesis of a method declaration parameter list.
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = none
