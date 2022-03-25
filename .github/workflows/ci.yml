@@ -12,6 +12,7 @@ concurrency:
 
 env:
   DOTNET_NOLOGO: true
+  CONFIGURATION: Release
 
 jobs:
   build:
@@ -53,11 +54,11 @@ jobs:
 
       - run: dotnet tool restore
 
-      - run: dotnet r build:release
+      - run: dotnet r build
 
-      - run: dotnet r test:release --if-present
+      - run: dotnet r test --if-present
 
-      - run: dotnet r pack:release -- --version-suffix ${{ env.VERSION_SUFFIX }}
+      - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
 
       - name: Publish artifacts
         uses: actions/upload-artifact@v3.0.0
