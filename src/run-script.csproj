@@ -11,20 +11,22 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Description>dotnet tool to run arbitrary commands from a project's "scripts" object</Description>
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <PackageId>run-script</PackageId>
-    <Authors>Brian Surowiec</Authors>
-    <Description>dotnet tool to run arbitrary commands from a project's "scripts" object</Description>
-    <PackageTags>dotnet, tool, cli, build, scripts</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>See https://github.com/xt0rted/dotnet-run-script/blob/main/CHANGELOG.md for more info</PackageReleaseNotes>
+    <PackageTags>dotnet, tool, cli, build, scripts</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryBranch>main</RepositoryBranch>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../assets/icon.png" Pack="true" PackagePath="\">
+      <LinkBase>assets</LinkBase>
+    </None>
     <None Include="../README.md" Pack="true" PackagePath="\">
       <LinkBase>assets</LinkBase>
     </None>
