@@ -43,7 +43,7 @@ jobs:
         run: echo "VERSION_SUFFIX=alpha.${{ github.event.number }}" >> $GITHUB_ENV
         shell: bash
 
-      # This action doesn't support comments in the global.json  so for now we have to specify all sdk versions
+      # This action doesn't support comments in the global.json so for now we have to specify all sdk versions
       - name: Set up .NET
         uses: actions/setup-dotnet@v2.0.0
         with:
