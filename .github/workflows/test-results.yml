@@ -1,0 +1,27 @@
+name: Test Report
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+
+    steps:
+      - uses: dorny/test-reporter@v1.5.0
+        with:
+          artifact: test-results
+          name: .NET Tests
+          path: "*.trx"
+          reporter: dotnet-trx

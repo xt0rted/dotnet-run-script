@@ -60,12 +60,19 @@ jobs:
 
       - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
 
-      - name: Publish artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3.0.0
         if: matrix.os == 'ubuntu-latest'
         with:
           name: nupkg
           path: ./artifacts/*.nupkg
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3.0.0
+        if: always()
+        with:
+          name: test-results
+          path: ./.coverage/*.trx
 
   release:
     if: github.event_name == 'push'

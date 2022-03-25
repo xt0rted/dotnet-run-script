@@ -8,7 +8,7 @@
     "clean": "dotnet rimraf artifacts .coverage",
     "prebuild": "dotnet r clean",
     "build": "dotnet build",
-    "test": "dotnet test --no-build",
+    "test": "dotnet test --no-build --logger \"trx\" --results-directory \"./.coverage\"",
     "pack": "dotnet pack --no-build --output ./artifacts",
 
     "build:release": "dotnet r build -- --configuration Release",
