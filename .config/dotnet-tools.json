@@ -7,6 +7,12 @@
       "commands": [
         "r"
       ]
+    },
+    "rimraf": {
+      "version": "0.1.0",
+      "commands": [
+        "rimraf"
+      ]
     }
   }
 }

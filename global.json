@@ -5,15 +5,15 @@
   //"scriptShell": "pwsh",
   "scripts": {
     // project scripts
+    "clean": "dotnet rimraf artifacts .coverage",
+    "prebuild": "dotnet r clean",
     "build": "dotnet build",
     "test": "dotnet test --no-build",
     "pack": "dotnet pack --no-build --output ./artifacts",
-    "ci": "dotnet r build && dotnet r test && dotnet r pack",
 
-    "build:release": "dotnet build --configuration Release",
-    "test:release": "dotnet test --configuration Release --no-build",
-    "pack:release": "dotnet pack --configuration Release --no-build --output ./artifacts",
-    "ci:release": "dotnet r build:release && dotnet r test:release && dotnet r pack:release",
+    "build:release": "dotnet r build -- --configuration Release",
+    "test:release": "dotnet r test -- --configuration Release",
+    "pack:release": "dotnet r pack -- --configuration Release",
 
     // test scripts
     "info": "dotnet r dotnet:version && dotnet r dotnet:info",
