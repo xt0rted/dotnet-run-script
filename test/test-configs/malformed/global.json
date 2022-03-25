@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "echo \"malformed\" && exit 1",
+  },
+}

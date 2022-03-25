@@ -53,13 +53,20 @@ public class ProjectLoader
     {
         var json = await File.ReadAllTextAsync(jsonPath);
 
-        return JsonSerializer.Deserialize<Project>(
-            json,
-            new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                });
+        try
+        {
+            var globalJson = JsonSerializer.Deserialize<Project>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReadCommentHandling = JsonCommentHandling.Skip,
+            });
+
+            return globalJson;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static Dictionary<string, string?> LoadScripts(Project project)

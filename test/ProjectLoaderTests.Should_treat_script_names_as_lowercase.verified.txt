@@ -1,0 +1,7 @@
+﻿{
+  Scripts: {
+    bUiLD: build,
+    pack: pack,
+    TEST: test
+  }
+}

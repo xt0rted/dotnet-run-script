@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RootNamespace>RunScript</RootNamespace>
     <OutputType>Exe</OutputType>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
