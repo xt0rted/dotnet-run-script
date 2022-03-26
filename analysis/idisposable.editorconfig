@@ -1,0 +1,78 @@
+is_global = true
+
+# Rules
+
+# IDISP001: Dispose created
+dotnet_diagnostic.IDISP001.severity = error
+
+# IDISP002: Dispose member
+dotnet_diagnostic.IDISP002.severity = error
+
+# IDISP003: Dispose previous before re-assigning
+dotnet_diagnostic.IDISP003.severity = error
+
+# IDISP004: Don't ignore created IDisposable
+dotnet_diagnostic.IDISP004.severity = error
+
+# IDISP005: Return type should indicate that the value should be disposed
+dotnet_diagnostic.IDISP005.severity = error
+
+# IDISP006: Implement IDisposable
+dotnet_diagnostic.IDISP006.severity = error
+
+# IDISP007: Don't dispose injected
+dotnet_diagnostic.IDISP007.severity = error
+
+# IDISP008: Don't assign member with injected and created disposables
+dotnet_diagnostic.IDISP008.severity = error
+
+# IDISP009: Add IDisposable interface
+dotnet_diagnostic.IDISP009.severity = error
+
+# IDISP010: Call base.Dispose(disposing)
+dotnet_diagnostic.IDISP010.severity = error
+
+# IDISP011: Don't return disposed instance
+dotnet_diagnostic.IDISP011.severity = error
+
+# IDISP012: Property should not return created disposable
+dotnet_diagnostic.IDISP012.severity = error
+
+# IDISP013: Await in using
+dotnet_diagnostic.IDISP013.severity = error
+
+# IDISP014: Use a single instance of HttpClient
+dotnet_diagnostic.IDISP014.severity = error
+
+# IDISP015: Member should not return created and cached instance
+dotnet_diagnostic.IDISP015.severity = error
+
+# IDISP016: Don't use disposed instance
+dotnet_diagnostic.IDISP016.severity = error
+
+# IDISP017: Prefer using
+dotnet_diagnostic.IDISP017.severity = error
+
+# IDISP018: Call SuppressFinalize
+dotnet_diagnostic.IDISP018.severity = error
+
+# IDISP019: Call SuppressFinalize
+dotnet_diagnostic.IDISP019.severity = error
+
+# IDISP020: Call SuppressFinalize(this)
+dotnet_diagnostic.IDISP020.severity = error
+
+# IDISP021: Call this.Dispose(true)
+dotnet_diagnostic.IDISP021.severity = error
+
+# IDISP022: Call this.Dispose(false)
+dotnet_diagnostic.IDISP022.severity = error
+
+# IDISP023: Don't use reference types in finalizer context
+dotnet_diagnostic.IDISP023.severity = error
+
+# IDISP024: Don't call GC.SuppressFinalize(this) when the type is sealed and has no finalizer
+dotnet_diagnostic.IDISP024.severity = error
+
+# IDISP025: Class with no virtual dispose method should be sealed
+dotnet_diagnostic.IDISP025.severity = error
