@@ -7,6 +7,14 @@ on:
     branches: [main]
   schedule:
     - cron: "25 0 * * 5"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
 
 jobs:
   analyze:
@@ -27,6 +35,18 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3.0.0
+
+      # This action doesn't support comments in the global.json so for now we have to specify all sdk versions
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2.0.0
+        with:
+          source-url: https://nuget.pkg.github.com/xt0rted/index.json
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
