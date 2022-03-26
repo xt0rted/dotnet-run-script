@@ -13,10 +13,12 @@ internal class CaseInsensitiveDictionaryConverter<TValue> : JsonConverter<Dictio
         var dict = (Dictionary<string, TValue>)JsonSerializer
             .Deserialize(ref reader, typeToConvert, options)!;
 
+#pragma warning disable CA1308 // Normalize strings to uppercase
         return dict.ToDictionary(
             i => i.Key.ToLowerInvariant(),
             i => i.Value,
             StringComparer.OrdinalIgnoreCase);
+#pragma warning restore CA1308 // Normalize strings to uppercase
     }
 
     public override void Write(

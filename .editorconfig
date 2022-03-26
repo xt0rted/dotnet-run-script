@@ -48,8 +48,6 @@ dotnet_style_qualification_for_property = false:error
 dotnet_style_qualification_for_method = false:error
 dotnet_style_qualification_for_event = false:error
 
-# CA1062: Validate arguments of public methods
-dotnet_diagnostic.CA1062.severity = error
 
 ## Naming Conventions
 [*.{cs,vb}]
