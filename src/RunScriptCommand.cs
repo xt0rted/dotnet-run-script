@@ -47,7 +47,7 @@ public class RunScriptCommand : Command, ICommandHandler
         console.AlertAboutVerbose();
 
         var scriptShell = context.ParseResult.GetValueForOption(GlobalOptions.ScriptShell);
-        if (scriptShell != null)
+        if (scriptShell is not null)
         {
             _projectScriptshell = scriptShell;
         }
@@ -56,15 +56,13 @@ public class RunScriptCommand : Command, ICommandHandler
 
         var ct = context.GetCancellationToken();
 
-        var runScripts = _scriptNames.Where(scriptName => _scripts.ContainsKey(scriptName)).ToImmutableArray();
-
-        foreach (var script in runScripts)
+        foreach (var script in _scriptNames.Where(scriptName => _scripts.ContainsKey(scriptName)).ToImmutableArray())
         {
             var args = script == Name
                 ? context.ParseResult.UnparsedTokens
                 : null;
 
-            var result = await RunScript(
+            var result = await RunScriptAsync(
                 console,
                 script,
                 _scripts[script],
@@ -95,7 +93,7 @@ public class RunScriptCommand : Command, ICommandHandler
         return (shell, isCmd);
     }
 
-    private async Task<int> RunScript(
+    private async Task<int> RunScriptAsync(
         ConsoleWriter console,
         string name,
         string? cmd,
@@ -107,7 +105,7 @@ public class RunScriptCommand : Command, ICommandHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var toExecute = cmd;
-        if (args != null && args.Count > 0)
+        if (args?.Count > 0)
         {
             toExecute += " ";
             toExecute += string.Join(" ", args);

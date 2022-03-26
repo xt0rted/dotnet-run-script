@@ -1,0 +1,9 @@
+<Project>
+
+  <Target Name="AddGlobalCodeAnalysisRules" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <EditorConfigFiles Include="$(MSBuildThisFileDirectory)analysis\*.editorconfig" />
+    </ItemGroup>
+  </Target>
+
+</Project>

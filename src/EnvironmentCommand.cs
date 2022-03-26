@@ -8,9 +8,7 @@ public class EnvironmentCommand : Command, ICommandHandler
 {
     public EnvironmentCommand()
         : base("env", "List available environment variables")
-    {
-        Handler = this;
-    }
+        => Handler = this;
 
     public Task<int> InvokeAsync(InvocationContext context)
     {
