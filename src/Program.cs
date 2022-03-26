@@ -1,3 +1,5 @@
+#pragma warning disable RCS0054
+
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
@@ -12,7 +14,7 @@ Project? project;
 Dictionary<string, string?> scripts;
 try
 {
-    (project, scripts, workingDirectory) = await new ProjectLoader().Load(workingDirectory);
+    (project, scripts, workingDirectory) = await new ProjectLoader().LoadAsync(workingDirectory);
 }
 catch (Exception ex)
 {
