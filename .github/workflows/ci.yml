@@ -48,7 +48,10 @@ jobs:
         uses: actions/setup-dotnet@v2.0.0
         with:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
-          dotnet-version: 6.0.x
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,7 +59,7 @@ jobs:
 
       - run: dotnet r build
 
-      - run: dotnet r test --if-present
+      - run: dotnet r test
 
       - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
 

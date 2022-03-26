@@ -9,6 +9,9 @@
     "prebuild": "dotnet r clean",
     "build": "dotnet build",
     "test": "dotnet test --no-build --logger \"trx\" --results-directory \"./.coverage\"",
+    "test:31": "dotnet r test -- --framework netcoreapp3.1",
+    "test:5": "dotnet r test -- --framework net5.0",
+    "test:6": "dotnet r test -- --framework net6.0",
     "pack": "dotnet pack --no-build --output ./artifacts",
 
     "build:release": "dotnet r build -- --configuration Release",

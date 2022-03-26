@@ -3,6 +3,7 @@ namespace RunScript;
 using System;
 using System.CommandLine;
 using System.CommandLine.Rendering;
+using System.Globalization;
 
 internal class ConsoleWriter
 {
@@ -28,7 +29,7 @@ internal class ConsoleWriter
 
             if (args?.Length > 0)
             {
-                _console.Out.Write(string.Format(message, args));
+                _console.Out.Write(string.Format(CultureInfo.CurrentCulture, message, args));
             }
             else
             {

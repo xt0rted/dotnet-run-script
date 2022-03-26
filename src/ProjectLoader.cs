@@ -4,7 +4,7 @@ using System.Text.Json;
 
 public class ProjectLoader
 {
-    public async Task<(Project, Dictionary<string, string?>, string)> LoadAsync(string executingDirectory)
+    public async Task<(Project, string)> LoadAsync(string executingDirectory)
     {
         var jsonPath = CheckFolderForFile(executingDirectory, "global.json");
         if (jsonPath is null)
@@ -23,13 +23,12 @@ public class ProjectLoader
             throw new RunScriptException("Error parsing global.json");
         }
 
-        var scripts = LoadScripts(project);
-        if (scripts is null)
+        if (project.Scripts is null || project.Scripts.Count == 0)
         {
-            throw new RunScriptException("Error loading scripts");
+            throw new RunScriptException("No scripts found in the global.json");
         }
 
-        return (project, scripts, workingDirectory);
+        return (project, workingDirectory);
     }
 
     private string? CheckFolderForFile(string path, string file)
@@ -53,24 +52,19 @@ public class ProjectLoader
     {
         var json = await File.ReadAllTextAsync(jsonPath);
 
-        return JsonSerializer.Deserialize<Project>(
-            json,
-            new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                });
-    }
-
-    private static Dictionary<string, string?> LoadScripts(Project project)
-    {
-        if (project is null) throw new ArgumentNullException(nameof(project));
-
-        if (project.Scripts is null || project.Scripts.Count == 0)
+        try
         {
-            throw new RunScriptException("No scripts found in the global.json");
+            return JsonSerializer.Deserialize<Project>(
+                json,
+                new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                    });
         }
-
-        return new Dictionary<string, string?>(project.Scripts, StringComparer.OrdinalIgnoreCase);
+        catch
+        {
+            return null;
+        }
     }
 }

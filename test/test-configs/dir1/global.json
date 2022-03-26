@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "echo \"dir1\" && exit 1"
+  }
+}

@@ -1,0 +1,3 @@
+[*.cs]
+# RCS1046: Asynchronous method name should end with 'Async'
+dotnet_diagnostic.RCS1046.severity = none
