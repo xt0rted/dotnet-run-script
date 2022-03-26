@@ -25,7 +25,7 @@ catch (Exception ex)
     return 1;
 }
 
-var consoleFormatProvider = new ConsoleFormatInfo();
+var consoleFormatProvider = ConsoleFormatInfo.CurrentInfo;
 var rootCommand = new RootCommand();
 
 rootCommand.TreatUnmatchedTokensAsErrors = false;
