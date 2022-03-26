@@ -65,7 +65,7 @@ var parser = new CommandLineBuilder(rootCommand)
         var verbose = ctx.ParseResult.HasOption(GlobalOptions.Verbose);
         var writer = new ConsoleWriter(ctx.Console, consoleFormatProvider, verbose);
 
-        if (ctx.ParseResult.HasOption(GlobalOptions.Verbose))
+        if (verbose)
         {
             writer.Error(ex.ToString());
         }
