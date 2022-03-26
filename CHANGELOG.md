@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.1.0](https://github.com/xt0rted/dotnet-run-script/releases/tag/v0.1.0) - 2022-03-26
+
 - Run scripts with `dotnet r ...`
 - Uses `cmd` on Windows and `sh` on Linux
 - Support for `pre` and `post` scripts
