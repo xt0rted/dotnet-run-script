@@ -48,7 +48,7 @@ public class RunScriptCommand : Command, ICommandHandler
 
         var ct = context.GetCancellationToken();
 
-        foreach (var script in _scriptNames.Where(scriptName => _project.Scripts!.ContainsKey(scriptName)).ToImmutableArray())
+        foreach (var script in _scriptNames.Where(scriptName => _project.Scripts!.ContainsKey(scriptName)))
         {
             var args = script == Name
                 ? context.ParseResult.UnparsedTokens
