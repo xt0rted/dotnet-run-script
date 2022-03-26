@@ -55,18 +55,12 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var (project, scripts, workingDirectory) = await projectLoader.LoadAsync(testPath);
+        var (project, workingDirectory) = await projectLoader.LoadAsync(testPath);
 
         // Then
         project.ShouldNotBeNull();
 
         await Verify(project);
-
-        scripts.ShouldBeEquivalentTo(
-            new Dictionary<string, string>
-            {
-                { "test", "echo \"dir1\" && exit 1" },
-            });
 
         workingDirectory.ShouldBe(TestPath("dir1"));
     }
@@ -79,18 +73,13 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var (project, scripts, workingDirectory) = await projectLoader.LoadAsync(testPath);
+        var (project, workingDirectory) = await projectLoader.LoadAsync(testPath);
 
         // Then
         project.ShouldNotBeNull();
 
         await Verify(project);
 
-        scripts.ShouldBeEquivalentTo(
-            new Dictionary<string, string>
-            {
-                { "test", "echo \"dir1\" && exit 1" },
-            });
         workingDirectory.ShouldBe(TestPath("dir1"));
     }
 
@@ -102,20 +91,12 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var (project, scripts, _) = await projectLoader.LoadAsync(testPath);
+        var (project, _) = await projectLoader.LoadAsync(testPath);
 
         // Then
-        project.Scripts.ShouldNotBeNull();
-
-        project.Scripts["bUiLD"].ShouldBe("build");
-        project.Scripts["TEST"].ShouldBe("test");
-        project.Scripts["pack"].ShouldBe("pack");
+        project.Scripts?.Comparer.ShouldBe(StringComparer.OrdinalIgnoreCase);
 
         await Verify(project);
-
-        scripts["build"].ShouldBe("build");
-        scripts["test"].ShouldBe("test");
-        scripts["pack"].ShouldBe("pack");
     }
 
     private string TestPath(params string[] folders)

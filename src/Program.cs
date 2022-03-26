@@ -11,10 +11,9 @@ var workingDirectory = Environment.CurrentDirectory;
 Environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
 
 Project? project;
-Dictionary<string, string?> scripts;
 try
 {
-    (project, scripts, workingDirectory) = await new ProjectLoader().LoadAsync(workingDirectory);
+    (project, workingDirectory) = await new ProjectLoader().LoadAsync(workingDirectory);
 }
 catch (Exception ex)
 {
@@ -29,19 +28,18 @@ rootCommand.AddGlobalOption(GlobalOptions.IfPresent);
 rootCommand.AddGlobalOption(GlobalOptions.ScriptShell);
 rootCommand.AddGlobalOption(GlobalOptions.Verbose);
 
-foreach (var (name, script) in scripts.OrderBy(s => s.Key))
+foreach (var (name, script) in project.Scripts!.OrderBy(s => s.Key))
 {
     var runScript = new RunScriptCommand(
         name,
         script,
-        project.ScriptShell,
-        scripts,
+        project,
         workingDirectory);
 
     rootCommand.AddCommand(runScript);
 }
 
-if (!scripts.ContainsKey("env"))
+if (!project.Scripts!.ContainsKey("env"))
 {
     rootCommand.AddCommand(new EnvironmentCommand());
 }
