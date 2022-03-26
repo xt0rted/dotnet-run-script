@@ -1,4 +1,4 @@
-# dotnet-run-script
+# <img src="assets/icon.svg" align="left" height="45"> dotnet-run-script
 
 [![CI build status](https://github.com/xt0rted/dotnet-run-script/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/xt0rted/dotnet-run-script/actions/workflows/ci.yml)
 [![NuGet Package](https://img.shields.io/nuget/v/run-script?logo=nuget)](https://www.nuget.org/packages/run-script)
