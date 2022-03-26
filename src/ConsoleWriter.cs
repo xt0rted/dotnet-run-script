@@ -5,14 +5,17 @@ using System.CommandLine;
 using System.CommandLine.Rendering;
 using System.Globalization;
 
-internal class ConsoleWriter
+internal class ConsoleWriter : IConsoleWriter
 {
     private readonly IConsole _console;
+    private readonly IFormatProvider? _consoleFormatProvider;
+
     private readonly bool _verbose;
 
-    public ConsoleWriter(IConsole console, bool verbose)
+    public ConsoleWriter(IConsole console, IFormatProvider consoleFormatProvider, bool verbose)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
+        _consoleFormatProvider = consoleFormatProvider ?? throw new ArgumentNullException(nameof(consoleFormatProvider));
         _verbose = verbose;
     }
 
@@ -25,7 +28,7 @@ internal class ConsoleWriter
 
         if (message is not null)
         {
-            _console.Out.Write(textColor.EscapeSequence);
+            _console.Out.Write(textColor.ToString(null, _consoleFormatProvider));
 
             if (args?.Length > 0)
             {
@@ -36,33 +39,29 @@ internal class ConsoleWriter
                 _console.Out.Write(message);
             }
 
-            _console.Out.Write(Ansi.Color.Foreground.Default.EscapeSequence);
+            _console.Out.Write(Ansi.Color.Foreground.Default.ToString(null, _consoleFormatProvider));
         }
 
         _console.Out.Write(Environment.NewLine);
     }
-    public void AlertAboutVerbose()
-        => VerboseLine("Verbose mode is on. This will print more information.");
+
+    public void VerboseBanner()
+        => LineVerbose("Verbose mode is on. This will print more information.");
 
     public void BlankLine()
         => WriteLine(Ansi.Color.Foreground.LightGray, verbose: false, null);
-    public void BlankVerboseLine()
+
+    public void BlankLineVerbose()
         => WriteLine(Ansi.Color.Foreground.LightGray, verbose: true, null);
 
     public void Line(string? message, params object?[] args)
         => WriteLine(Ansi.Color.Foreground.LightGray, verbose: false, message, args);
-    public void VerboseLine(string? message = null, params object?[] args)
-        => WriteLine(Ansi.Color.Foreground.LightGray, verbose: true, "> " + message, args);
 
-    //public void SecondaryLine(string? message, params object?[] args) =>
-    //    WriteLine(Ansi.Color.Foreground.DarkGray, verbose: false, message, args);
-    //public void VerboseSecondaryLine(string? message, params object?[] args) =>
-    //    WriteLine(Ansi.Color.Foreground.DarkGray, verbose: true, "> " + message, args);
+    public void LineVerbose(string? message = null, params object?[] args)
+        => WriteLine(Ansi.Color.Foreground.LightGray, verbose: true, "> " + message, args);
 
     internal void Information(string? message, params object?[] args)
         => WriteLine(Ansi.Color.Foreground.Cyan, verbose: false, message, args);
-    //public void VerboseInformation(string? message, params object?[] args) =>
-    //    WriteLine(Ansi.Color.Foreground.Cyan, verbose: true, "> " + message, args);
 
     public void Banner(params string?[] messages)
     {
@@ -78,6 +77,6 @@ internal class ConsoleWriter
         BlankLine();
     }
 
-    //public void Error(string? message, params object?[] args) =>
-    //    WriteLine(Ansi.Color.Foreground.Red, verbose: false, message, args);
+    public void Error(string? message, params object?[] args)
+        => WriteLine(Ansi.Color.Foreground.Red, verbose: false, message, args);
 }

@@ -6,22 +6,28 @@ using System.Threading.Tasks;
 
 public class EnvironmentCommand : Command, ICommandHandler
 {
-    public EnvironmentCommand()
+    private readonly IFormatProvider _consoleFormatProvider;
+
+    public EnvironmentCommand(IFormatProvider consoleFormatProvider)
         : base("env", "List available environment variables")
-        => Handler = this;
+    {
+        _consoleFormatProvider = consoleFormatProvider ?? throw new ArgumentNullException(nameof(consoleFormatProvider));
+
+        Handler = this;
+    }
 
     public Task<int> InvokeAsync(InvocationContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
 
-        var console = new ConsoleWriter(context.Console, context.ParseResult.GetValueForOption(GlobalOptions.Verbose));
-        console.AlertAboutVerbose();
+        var writer = new ConsoleWriter(context.Console, _consoleFormatProvider, context.ParseResult.GetValueForOption(GlobalOptions.Verbose));
 
-        console.Banner(Name);
+        writer.VerboseBanner();
+        writer.Banner(Name);
 
         foreach (var (key, value) in environmentVariables().OrderBy(v => v.Key, StringComparer.InvariantCulture))
         {
-            console.Line("{0}={1}", key, value);
+            writer.Line("{0}={1}", key, value);
         }
 
         return Task.FromResult(0);

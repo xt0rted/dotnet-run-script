@@ -16,6 +16,7 @@ public class RunScriptCommand : Command, ICommandHandler
 
     private readonly Project _project;
     private readonly string _workingDirectory;
+    private readonly IFormatProvider _consoleFormatProvider;
 
     private readonly ImmutableArray<string> _scriptNames;
 
@@ -23,13 +24,15 @@ public class RunScriptCommand : Command, ICommandHandler
         string name,
         string? description,
         Project project,
-        string workingDirectory)
+        string workingDirectory,
+        IFormatProvider consoleFormatProvider)
         : base(name, description)
     {
         if (string.IsNullOrEmpty(workingDirectory)) throw new ArgumentException($"'{nameof(workingDirectory)}' cannot be null or empty.", nameof(workingDirectory));
 
         _project = project ?? throw new ArgumentNullException(nameof(project));
         _workingDirectory = workingDirectory;
+        _consoleFormatProvider = consoleFormatProvider ?? throw new ArgumentNullException(nameof(consoleFormatProvider));
 
         _scriptNames = ImmutableArray.Create(new[] { "pre" + Name, Name, "post" + Name });
 
@@ -40,8 +43,9 @@ public class RunScriptCommand : Command, ICommandHandler
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
 
-        var console = new ConsoleWriter(context.Console, context.ParseResult.GetValueForOption(GlobalOptions.Verbose));
-        console.AlertAboutVerbose();
+        var writer = new ConsoleWriter(context.Console, _consoleFormatProvider, context.ParseResult.GetValueForOption(GlobalOptions.Verbose));
+
+        writer.VerboseBanner();
 
         var scriptShell = context.ParseResult.GetValueForOption(GlobalOptions.ScriptShell);
         var (shell, isCmd) = GetScriptShell(scriptShell ?? _project.ScriptShell);
@@ -55,7 +59,7 @@ public class RunScriptCommand : Command, ICommandHandler
                 : null;
 
             var result = await RunScriptAsync(
-                console,
+                writer,
                 script,
                 _project.Scripts![script],
                 shell,
@@ -84,7 +88,7 @@ public class RunScriptCommand : Command, ICommandHandler
     }
 
     private async Task<int> RunScriptAsync(
-        ConsoleWriter console,
+        IConsoleWriter writer,
         string name,
         string? cmd,
         string shell,
@@ -101,9 +105,9 @@ public class RunScriptCommand : Command, ICommandHandler
             toExecute += string.Join(" ", args);
         }
 
-        console.Banner(name, toExecute);
-        console.VerboseLine("Using shell: {0}", shell);
-        console.BlankVerboseLine();
+        writer.Banner(name, toExecute);
+        writer.LineVerbose("Using shell: {0}", shell);
+        writer.BlankLineVerbose();
 
         using (var process = new Process())
         {
