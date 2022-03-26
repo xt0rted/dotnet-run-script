@@ -3,6 +3,7 @@
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
+using System.CommandLine.Rendering;
 
 using RunScript;
 
@@ -17,13 +18,18 @@ try
 }
 catch (Exception ex)
 {
-    logError(ex.Message);
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine(ex.Message);
+    Console.ResetColor();
 
     return 1;
 }
 
+var consoleFormatProvider = new ConsoleFormatInfo();
 var rootCommand = new RootCommand();
+
 rootCommand.TreatUnmatchedTokensAsErrors = false;
+
 rootCommand.AddGlobalOption(GlobalOptions.IfPresent);
 rootCommand.AddGlobalOption(GlobalOptions.ScriptShell);
 rootCommand.AddGlobalOption(GlobalOptions.Verbose);
@@ -34,14 +40,15 @@ foreach (var (name, script) in project.Scripts!.OrderBy(s => s.Key))
         name,
         script,
         project,
-        workingDirectory);
+        workingDirectory,
+        consoleFormatProvider);
 
     rootCommand.AddCommand(runScript);
 }
 
 if (!project.Scripts!.ContainsKey("env"))
 {
-    rootCommand.AddCommand(new EnvironmentCommand());
+    rootCommand.AddCommand(new EnvironmentCommand(consoleFormatProvider));
 }
 
 var parser = new CommandLineBuilder(rootCommand)
@@ -55,13 +62,16 @@ var parser = new CommandLineBuilder(rootCommand)
     .UseParseErrorReporting()
     .UseExceptionHandler((ex, ctx) =>
     {
-        if (ctx.ParseResult.HasOption(GlobalOptions.Verbose))
+        var verbose = ctx.ParseResult.HasOption(GlobalOptions.Verbose);
+        var writer = new ConsoleWriter(ctx.Console, consoleFormatProvider, verbose);
+
+        if (verbose)
         {
-            logError(ex.ToString());
+            writer.Error(ex.ToString());
         }
         else
         {
-            logError(ex.Message);
+            writer.Error(ex.Message);
         }
     })
     .CancelOnProcessTermination()
@@ -71,10 +81,3 @@ var parser = new CommandLineBuilder(rootCommand)
 var parseResult = parser.Parse(args);
 
 return await parseResult.InvokeAsync();
-
-static void logError(string message)
-{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine(message);
-    Console.ResetColor();
-}
