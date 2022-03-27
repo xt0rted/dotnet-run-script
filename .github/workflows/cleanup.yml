@@ -1,0 +1,33 @@
+name: Cleanup
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+env:
+  package_name: run-script
+
+jobs:
+  gpr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3.0.0
+
+      - name: Get project version
+        id: project
+        run: |
+          _version="$(jq -r '.tools."${{ env.package_name }}".version' ./.config/dotnet-tools.json)"
+          _version="${_version//'.'/'\.'}"
+          _version="^${_version}\$"
+          echo "::set-output name=version::${_version}"
+
+      # Keep the last 13 versions as well as the version used by the project itself
+      - uses: actions/delete-package-versions@v3.0.0
+        with:
+          package-name: ${{ env.package_name }}
+          delete-only-pre-release-versions: true
+          min-versions-to-keep: 13
+          ignore-versions: ${{ steps.project.outputs.version }}
