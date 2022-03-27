@@ -9,49 +9,11 @@ var workingDirectory = environment.CurrentDirectory;
 
 environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
 
-Project? project;
-try
-{
-    (project, workingDirectory) = await new ProjectLoader().LoadAsync(workingDirectory);
-}
-catch (Exception ex)
-{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine(ex.Message);
-    Console.ResetColor();
-
-    return 1;
-}
-
 var consoleFormatProvider = ConsoleHelpers.FormatInfo(environment);
-var rootCommand = new RootCommand();
-
-rootCommand.TreatUnmatchedTokensAsErrors = false;
-
-rootCommand.AddGlobalOption(GlobalOptions.IfPresent);
-rootCommand.AddGlobalOption(GlobalOptions.ScriptShell);
-rootCommand.AddGlobalOption(GlobalOptions.Verbose);
-
-foreach (var (name, script) in project.Scripts!.OrderBy(s => s.Key))
-{
-    var runScript = new RunScriptCommand(
-        name,
-        script,
-        project,
-        workingDirectory,
-        environment,
-        consoleFormatProvider);
-
-    rootCommand.AddCommand(runScript);
-}
-
-if (!project.Scripts!.ContainsKey("env"))
-{
-    rootCommand.AddCommand(
-        new EnvironmentCommand(
-            environment,
-            consoleFormatProvider));
-}
+var rootCommand = new RunScriptCommand(
+    environment,
+    consoleFormatProvider,
+    workingDirectory);
 
 var parser = new CommandLineBuilder(rootCommand)
     .UseVersionOption()
@@ -60,7 +22,6 @@ var parser = new CommandLineBuilder(rootCommand)
     .UseParseDirective()
     .UseSuggestDirective()
     .RegisterWithDotnetSuggest()
-    .RunScriptsIfPrsent()
     .UseParseErrorReporting()
     .UseExceptionHandler((ex, ctx) =>
     {
