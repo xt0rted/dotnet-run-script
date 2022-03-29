@@ -53,6 +53,8 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         Project? project;
         try
         {
+            _environment.SetEnvironmentVariable("INIT_CWD", _workingDirectory);
+
             (project, _workingDirectory) = await new ProjectLoader().LoadAsync(_workingDirectory);
         }
         catch (Exception ex)
