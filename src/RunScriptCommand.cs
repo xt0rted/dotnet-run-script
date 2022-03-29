@@ -1,7 +1,6 @@
 namespace RunScript;
 
 using System.Collections.Immutable;
-using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
