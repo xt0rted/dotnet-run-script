@@ -5,15 +5,11 @@ using System.CommandLine.Parsing;
 using RunScript;
 
 var environment = new EnvironmentWrapper();
-var workingDirectory = environment.CurrentDirectory;
-
-environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
-
 var consoleFormatProvider = ConsoleHelpers.FormatInfo(environment);
 var rootCommand = new RunScriptCommand(
     environment,
     consoleFormatProvider,
-    workingDirectory);
+    environment.CurrentDirectory);
 
 var parser = new CommandLineBuilder(rootCommand)
     .UseVersionOption()
