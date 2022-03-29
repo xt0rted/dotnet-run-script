@@ -1,7 +1,5 @@
 namespace RunScript;
 
-using System.CommandLine;
-
 public static class GlobalOptions
 {
     public static readonly Option<bool> IfPresent = new("--if-present", "Don't exit with an error code if the script isn't found");
