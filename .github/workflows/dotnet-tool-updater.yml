@@ -1,0 +1,24 @@
+name: .NET tool updater
+
+on:
+  workflow_dispatch:
+    inputs:
+      package-name:
+        description: The name of the package
+        required: true
+        type: string
+      package-version:
+        description: The current version of the package
+        required: true
+        type: string
+
+jobs:
+  update:
+    uses: xt0rted/.github/.github/workflows/dotnet-tool-updater.yml@main
+    secrets:
+      DOTNET_UPDATER_APP_ID: ${{ secrets.DOTNET_UPDATER_APP_ID }}
+      DOTNET_UPDATER_PRIVATE_KEY: ${{ secrets.DOTNET_UPDATER_PRIVATE_KEY }}
+      GPR_READ_TOKEN: ${{ secrets.GPR_READ_TOKEN }}
+    with:
+      package-name: ${{ github.event.inputs.package-name }}
+      package-version: ${{ github.event.inputs.package-version }}
