@@ -17,7 +17,6 @@ var parser = new CommandLineBuilder(rootCommand)
     .UseParseDirective()
     .UseSuggestDirective()
     .RegisterWithDotnetSuggest()
-    .RunScriptsIfPrsent()
     .UseParseErrorReporting()
     .UseExceptionHandler((ex, ctx) =>
     {
