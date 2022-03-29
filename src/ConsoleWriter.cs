@@ -6,8 +6,6 @@ using System.Globalization;
 
 internal class ConsoleWriter : IConsoleWriter
 {
-    private static readonly object _writeLock = new();
-
     private readonly IConsole _console;
     private readonly IFormatProvider? _consoleFormatProvider;
 
@@ -27,26 +25,23 @@ internal class ConsoleWriter : IConsoleWriter
             return;
         }
 
-        lock (_writeLock)
+        if (message is not null)
         {
-            if (message is not null)
+            _console.Out.Write(modifierOn.ToString(null, _consoleFormatProvider));
+
+            if (args?.Length > 0)
             {
-                _console.Out.Write(modifierOn.ToString(null, _consoleFormatProvider));
-
-                if (args?.Length > 0)
-                {
-                    _console.Out.Write(string.Format(CultureInfo.CurrentCulture, message, args));
-                }
-                else
-                {
-                    _console.Out.Write(message);
-                }
-
-                _console.Out.Write(modifierOff.ToString(null, _consoleFormatProvider));
+                _console.Out.Write(string.Format(CultureInfo.CurrentCulture, message, args));
+            }
+            else
+            {
+                _console.Out.Write(message);
             }
 
-            _console.Out.Write(Environment.NewLine);
+            _console.Out.Write(modifierOff.ToString(null, _consoleFormatProvider));
         }
+
+        _console.Out.Write(Environment.NewLine);
     }
 
     public void VerboseBanner()
@@ -77,17 +72,14 @@ internal class ConsoleWriter : IConsoleWriter
     {
         if (messages is null) return;
 
-        lock (_writeLock)
+        BlankLine();
+
+        foreach (var message in messages)
         {
-            BlankLine();
-
-            foreach (var message in messages)
-            {
-                Information("> {0}", message);
-            }
-
-            BlankLine();
+            Information("> {0}", message);
         }
+
+        BlankLine();
     }
 
     public void Error(string? message, params object?[] args)
