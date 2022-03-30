@@ -1,13 +1,9 @@
 namespace RunScript;
 
 using System.CommandLine.Invocation;
-using System.Text.RegularExpressions;
 
 internal class RunScriptCommand : RootCommand, ICommandHandler
 {
-    // This is the same regex used by npm's run-script library
-    private static readonly Regex _isCmdCheck = new("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase);
-
     private readonly IEnvironment _environment;
     private readonly IFormatProvider _consoleFormatProvider;
     private string _workingDirectory;
@@ -61,10 +57,13 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             return 1;
         }
 
-        (scriptShell, var isCmd) = GetScriptShell(scriptShell ?? project.ScriptShell);
+        var builder = new CommandBuilder(
+            writer,
+            _environment,
+            project,
+            _workingDirectory);
 
-        writer.LineVerbose("Using shell: {0}", scriptShell);
-        writer.BlankLine();
+        builder.SetUpEnvironment(scriptShell);
 
         if (scripts.Length == 0)
         {
@@ -108,14 +107,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             // Hopefully this doesn't break in the future 🤞
             var scriptArgs = (string[])context.ParseResult.UnparsedTokens;
 
-            ICommandGroupRunner scriptRunner = new CommandGroupRunner(
-                writer,
-                _environment,
-                project.Scripts!,
-                _workingDirectory,
-                scriptShell!,
-                isCmd,
-                context.GetCancellationToken());
+            var scriptRunner = builder.CreateGroupRunner(context.GetCancellationToken());
 
             var result = await scriptRunner.RunAsync(
                 scriptName,
@@ -153,21 +145,5 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         }
 
         return hadError ? 1 : 0;
-    }
-
-    /// <summary>
-    /// Gets the script shell to use.
-    /// </summary>
-    /// <param name="shell">A optional custom shell to use instead of the system default.</param>
-    /// <returns>The shell to use and if it's <c>cmd</c> or not.</returns>
-    private (string shell, bool isCmd) GetScriptShell(string? shell)
-    {
-        shell ??= _environment.IsWindows
-            ? _environment.GetEnvironmentVariable("COMSPEC") ?? "cmd"
-            : "sh";
-
-        var isCmd = _isCmdCheck.IsMatch(shell);
-
-        return (shell, isCmd);
     }
 }
