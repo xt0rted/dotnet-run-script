@@ -26,15 +26,15 @@ internal class CommandBuilder
         _workingDirectory = workingDirectory;
     }
 
-    public string? ScriptShell { get; private set; }
-
-    public bool IsCmd { get; private set; }
+    public ProcessContext? ProcessContext { get; private set; }
 
     public void SetUpEnvironment(string? scriptShellOverride)
     {
-        (ScriptShell, IsCmd) = GetScriptShell(scriptShellOverride ?? _project.ScriptShell);
+        var (scriptShell, isCmd) = GetScriptShell(scriptShellOverride ?? _project.ScriptShell);
 
-        _writer.LineVerbose("Using shell: {0}", ScriptShell);
+        ProcessContext = ProcessContext.Create(scriptShell, isCmd, _workingDirectory);
+
+        _writer.LineVerbose("Using shell: {0}", scriptShell);
         _writer.BlankLine();
     }
 
@@ -43,9 +43,7 @@ internal class CommandBuilder
             _writer,
             _environment,
             _project.Scripts!,
-            _workingDirectory,
-            ScriptShell!,
-            IsCmd,
+            ProcessContext!,
             cancellationToken);
 
     /// <summary>
