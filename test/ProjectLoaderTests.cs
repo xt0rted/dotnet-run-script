@@ -10,7 +10,7 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var action = async () => await projectLoader.LoadAsync(Path.GetTempPath());
+        var action = () => projectLoader.LoadAsync(Path.GetTempPath());
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
@@ -25,7 +25,7 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var action = async () => await projectLoader.LoadAsync(testPath);
+        var action = () => projectLoader.LoadAsync(testPath);
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
@@ -40,7 +40,7 @@ public class ProjectLoaderTests
         var projectLoader = new ProjectLoader();
 
         // When
-        var action = async () => await projectLoader.LoadAsync(testPath);
+        var action = () => projectLoader.LoadAsync(testPath);
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
