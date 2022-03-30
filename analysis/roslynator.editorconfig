@@ -61,7 +61,7 @@ dotnet_diagnostic.RCS0010.severity = error
 dotnet_diagnostic.RCS0011.severity = error
 
 # RCS0012: Add blank line between single-line declarations
-dotnet_diagnostic.RCS0012.severity = error
+dotnet_diagnostic.RCS0012.severity = none
 
 # RCS0013: Add blank line between single-line declarations of different kind
 dotnet_diagnostic.RCS0013.severity = error
@@ -118,7 +118,7 @@ dotnet_diagnostic.RCS0033.severity = error
 dotnet_diagnostic.RCS0034.severity = error
 
 # RCS0036: Remove blank line between single-line declarations of same kind
-dotnet_diagnostic.RCS0036.severity = error
+dotnet_diagnostic.RCS0036.severity = none
 
 # RCS0038: Remove blank line between using directives with same root namespace
 dotnet_diagnostic.RCS0038.severity = error
