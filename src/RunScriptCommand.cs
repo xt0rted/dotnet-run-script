@@ -127,10 +127,10 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             }
         }
 
-        return LogErrors(writer, runResults);
+        return RunResults(writer, runResults);
     }
 
-    private static int LogErrors(IConsoleWriter writer, List<(string scriptName, int exitCode)> results)
+    private static int RunResults(IConsoleWriter writer, List<(string scriptName, int exitCode)> results)
     {
         // If only 1 script ran we don't need a report of the results
         if (results.Count == 1)
