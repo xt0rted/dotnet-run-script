@@ -1,8 +1,6 @@
 namespace RunScript;
 
-using System.Collections.Immutable;
 using System.CommandLine.Invocation;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 internal class RunScriptCommand : RootCommand, ICommandHandler
@@ -70,7 +68,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
         if (scripts.Length == 0)
         {
-            PrintAvailableScripts(writer, project.Scripts!);
+            GlobalCommands.PrintAvailableScripts(writer, project.Scripts!);
 
             return 0;
         }
@@ -110,14 +108,18 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             // Hopefully this doesn't break in the future 🤞
             var scriptArgs = (string[])context.ParseResult.UnparsedTokens;
 
-            var result = await ProcessScriptAsync(
-                project.Scripts!,
+            ICommandGroupRunner scriptRunner = new CommandGroupRunner(
                 writer,
+                _environment,
+                project.Scripts!,
+                _workingDirectory,
                 scriptShell!,
                 isCmd,
-                scriptName,
-                scriptArgs,
                 context.GetCancellationToken());
+
+            var result = await scriptRunner.RunAsync(
+                scriptName,
+                scriptArgs);
 
             runResults.Add((scriptName, result));
 
@@ -154,48 +156,6 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
     }
 
     /// <summary>
-    /// The help command that lists all the scripts availble in the <g>global.json</g>.
-    /// </summary>
-    /// <param name="writer">The console logger instance to use.</param>
-    /// <param name="scripts">The project's scripts.</param>
-    private static void PrintAvailableScripts(IConsoleWriter writer, IDictionary<string, string?> scripts)
-    {
-        writer.Line("Available via `{0}`:", writer.ColorText(ConsoleColor.Blue, "dotnet r"));
-        writer.BlankLine();
-
-        foreach (var script in scripts.Keys)
-        {
-            writer.Line("  {0}", script);
-            writer.SecondaryLine("    {0}", scripts[script]);
-            writer.BlankLine();
-        }
-    }
-
-    /// <summary>
-    /// Custom "script" that lists all available environment variables that will be available to the executing scripts.
-    /// </summary>
-    /// <param name="writer">The console logger instance to use.</param>
-    private void PrintEnvironmentVariables(IConsoleWriter writer)
-    {
-        writer.Banner("env");
-
-        foreach (var (key, value) in environmentVariables(_environment).OrderBy(v => v.key, StringComparer.InvariantCulture))
-        {
-            writer.Line("{0}={1}", key, value);
-        }
-
-        static IEnumerable<(string key, string value)> environmentVariables(IEnvironment environment)
-        {
-            var variables = environment.GetEnvironmentVariables();
-
-            foreach (var key in variables.Keys)
-            {
-                yield return new((string)key!, (string)variables[key!]!);
-            }
-        }
-    }
-
-    /// <summary>
     /// Gets the script shell to use.
     /// </summary>
     /// <param name="shell">A optional custom shell to use instead of the system default.</param>
@@ -209,120 +169,5 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         var isCmd = _isCmdCheck.IsMatch(shell);
 
         return (shell, isCmd);
-    }
-
-    /// <summary>
-    /// Process a script and it's pre & post scripts.
-    /// </summary>
-    /// <param name="scripts">The project's scripts.</param>
-    /// <param name="writer">The console logger instance to use.</param>
-    /// <param name="scriptShell">The shell to run the script in.</param>
-    /// <param name="isCmd">If the shell is <c>cmd</c> or not.</param>
-    /// <param name="script"></param>
-    /// <param name="scriptArgs">
-    /// Any arguments to pass to the executing script.
-    /// Will not be passed to the <c>pre</c> or <c>post</c> scripts.
-    /// </param>
-    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
-    /// <returns><c>0</c> if there were no errors; otherwise the exit code of the failed script.</returns>
-    private async Task<int> ProcessScriptAsync(
-        IDictionary<string, string?> scripts,
-        IConsoleWriter writer,
-        string scriptShell,
-        bool isCmd,
-        string script,
-        string[]? scriptArgs,
-        CancellationToken cancellationToken)
-    {
-        var scriptNames = ImmutableArray.Create(new[] { "pre" + script, script, "post" + script });
-
-        foreach (var subScript in scriptNames.Where(scriptName => scripts.ContainsKey(scriptName) || scriptName == "env"))
-        {
-            // At this point we should have done enough checks to make sure the only not found script is `env`
-            if (!scripts.ContainsKey(subScript))
-            {
-                PrintEnvironmentVariables(writer);
-
-                continue;
-            }
-
-            var args = subScript == script
-                ? scriptArgs
-                : null;
-
-            var result = await RunScriptAsync(
-                writer,
-                subScript,
-                scripts[subScript],
-                scriptShell,
-                isCmd,
-                args,
-                cancellationToken);
-
-            if (result != 0)
-            {
-                return result;
-            }
-        }
-
-        return 0;
-    }
-
-    /// <summary>
-    /// Execute the script in another process.
-    /// </summary>
-    /// <param name="writer">The console logger instance to use.</param>
-    /// <param name="name">The name of the script to run.</param>
-    /// <param name="cmd">The contents of the script to run.</param>
-    /// <param name="shell">The shell to run the script in.</param>
-    /// <param name="isCmd">If the shell is <c>cmd</c> or not.</param>
-    /// <param name="args">Any arguments to pass to the executing script.</param>
-    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
-    /// <returns>The exit code of the script./returns>
-    private async Task<int> RunScriptAsync(
-        IConsoleWriter writer,
-        string name,
-        string? cmd,
-        string shell,
-        bool isCmd,
-        string[]? args,
-        CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        writer.Banner(name, ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
-        writer.LineVerbose("Using shell: {0}", shell);
-        writer.BlankLineVerbose();
-
-        using (var process = new Process())
-        {
-            process.StartInfo.WorkingDirectory = _workingDirectory;
-            process.StartInfo.FileName = shell;
-
-            if (isCmd)
-            {
-                process.StartInfo.Arguments = string.Concat(
-                    "/d /s /c \"",
-                    ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(cmd, args),
-                    "\"");
-            }
-            else
-            {
-                process.StartInfo.ArgumentList.Add("-c");
-                process.StartInfo.ArgumentList.Add(ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForProcessStart(cmd, args));
-            }
-
-            process.Start();
-
-#if NET5_0_OR_GREATER
-            await process.WaitForExitAsync(cancellationToken);
-#else
-            await Task.CompletedTask;
-
-            process.WaitForExit();
-#endif
-
-            return process.ExitCode;
-        }
     }
 }
