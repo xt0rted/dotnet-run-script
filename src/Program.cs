@@ -10,6 +10,7 @@ var workingDirectory = Environment.CurrentDirectory;
 Environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
 
 Project? project;
+
 try
 {
     (project, workingDirectory) = await new ProjectLoader().LoadAsync(workingDirectory);
