@@ -5,25 +5,16 @@ using System.Diagnostics;
 internal class CommandRunner : ICommandRunner
 {
     private readonly IConsoleWriter _writer;
-    private readonly string _workingDirectory;
-    private readonly string _shell;
-    private readonly bool _isCmd;
+    private readonly ProcessContext _processContext;
     private readonly CancellationToken _cancellationToken;
 
     public CommandRunner(
         IConsoleWriter writer,
-        string workingDirectory,
-        string shell,
-        bool isCmd,
+        ProcessContext processContext,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(workingDirectory)) throw new ArgumentException($"'{nameof(workingDirectory)}' cannot be null or empty.", nameof(workingDirectory));
-        if (string.IsNullOrEmpty(shell)) throw new ArgumentException($"'{nameof(shell)}' cannot be null or empty.", nameof(shell));
-
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
-        _workingDirectory = workingDirectory;
-        _shell = shell;
-        _isCmd = isCmd;
+        _processContext = processContext ?? throw new ArgumentNullException(nameof(processContext));
         _cancellationToken = cancellationToken;
     }
 
@@ -32,15 +23,15 @@ internal class CommandRunner : ICommandRunner
         _cancellationToken.ThrowIfCancellationRequested();
 
         _writer.Banner(name, ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
-        _writer.LineVerbose("Using shell: {0}", _shell);
+        _writer.LineVerbose("Using shell: {0}", _processContext.Shell);
         _writer.BlankLineVerbose();
 
         using (var process = new Process())
         {
-            process.StartInfo.WorkingDirectory = _workingDirectory;
-            process.StartInfo.FileName = _shell;
+            process.StartInfo.WorkingDirectory = _processContext.WorkingDirectory;
+            process.StartInfo.FileName = _processContext.Shell;
 
-            if (_isCmd)
+            if (_processContext.IsCmd)
             {
                 process.StartInfo.Arguments = string.Concat(
                     "/d /s /c \"",

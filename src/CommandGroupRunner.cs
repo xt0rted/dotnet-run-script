@@ -7,29 +7,20 @@ internal class CommandGroupRunner : ICommandGroupRunner
     private readonly IConsoleWriter _writer;
     private readonly IEnvironment _environment;
     private readonly IDictionary<string, string?> _scripts;
-    private readonly string _workingDirectory;
-    private readonly string _shell;
-    private readonly bool _isCmd;
+    private readonly ProcessContext _processContext;
     private readonly CancellationToken _cancellationToken;
 
     public CommandGroupRunner(
         IConsoleWriter writer,
         IEnvironment environment,
         IDictionary<string, string?> scripts,
-        string workingDirectory,
-        string shell,
-        bool isCmd,
+        ProcessContext processContext,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(workingDirectory)) throw new ArgumentException($"'{nameof(workingDirectory)}' cannot be null or empty.", nameof(workingDirectory));
-        if (string.IsNullOrEmpty(shell)) throw new ArgumentException($"'{nameof(shell)}' cannot be null or empty.", nameof(shell));
-
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _scripts = scripts ?? throw new ArgumentNullException(nameof(scripts));
-        _workingDirectory = workingDirectory;
-        _shell = shell;
-        _isCmd = isCmd;
+        _processContext = processContext ?? throw new ArgumentNullException(nameof(processContext));
         _cancellationToken = cancellationToken;
     }
 
@@ -49,9 +40,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
 
             ICommandRunner command = new CommandRunner(
                 _writer,
-                _workingDirectory,
-                _shell,
-                _isCmd,
+                _processContext,
                 _cancellationToken);
 
             var args = subScript == name
