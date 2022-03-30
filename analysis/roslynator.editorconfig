@@ -16,9 +16,12 @@ roslynator_body_style = expression
 roslynator_conditional_operator_condition_parentheses_style = omit
 roslynator_conditional_operator_new_line = before
 roslynator_configure_await = false
+roslynator_doc_comment_summary_style = multi_line
 roslynator_empty_string_style = literal
+roslynator_enum_flag_value_style = decimal_number
 roslynator_enum_has_flag_style = method
 roslynator_new_line_before_while_in_do_statement = true
+roslynator_infinite_loop_style = while
 roslynator_null_check_style = pattern_matching
 roslynator_object_creation_parentheses_style = omit
 roslynator_suppress_unity_script_methods = false
@@ -390,12 +393,6 @@ dotnet_diagnostic.RCS1098.severity = error
 # RCS1099: Default label should be the last label in a switch section
 dotnet_diagnostic.RCS1099.severity = error
 
-# RCS1100: Format documentation summary on a single line
-dotnet_diagnostic.RCS1100.severity = none
-
-# RCS1101: Format documentation summary on multiple lines
-dotnet_diagnostic.RCS1101.severity = error
-
 # RCS1102: Make class static
 dotnet_diagnostic.RCS1102.severity = error
 
@@ -764,6 +761,18 @@ dotnet_diagnostic.RCS1249.severity = error
 
 # RCS1250: Use implicit/explicit object creation
 dotnet_diagnostic.RCS1250.severity = error
+
+# RCS1251: Remove unnecessary braces from record declaration
+dotnet_diagnostic.RCS1251.severity = error
+
+# RCS1252: Normalize usage of infinite loop
+dotnet_diagnostic.RCS1252.severity = error
+
+# RCS1253: Normalize format of enum flag value
+dotnet_diagnostic.RCS1253.severity = error
+
+# RCS1254: Normalize format of enum flag value
+dotnet_diagnostic.RCS1254.severity = error
 
 # RCS9001: Use pattern matching
 dotnet_diagnostic.RCS9001.severity = error
