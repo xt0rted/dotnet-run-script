@@ -117,7 +117,7 @@ public class RunScriptCommand : Command, ICommandHandler
             process.StartInfo.Arguments =
                 isCmd
                 ? $"/d /s /c {toExecute}"
-                : $"-c \"{toExecute}\"";
+                : $"-c \"{toExecute.Replace("\"", "\\\"", StringComparison.Ordinal)}\"";
 
             process.Start();
 
