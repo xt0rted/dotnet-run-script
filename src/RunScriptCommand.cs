@@ -98,14 +98,7 @@ public class RunScriptCommand : Command, ICommandHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var toExecute = cmd;
-        if (args?.Count > 0)
-        {
-            toExecute += " ";
-            toExecute += string.Join(" ", args);
-        }
-
-        writer.Banner(name, toExecute);
+        writer.Banner(name, CommandBannerText(cmd, args));
         writer.LineVerbose("Using shell: {0}", shell);
         writer.BlankLineVerbose();
 
@@ -114,10 +107,24 @@ public class RunScriptCommand : Command, ICommandHandler
             process.StartInfo.WorkingDirectory = _workingDirectory;
             process.StartInfo.FileName = shell;
 
-            process.StartInfo.Arguments =
-                isCmd
-                ? $"/d /s /c {toExecute}"
-                : $"-c \"{toExecute}\"";
+            if (isCmd)
+            {
+                process.StartInfo.Arguments = string.Concat(
+                    "/d /s /c \"",
+                    cmd,
+                    " ",
+                    ArgumentEscaper.EscapeAndConcatenateArgArrayForCmdProcessStart(args),
+                    "\"");
+            }
+            else
+            {
+                process.StartInfo.ArgumentList.Add("-c");
+                process.StartInfo.ArgumentList.Add(
+                    string.Concat(
+                        cmd.AsSpan(),
+                        " ",
+                        ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(args)));
+            }
 
             process.Start();
 
@@ -131,5 +138,23 @@ public class RunScriptCommand : Command, ICommandHandler
 
             return process.ExitCode;
         }
+    }
+
+    private static string CommandBannerText(string? cmd, IReadOnlyList<string>? args)
+    {
+        var sb = new ValueStringBuilder(stackalloc char[256]);
+
+        sb.Append(cmd);
+
+        if (args?.Count > 0)
+        {
+            for (var i = 0; i < args.Count; i++)
+            {
+                sb.Append(' ');
+                sb.Append(args[i]);
+            }
+        }
+
+        return sb.ToString();
     }
 }

@@ -2,7 +2,10 @@
 
 ## Unreleased
 
-- Switched from [actions/setup-dotnet](https://github.com/actions/setup-dotnet) to [xt0rted/setup-dotnet](https://github.com/xt0rted/setup-dotnet)
+- fixed: Escape arguments for non-cmd shells
+- fixed: Quote additional arguments passed after `--`
+- fixed: Escape scripts with `^` passed to `cmd.exe`
+- updated: Switched from [actions/setup-dotnet](https://github.com/actions/setup-dotnet) to [xt0rted/setup-dotnet](https://github.com/xt0rted/setup-dotnet)
 
 ## [0.1.0](https://github.com/xt0rted/dotnet-run-script/releases/tag/v0.1.0) - 2022-03-26
 
