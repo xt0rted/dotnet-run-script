@@ -1,3 +1,9 @@
 [*.cs]
+# IDE0022: Use expression body for methods
+dotnet_diagnostic.IDE0022.severity = none
+
 # RCS1046: Asynchronous method name should end with 'Async'
 dotnet_diagnostic.RCS1046.severity = none
+
+# RCS1016: Use block body or expression body.
+dotnet_diagnostic.RCS1016.severity = none

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 internal class CommandBuilder
 {
     // This is the same regex used by npm's run-script library
-    private static readonly Regex _isCmdCheck = new("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase);
+    public static readonly Regex IsCmdCheck = new("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase);
 
     private readonly IConsoleWriter _writer;
     private readonly IEnvironment _environment;
@@ -57,7 +57,7 @@ internal class CommandBuilder
             ? _environment.GetEnvironmentVariable("COMSPEC") ?? "cmd"
             : "sh";
 
-        var isCmd = _isCmdCheck.IsMatch(shell);
+        var isCmd = IsCmdCheck.IsMatch(shell);
 
         return (shell, isCmd);
     }

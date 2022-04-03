@@ -25,8 +25,11 @@ internal static class GlobalCommands
     /// </summary>
     /// <param name="writer">The console logger instance to use.</param>
     /// <param name="environment">The environment to pull from.</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public static void PrintEnvironmentVariables(IConsoleWriter writer, IEnvironment environment)
     {
+        if (environment is null) throw new ArgumentNullException(nameof(environment));
+
         writer.Banner("env");
 
         foreach (var (key, value) in environmentVariables(environment).OrderBy(v => v.key, StringComparer.InvariantCulture))
