@@ -63,7 +63,7 @@ jobs:
 
       - run: |
           dotnet tool uninstall run-script
-          dotnet tool install run-script --prerelease --add-source ./artifacts
+          dotnet tool install run-script --add-source ./artifacts --version "0.1.0-${{ env.VERSION_SUFFIX }}"
           cat .config/dotnet-tools.json
         shell: bash
       
