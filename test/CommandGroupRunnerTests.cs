@@ -20,10 +20,10 @@ public class CommandGroupRunnerTests
         TestCommandRunner[] commandRunners =
         {
             new(0),
-            new(1),
+            new(999),
         };
 
-        var groupRunner = SetUpTest(isWindows);
+        var (_, groupRunner) = SetUpTest(isWindows);
         A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
@@ -50,10 +50,10 @@ public class CommandGroupRunnerTests
         {
             new(0),
             new(0),
-            new(1),
+            new(999),
         };
 
-        var groupRunner = SetUpTest(isWindows);
+        var (_, groupRunner) = SetUpTest(isWindows);
         A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
@@ -80,10 +80,10 @@ public class CommandGroupRunnerTests
         {
             new(0),
             new(0),
-            new(1),
+            new(999),
         };
 
-        var groupRunner = SetUpTest(isWindows);
+        var (_, groupRunner) = SetUpTest(isWindows);
         A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
@@ -111,10 +111,10 @@ public class CommandGroupRunnerTests
             new(0),
             new(0),
             new(0),
-            new(1),
+            new(999),
         };
 
-        var groupRunner = SetUpTest(isWindows);
+        var (_, groupRunner) = SetUpTest(isWindows);
         A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
@@ -128,7 +128,66 @@ public class CommandGroupRunnerTests
         await Verify(commandRunners, verifySettings);
     }
 
-    private static CommandGroupRunner SetUpTest(bool isWindows)
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Should_emit_environment_variable_list_when_env_script_not_defined(bool isWindows)
+    {
+        // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
+        TestCommandRunner[] commandRunners =
+        {
+            new(999),
+        };
+
+        var (console, groupRunner) = SetUpTest(isWindows);
+        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+
+        // When
+        var result = await groupRunner.RunAsync("env", null);
+
+        // Then
+        result.ShouldBe(0);
+
+        A.CallTo(() => groupRunner.BuildCommand()).MustNotHaveHappened();
+
+        await Verify(console, verifySettings);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Should_return_first_error_hit(bool isWindows)
+    {
+        // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
+        TestCommandRunner[] commandRunners =
+        {
+            new(0),
+            new(123),
+            new(0),
+            new(999),
+        };
+
+        var (_, groupRunner) = SetUpTest(isWindows);
+        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+
+        // When
+        var result = await groupRunner.RunAsync("pack", null);
+
+        // Then
+        result.ShouldBe(123);
+
+        A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedTwiceExactly();
+
+        await Verify(commandRunners, verifySettings);
+    }
+
+    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(bool isWindows)
     {
         var console = new TestConsole();
         var consoleFormatProvider = new ConsoleFormatInfo
@@ -160,12 +219,18 @@ public class CommandGroupRunnerTests
             "/test/path",
             isWindows);
 
+        // These are reversed to verify they come back sorted
+        environment.SetEnvironmentVariable("value4", "value 4");
+        environment.SetEnvironmentVariable("value3", "value 3");
+        environment.SetEnvironmentVariable("value2", "value 2");
+        environment.SetEnvironmentVariable("value1", "value 1");
+
         var context = ProcessContext.Create(
             isWindows ? "cmd" : "sh",
             isWindows,
             "/test/path");
 
-        return A.Fake<CommandGroupRunner>(
+        var groupRunner = A.Fake<CommandGroupRunner>(
             o => o.WithArgumentsForConstructor(
                 () => new CommandGroupRunner(
                     consoleWriter,
@@ -173,6 +238,8 @@ public class CommandGroupRunnerTests
                     scripts,
                     context,
                     default)));
+
+        return (console, groupRunner);
     }
 
     private class TestCommandRunner : ICommandRunner
