@@ -159,6 +159,85 @@ public class CommandGroupRunnerTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
+    public async Task Should_emit_environment_variable_list_and_pre_and_post_scripts_when_env_script_not_defined(bool isWindows)
+    {
+        // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
+        TestCommandRunner[] commandRunners =
+        {
+            new(0),
+            new(0),
+            new(999),
+        };
+
+        var (console, groupRunner) = SetUpTest(
+            isWindows,
+            scripts =>
+            {
+                scripts.Add("preenv", "echo preenv");
+                scripts.Add("postenv", "echo postenv");
+            });
+        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+
+        // When
+        var result = await groupRunner.RunAsync("env", null);
+
+        // Then
+        result.ShouldBe(0);
+
+        A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedTwiceExactly();
+
+        await Verify(
+            new
+            {
+                console,
+                commandRunners,
+            },
+            verifySettings);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Should_run_env_script_if_defined(bool isWindows)
+    {
+        // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
+        TestCommandRunner[] commandRunners =
+        {
+            new(0),
+            new(999),
+        };
+
+        var (console, groupRunner) = SetUpTest(
+            isWindows,
+            scripts => scripts.Add("env", "echo env"));
+        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+
+        // When
+        var result = await groupRunner.RunAsync("env", null);
+
+        // Then
+        result.ShouldBe(0);
+
+        A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedOnceExactly();
+
+        await Verify(
+            new
+            {
+                console,
+                commandRunners,
+            },
+            verifySettings);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
     public async Task Should_return_first_error_hit(bool isWindows)
     {
         // Given
@@ -187,7 +266,7 @@ public class CommandGroupRunnerTests
         await Verify(commandRunners, verifySettings);
     }
 
-    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(bool isWindows)
+    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(bool isWindows, Action<Dictionary<string, string?>>? scriptSetup = null)
     {
         var console = new TestConsole();
         var consoleFormatProvider = new ConsoleFormatInfo
@@ -214,6 +293,8 @@ public class CommandGroupRunnerTests
             { "pack", "echo pack" },
             { "postpack", "echo pack" },
         };
+
+        scriptSetup?.Invoke(scripts);
 
         var environment = new TestEnvironment(
             "/test/path",
