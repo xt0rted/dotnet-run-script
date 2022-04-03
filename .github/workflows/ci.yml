@@ -59,9 +59,13 @@ jobs:
 
       - run: dotnet r build
 
-      - run: dotnet r test
-
       - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
+
+      - run: |
+          dotnet tool uninstall run-script
+          dotnet tool install run-script --prerelease --add-source ./artifacts
+      
+      - run: dotnet r test
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.0.0
