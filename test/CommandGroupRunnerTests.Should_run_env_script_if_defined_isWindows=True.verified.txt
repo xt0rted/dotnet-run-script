@@ -1,0 +1,13 @@
+﻿{
+  console: {
+    Error: ,
+    Out: 
+  },
+  commandRunners: [
+    {
+      Name: env,
+      Cmd: echo env
+    },
+    {}
+  ]
+}

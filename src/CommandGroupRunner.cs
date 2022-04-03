@@ -24,6 +24,12 @@ internal class CommandGroupRunner : ICommandGroupRunner
         _cancellationToken = cancellationToken;
     }
 
+    public virtual ICommandRunner BuildCommand()
+        => new CommandRunner(
+            _writer,
+            _processContext,
+            _cancellationToken);
+
     public async Task<int> RunAsync(string name, string[]? scriptArgs)
     {
         var scriptNames = ImmutableArray.Create(new[] { "pre" + name, name, "post" + name });
@@ -38,10 +44,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
                 continue;
             }
 
-            ICommandRunner command = new CommandRunner(
-                _writer,
-                _processContext,
-                _cancellationToken);
+            var command = BuildCommand();
 
             var args = subScript == name
                 ? scriptArgs

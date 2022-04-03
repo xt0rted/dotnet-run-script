@@ -24,9 +24,12 @@ internal static class GlobalCommands
     /// Custom "script" that lists all available environment variables that will be available to the executing scripts.
     /// </summary>
     /// <param name="writer">The console logger instance to use.</param>
-    /// <param name="environment">The environment to pull from.</param>
+    /// <param name="environment">The environment wrapper to use.</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public static void PrintEnvironmentVariables(IConsoleWriter writer, IEnvironment environment)
     {
+        if (environment is null) throw new ArgumentNullException(nameof(environment));
+
         writer.Banner("env");
 
         foreach (var (key, value) in environmentVariables(environment).OrderBy(v => v.key, StringComparer.InvariantCulture))

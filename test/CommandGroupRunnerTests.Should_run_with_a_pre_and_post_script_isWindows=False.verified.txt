@@ -1,0 +1,15 @@
+﻿[
+  {
+    Name: prepack,
+    Cmd: echo pack
+  },
+  {
+    Name: pack,
+    Cmd: echo pack
+  },
+  {
+    Name: postpack,
+    Cmd: echo pack
+  },
+  {}
+]

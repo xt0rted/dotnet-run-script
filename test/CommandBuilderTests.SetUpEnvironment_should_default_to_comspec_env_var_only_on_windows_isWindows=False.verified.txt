@@ -1,0 +1,4 @@
+﻿{
+  Shell: sh,
+  WorkingDirectory: /test/path
+}

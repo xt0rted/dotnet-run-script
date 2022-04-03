@@ -1,0 +1,5 @@
+﻿{
+  Shell: cmd,
+  IsCmd: true,
+  WorkingDirectory: /test/path
+}

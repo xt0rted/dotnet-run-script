@@ -8,7 +8,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
     private readonly IFormatProvider _consoleFormatProvider;
     private string _workingDirectory;
 
-    public RunScriptCommand(
+    internal RunScriptCommand(
         IEnvironment environment,
         IFormatProvider consoleFormatProvider,
         string workingDirectory)
