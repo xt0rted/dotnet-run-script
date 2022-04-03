@@ -24,7 +24,7 @@ internal static class GlobalCommands
     /// Custom "script" that lists all available environment variables that will be available to the executing scripts.
     /// </summary>
     /// <param name="writer">The console logger instance to use.</param>
-    /// <param name="environment">The environment to pull from.</param>
+    /// <param name="environment">The environment wrapper to use.</param>
     /// <exception cref="ArgumentNullException"></exception>
     public static void PrintEnvironmentVariables(IConsoleWriter writer, IEnvironment environment)
     {

@@ -300,11 +300,9 @@ public class CommandGroupRunnerTests
             "/test/path",
             isWindows);
 
-        // These are reversed to verify they come back sorted
-        environment.SetEnvironmentVariable("value4", "value 4");
-        environment.SetEnvironmentVariable("value3", "value 3");
-        environment.SetEnvironmentVariable("value2", "value 2");
         environment.SetEnvironmentVariable("value1", "value 1");
+        environment.SetEnvironmentVariable("value2", "value 2");
+        environment.SetEnvironmentVariable("value3", "value 3");
 
         var context = ProcessContext.Create(
             isWindows ? "cmd" : "sh",

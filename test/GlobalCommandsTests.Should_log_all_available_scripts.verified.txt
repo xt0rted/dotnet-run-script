@@ -1,0 +1,31 @@
+﻿{
+  Error: ,
+  Out:
+Available via `dotnet r`:
+
+  clean
+    echo clean
+
+  prebuild
+    echo prebuild
+
+  build
+    echo build
+
+  test
+    echo test
+
+  posttest
+    echo posttest
+
+  prepack
+    echo pack
+
+  pack
+    echo pack
+
+  postpack
+    echo pack
+
+
+}
