@@ -64,6 +64,8 @@ jobs:
       - run: |
           dotnet tool uninstall run-script
           dotnet tool install run-script --prerelease --add-source ./artifacts
+          cat .config/dotnet-tools.json
+        shell: bash
       
       - run: dotnet r test
 
