@@ -1,0 +1,4 @@
+﻿{
+  Shell: pwsh,
+  WorkingDirectory: /test/path
+}

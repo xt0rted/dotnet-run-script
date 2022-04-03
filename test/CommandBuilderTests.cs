@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
+[UsesVerify]
 public class CommandBuilderTests
 {
     private const string DefaultComSpec = @"C:\WINDOWS\system32\cmd.exe";
@@ -31,23 +32,23 @@ public class CommandBuilderTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void SetUpEnvironment_should_default_to_comspec_env_var_only_on_windows(bool isWindows)
+    public async Task SetUpEnvironment_should_default_to_comspec_env_var_only_on_windows(bool isWindows)
     {
         // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
         var builder = SetUpTest(isWindows);
 
         // When
         builder.SetUpEnvironment(scriptShellOverride: null);
 
         // Then
-        builder.ProcessContext.ShouldNotBeNull();
-        builder.ProcessContext.IsCmd.ShouldBe(isWindows);
-        builder.ProcessContext.Shell.ShouldBe(isWindows ? DefaultComSpec : "sh");
-        builder.ProcessContext.WorkingDirectory.ShouldBe("/test/path");
+        await Verify(builder.ProcessContext, verifySettings);
     }
 
     [Fact]
-    public void SetUpEnvironment_should_fall_back_to_cmd_on_windows()
+    public async Task SetUpEnvironment_should_fall_back_to_cmd_on_windows()
     {
         // Given
         var builder = SetUpTest(isWindows: true, comSpec: null);
@@ -56,28 +57,25 @@ public class CommandBuilderTests
         builder.SetUpEnvironment(scriptShellOverride: null);
 
         // Then
-        builder.ProcessContext.ShouldNotBeNull();
-        builder.ProcessContext.IsCmd.ShouldBeTrue();
-        builder.ProcessContext.Shell.ShouldBe("cmd");
-        builder.ProcessContext.WorkingDirectory.ShouldBe("/test/path");
+        await Verify(builder.ProcessContext);
     }
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void SetUpEnvironment_should_use_custom_shell(bool isWindows)
+    public async Task SetUpEnvironment_should_use_custom_shell(bool isWindows)
     {
         // Given
+        var verifySettings = new VerifySettings();
+        verifySettings.UseParameters(isWindows);
+
         var builder = SetUpTest(isWindows);
 
         // When
         builder.SetUpEnvironment(scriptShellOverride: "pwsh");
 
         // Then
-        builder.ProcessContext.ShouldNotBeNull();
-        builder.ProcessContext.IsCmd.ShouldBeFalse();
-        builder.ProcessContext.Shell.ShouldBe("pwsh");
-        builder.ProcessContext.WorkingDirectory.ShouldBe("/test/path");
+        await Verify(builder.ProcessContext, verifySettings);
     }
 
     [Theory]
