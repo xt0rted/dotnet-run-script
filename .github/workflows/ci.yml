@@ -30,6 +30,14 @@ jobs:
       packages: read
 
     steps:
+      - run: echo "DOTNET_INSTALL_DIR=/usr/share/dotnet" >> $GITHUB_ENV
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+
+      - run: echo "DOTNET_INSTALL_DIR=C:\Program Files\dotnet" >> $GITHUB_ENV
+        if: matrix.os == 'windows-latest'
+        shell: bash
+
       - name: Check out repository
         uses: actions/checkout@v3.0.0
 
