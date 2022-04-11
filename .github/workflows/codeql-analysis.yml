@@ -33,6 +33,14 @@ jobs:
         language: [csharp]
 
     steps:
+      - run: echo "DOTNET_INSTALL_DIR=/usr/share/dotnet" >> $GITHUB_ENV
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+
+      - run: echo "DOTNET_INSTALL_DIR=C:\Program Files\dotnet" >> $GITHUB_ENV
+        if: startsWith(matrix.os, 'windows')
+        shell: bash
+
       - name: Check out repository
         uses: actions/checkout@v3.0.0
 
