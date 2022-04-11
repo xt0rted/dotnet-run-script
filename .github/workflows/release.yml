@@ -17,6 +17,14 @@ jobs:
       packages: write
 
     steps:
+      - run: echo "DOTNET_INSTALL_DIR=/usr/share/dotnet" >> $GITHUB_ENV
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+
+      - run: echo "DOTNET_INSTALL_DIR=C:\Program Files\dotnet" >> $GITHUB_ENV
+        if: startsWith(matrix.os, 'windows')
+        shell: bash
+
       - name: Get version from tag
         id: tag_name
         run: echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
