@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Switched from [actions/setup-dotnet](https://github.com/actions/setup-dotnet) to [xt0rted/setup-dotnet](https://github.com/xt0rted/setup-dotnet)
+
 ## [0.1.0](https://github.com/xt0rted/dotnet-run-script/releases/tag/v0.1.0) - 2022-03-26
 
 - Run scripts with `dotnet r ...`
