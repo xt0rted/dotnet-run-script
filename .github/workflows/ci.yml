@@ -43,17 +43,11 @@ jobs:
         run: echo "VERSION_SUFFIX=alpha.${{ github.event.number }}" >> $GITHUB_ENV
         shell: bash
 
-      # This action doesn't support comments in the global.json so for now we have to specify all sdk versions
       - name: Set up .NET
-        uses: actions/setup-dotnet@v2.0.0
+        uses: xt0rted/setup-dotnet@v1.0.0
         with:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
-          dotnet-version: |
-            3.1.x
-            5.0.x
-            6.0.x
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: dotnet tool restore
 
