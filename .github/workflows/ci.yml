@@ -44,7 +44,7 @@ jobs:
         shell: bash
 
       - name: Set up .NET
-        uses: xt0rted/setup-dotnet@v1.0.0
+        uses: xt0rted/setup-dotnet@v1.1.0
         with:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
