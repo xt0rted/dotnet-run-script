@@ -3,13 +3,13 @@
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
-using System.CommandLine.Rendering;
 
 using RunScript;
 
-var workingDirectory = Environment.CurrentDirectory;
+var environment = new EnvironmentWrapper();
+var workingDirectory = environment.CurrentDirectory;
 
-Environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
+environment.SetEnvironmentVariable("INIT_CWD", workingDirectory);
 
 Project? project;
 try
@@ -25,7 +25,7 @@ catch (Exception ex)
     return 1;
 }
 
-var consoleFormatProvider = ConsoleFormatInfo.CurrentInfo;
+var consoleFormatProvider = ConsoleHelpers.FormatInfo(environment);
 var rootCommand = new RootCommand();
 
 rootCommand.TreatUnmatchedTokensAsErrors = false;
@@ -41,6 +41,7 @@ foreach (var (name, script) in project.Scripts!.OrderBy(s => s.Key))
         script,
         project,
         workingDirectory,
+        environment,
         consoleFormatProvider);
 
     rootCommand.AddCommand(runScript);
@@ -48,7 +49,10 @@ foreach (var (name, script) in project.Scripts!.OrderBy(s => s.Key))
 
 if (!project.Scripts!.ContainsKey("env"))
 {
-    rootCommand.AddCommand(new EnvironmentCommand(consoleFormatProvider));
+    rootCommand.AddCommand(
+        new EnvironmentCommand(
+            environment,
+            consoleFormatProvider));
 }
 
 var parser = new CommandLineBuilder(rootCommand)

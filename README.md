@@ -35,6 +35,20 @@ Name | Description
 `--version` | Show version information
 `--help` | Show help and usage information
 
+### Color output
+
+This tool supports the `DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION` environment variable.
+Setting this to `1` or `true` will force color output on all platforms.
+Due to a limitation of the `Console` apis this will not work on Windows when output is redirected in environments such as GitHub Actions.
+
+There is also support for the `NO_COLOR` environment variable.
+Setting this to any value will disable color output.
+
+### GitHub Actions
+
+On GitHub Actions you need to set the environment values `DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION` and `TERM`.
+`TERM` should be `xterm` or `xterm-256color`.
+
 ## Configuration
 
 In your project's `global.json` add a `scripts` object:

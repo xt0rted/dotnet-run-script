@@ -1,6 +1,5 @@
 namespace RunScript;
 
-using System;
 using System.CommandLine;
 using System.CommandLine.Rendering;
 using System.Globalization;
