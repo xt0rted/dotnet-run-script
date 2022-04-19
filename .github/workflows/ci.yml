@@ -12,7 +12,6 @@ concurrency:
 
 env:
   DOTNET_NOLOGO: true
-  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
   CONFIGURATION: Release
 
 jobs:
@@ -34,16 +33,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3.0.1
 
-      - name: Build version suffix (main)
-        if: github.event_name == 'push'
-        run: echo "VERSION_SUFFIX=beta.${{ github.run_number }}" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Build version suffix (pr)
-        if: github.event_name == 'pull_request'
-        run: echo "VERSION_SUFFIX=alpha.${{ github.event.number }}" >> $GITHUB_ENV
-        shell: bash
-
       - name: Set up .NET
         uses: xt0rted/setup-dotnet@v1.1.0
         with:
@@ -52,44 +41,8 @@ jobs:
 
       - run: dotnet tool restore
 
-      - run: dotnet r build
-
-      - run: dotnet r test
-
-      - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3.0.0
-        if: matrix.os == 'ubuntu-latest'
-        with:
-          name: nupkg
-          path: ./artifacts/*.nupkg
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3.0.0
-        if: always()
-        with:
-          name: test-results
-          path: ./.coverage/*.trx
-
-  release:
-    if: github.event_name == 'push'
-
-    needs: build
-
-    runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-
-    steps:
-      - name: Download nupkg
-        uses: actions/download-artifact@v3.0.0
-        with:
-          name: nupkg
-
-      - name: Publish to GPR
-        run: |
-          dotnet nuget push "./*.nupkg" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --source https://nuget.pkg.github.com/${{ github.repository_owner }}
+      - run: dotnet r stuff
+      
+      - run: dotnet r stuff
+        env:
+          DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
