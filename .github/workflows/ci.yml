@@ -42,7 +42,9 @@ jobs:
       - run: dotnet tool restore
 
       - run: dotnet r stuff
+        shell: pwsh
       
       - run: dotnet r stuff
+        shell: pwsh
         env:
           DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
