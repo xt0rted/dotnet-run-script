@@ -12,6 +12,7 @@ concurrency:
 
 env:
   DOTNET_NOLOGO: true
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
   CONFIGURATION: Release
 
 jobs:
