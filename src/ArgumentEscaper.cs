@@ -103,8 +103,7 @@ internal static class ArgumentEscaper
 
     private static void EscapeSingleArg(ref ValueStringBuilder sb, string arg)
     {
-        var length = arg.Length;
-        var needsQuotes = length == 0 || ArgumentContainsWhitespace(arg);
+        var needsQuotes = arg.Length == 0 || ArgumentContainsWhitespace(arg);
         var isQuoted = needsQuotes || IsSurroundedWithQuotes(arg);
 
         if (needsQuotes)
@@ -112,7 +111,7 @@ internal static class ArgumentEscaper
             sb.Append(Quote);
         }
 
-        for (var i = 0; i < length; ++i)
+        for (var i = 0; i < arg.Length; ++i)
         {
             var backslashCount = 0;
 
