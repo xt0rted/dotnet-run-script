@@ -204,7 +204,5 @@ internal static class ArgumentEscaper
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool ArgumentContainsWhitespace(ReadOnlySpan<char> argument)
-        => argument.Contains(Space) ||
-            argument.Contains(Tab) ||
-            argument.Contains(NewLine);
+        => argument.IndexOfAny(Space, Tab, NewLine) >= 0;
 }
