@@ -103,7 +103,7 @@ internal static class ArgumentEscaper
         return sb.ToString();
     }
 
-    private static void EscapeSingleArg(ref ValueStringBuilder sb, string arg)
+    private static void EscapeSingleArg(ref ValueStringBuilder sb, ReadOnlySpan<char> arg)
     {
         var needsQuotes = arg.Length == 0 || ArgumentContainsWhitespace(arg);
         var isQuoted = needsQuotes || IsSurroundedWithQuotes(arg);
@@ -170,7 +170,7 @@ internal static class ArgumentEscaper
     /// </remarks>
     /// <param name="sb">The <seealso cref="ValueStringBuilder"/> to append to.</param>
     /// <param name="argument">The argument to escape.</param>
-    private static void EscapeArgForCmd(ref ValueStringBuilder sb, string argument)
+    private static void EscapeArgForCmd(ref ValueStringBuilder sb, ReadOnlySpan<char> argument)
     {
         var quoted = ArgumentContainsWhitespace(argument);
 
