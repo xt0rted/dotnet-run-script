@@ -19,6 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         os:
           - macos-latest
@@ -71,10 +72,86 @@ jobs:
           name: test-results
           path: ./.coverage/*.trx
 
+  integration:
+    needs: build
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        shell:
+          - default
+          - bash
+          - pwsh
+        exclude:
+          - os: windows-latest
+            shell: bash
+        include:
+          - os: windows-latest
+            shell: C:\Program Files\Git\bin\bash.exe
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3.0.1
+
+      - name: Set up .NET
+        uses: xt0rted/setup-dotnet@v1.1.0
+        with:
+          source-url: https://nuget.pkg.github.com/xt0rted/index.json
+          nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download nupkg
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: nupkg
+          path: .nuget
+
+      - run: dotnet tool restore
+
+      - run: dotnet tool uninstall run-script
+
+      - run: |
+          file=(.nuget/*.nupkg)
+          pattern="run-script\.(.*)\.nupkg"
+          if [[ $file =~ $pattern ]]; then
+            dotnet tool install run-script --version "${BASH_REMATCH[1]}" --add-source "${{ github.workspace }}/.nuget"
+          else
+            echo "::error::nupkg not found"
+            exit 1
+          fi
+        shell: bash
+
+      - run: |
+          if [ "${{ matrix.shell }}" == "default" ]; then
+            dotnet r build
+          else
+            dotnet r build --script-shell ${{ matrix.shell }}
+          fi
+        shell: bash
+
+      - run: |
+          if [ "${{ matrix.shell }}" == "default" ]; then
+            dotnet r test
+          else
+            dotnet r test --script-shell ${{ matrix.shell }}
+          fi
+        shell: bash
+
   release:
     if: github.event_name == 'push'
 
-    needs: build
+    needs:
+      - build
+      - integration
 
     runs-on: ubuntu-latest
 
