@@ -24,7 +24,10 @@ internal static class ArgumentEscaper
     /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
     /// </remarks>
     /// <param name="args">List of arguments to escape.</param>
-    /// <returns>An escaped string of the supplied arguments.</returns>
+    /// <returns>
+    /// An escaped string of the supplied arguments.
+    /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
+    /// </returns>
     public static string EscapeAndConcatenateArgArrayForProcessStart(IReadOnlyList<string>? args)
     {
         if (args is null)
@@ -42,7 +45,10 @@ internal static class ArgumentEscaper
     /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
     /// </remarks>
     /// <param name="args">List of arguments to escape.</param>
-    /// <returns>A <c>cmd.exe</c> safe escaped string of the supplied arguments.</returns>
+    /// <returns>
+    /// A <c>cmd.exe</c> safe escaped string of the supplied arguments.
+    /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
+    /// </returns>
     public static string EscapeAndConcatenateArgArrayForCmdProcessStart(IReadOnlyList<string>? args)
     {
         if (args is null)
@@ -67,10 +73,7 @@ internal static class ArgumentEscaper
 
         for (var i = 0; i < arguments.Count; i++)
         {
-            if (i > 0)
-            {
-                sb.Append(Space);
-            }
+            sb.Append(Space);
 
             EscapeSingleArg(ref sb, arguments[i]);
         }
@@ -92,10 +95,7 @@ internal static class ArgumentEscaper
 
         for (var i = 0; i < arguments.Count; i++)
         {
-            if (i > 0)
-            {
-                sb.Append(Space);
-            }
+            sb.Append(Space);
 
             EscapeArgForCmd(ref sb, arguments[i]);
         }

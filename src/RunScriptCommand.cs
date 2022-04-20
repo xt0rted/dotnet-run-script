@@ -112,7 +112,6 @@ public class RunScriptCommand : Command, ICommandHandler
                 process.StartInfo.Arguments = string.Concat(
                     "/d /s /c \"",
                     cmd,
-                    " ",
                     ArgumentEscaper.EscapeAndConcatenateArgArrayForCmdProcessStart(args),
                     "\"");
             }
@@ -121,8 +120,7 @@ public class RunScriptCommand : Command, ICommandHandler
                 process.StartInfo.ArgumentList.Add("-c");
                 process.StartInfo.ArgumentList.Add(
                     string.Concat(
-                        cmd.AsSpan(),
-                        " ",
+                        cmd,
                         ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(args)));
             }
 
