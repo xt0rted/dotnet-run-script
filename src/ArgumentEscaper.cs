@@ -183,10 +183,10 @@ internal static class ArgumentEscaper
         // This is harmless when passing through cmd
         // and ensures cmd metacharacters are not interpreted
         // as such
-        foreach (var character in argument)
+        for (var i = 0; i < argument.Length; i++)
         {
             sb.Append(Caret);
-            sb.Append(character);
+            sb.Append(argument[i]);
         }
 
         if (quoted)
