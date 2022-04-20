@@ -1,5 +1,7 @@
 namespace RunScript;
 
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Copy of the internal sdk class to escape command arguments updated to use <c>ReadOnlySpan</c>.
 /// </summary>
@@ -195,10 +197,12 @@ internal static class ArgumentEscaper
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsSurroundedWithQuotes(ReadOnlySpan<char> argument)
         => argument[0] == Quote &&
             argument[^1] == Quote;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool ArgumentContainsWhitespace(ReadOnlySpan<char> argument)
         => argument.Contains(Space) ||
             argument.Contains(Tab) ||
