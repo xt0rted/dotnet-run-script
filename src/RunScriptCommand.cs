@@ -98,7 +98,7 @@ public class RunScriptCommand : Command, ICommandHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        writer.Banner(name, CommandBannerText(cmd, args));
+        writer.Banner(name, ArgumentEscaper.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
         writer.LineVerbose("Using shell: {0}", shell);
         writer.BlankLineVerbose();
 
@@ -136,23 +136,5 @@ public class RunScriptCommand : Command, ICommandHandler
 
             return process.ExitCode;
         }
-    }
-
-    private static string CommandBannerText(string? cmd, IReadOnlyList<string>? args)
-    {
-        var sb = new ValueStringBuilder(stackalloc char[256]);
-
-        sb.Append(cmd);
-
-        if (args?.Count > 0)
-        {
-            for (var i = 0; i < args.Count; i++)
-            {
-                sb.Append(' ');
-                sb.Append(args[i]);
-            }
-        }
-
-        return sb.ToString();
     }
 }

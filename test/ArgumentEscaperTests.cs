@@ -40,4 +40,23 @@ public class ArgumentEscaperTests
         // Then
         result.ShouldBe(expected);
     }
+
+    [Theory]
+    [InlineData(new[] { "one", "two", "three" }, "c m d one two three")]
+    [InlineData(new[] { "line1\nline2", "word1\tword2" }, "c m d line1\nline2 word1\tword2")]
+    [InlineData(new[] { "with spaces" }, "c m d with spaces")]
+    [InlineData(new[] { @"with\backslash" }, @"c m d with\backslash")]
+    [InlineData(new[] { @"""quotedwith\backslash""" }, @"c m d ""quotedwith\backslash""")]
+    [InlineData(new[] { @"C:\Users\" }, @"c m d C:\Users\")]
+    [InlineData(new[] { @"C:\Program Files\dotnet\" }, @"c m d C:\Program Files\dotnet\")]
+    [InlineData(new[] { @"backslash\""preceedingquote" }, @"c m d backslash\""preceedingquote")]
+    [InlineData(new[] { @""" hello """ }, @"c m d "" hello """)]
+    public void ConcatinateCommandAndArgArrayForDisplay(string[] args, string expected)
+    {
+        // Given / When
+        var result = ArgumentEscaper.ConcatinateCommandAndArgArrayForDisplay("c m d", args);
+
+        // Then
+        result.ShouldBe(expected);
+    }
 }
