@@ -37,15 +37,17 @@ internal ref struct ValueStringBuilder
 
     public bool TryCopyTo(Span<char> destination, out int charsWritten)
     {
-        if (_chars.Slice(0, _pos).TryCopyTo(destination))
+        if (_chars[.._pos].TryCopyTo(destination))
         {
             charsWritten = _pos;
+
             Dispose();
 
             return true;
         }
 
         charsWritten = 0;
+
         Dispose();
 
         return false;
@@ -74,12 +76,7 @@ internal ref struct ValueStringBuilder
             Grow(count);
         }
 
-        var dst = _chars.Slice(_pos, count);
-
-        for (var i = 0; i < dst.Length; i++)
-        {
-            dst[i] = c;
-        }
+        _chars.Slice(_pos, count).Fill(c);
 
         _pos += count;
     }
