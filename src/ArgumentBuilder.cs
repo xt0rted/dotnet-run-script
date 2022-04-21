@@ -25,10 +25,7 @@ internal static class ArgumentBuilder
     /// </remarks>
     /// <param name="command">The base command.</param>
     /// <param name="args">List of arguments to escape.</param>
-    /// <returns>
-    /// An escaped string of the supplied arguments.
-    /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
-    /// </returns>
+    /// <returns>An escaped string of the <paramref name="command"/> and <paramref name="args"/>.</returns>
     public static string EscapeAndConcatenateCommandAndArgArrayForProcessStart(
         string? command,
         string[]? args)
@@ -58,10 +55,7 @@ internal static class ArgumentBuilder
     /// </remarks>
     /// <param name="command">The base command.</param>
     /// <param name="args">List of arguments to escape.</param>
-    /// <returns>
-    /// A <c>cmd.exe</c> safe escaped string of the supplied arguments.
-    /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
-    /// </returns>
+    /// <returns>An escaped string of the <paramref name="command"/> and <paramref name="args"/>.</returns>
     public static string EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(
         string? command,
         string[]? args)
