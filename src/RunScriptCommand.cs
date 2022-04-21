@@ -54,8 +54,11 @@ public class RunScriptCommand : Command, ICommandHandler
 
         foreach (var script in _scriptNames.Where(scriptName => _project.Scripts!.ContainsKey(scriptName)))
         {
+            // UnparsedTokens is backed by string[] so if we cast
+            // back to that we get a lot better perf down the line.
+            // Hopefully this doesn't break in the future 🤞
             var args = script == Name
-                ? context.ParseResult.UnparsedTokens
+                ? (string[])context.ParseResult.UnparsedTokens
                 : null;
 
             var result = await RunScriptAsync(
@@ -93,19 +96,12 @@ public class RunScriptCommand : Command, ICommandHandler
         string? cmd,
         string shell,
         bool isCmd,
-        IReadOnlyList<string>? args,
+        string[]? args,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var toExecute = cmd;
-        if (args?.Count > 0)
-        {
-            toExecute += " ";
-            toExecute += string.Join(" ", args);
-        }
-
-        writer.Banner(name, toExecute);
+        writer.Banner(name, ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
         writer.LineVerbose("Using shell: {0}", shell);
         writer.BlankLineVerbose();
 
@@ -114,10 +110,18 @@ public class RunScriptCommand : Command, ICommandHandler
             process.StartInfo.WorkingDirectory = _workingDirectory;
             process.StartInfo.FileName = shell;
 
-            process.StartInfo.Arguments =
-                isCmd
-                ? $"/d /s /c {toExecute}"
-                : $"-c \"{toExecute}\"";
+            if (isCmd)
+            {
+                process.StartInfo.Arguments = string.Concat(
+                    "/d /s /c \"",
+                    ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(cmd, args),
+                    "\"");
+            }
+            else
+            {
+                process.StartInfo.ArgumentList.Add("-c");
+                process.StartInfo.ArgumentList.Add(ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForProcessStart(cmd, args));
+            }
 
             process.Start();
 
