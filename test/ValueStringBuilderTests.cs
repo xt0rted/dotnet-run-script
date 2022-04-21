@@ -1,10 +1,10 @@
-﻿#pragma warning disable CA1305 // Specify IFormatProvider
+#pragma warning disable CA1305 // Specify IFormatProvider
 
 namespace RunScript;
 
 using System.Text;
 
-// https://github.com/dotnet/runtime/blob/400d171cae5491320470af921dbd0b49728f99dd/src/libraries/Common/src/System/Text/ValueStringBuilder.cs
+// https://github.com/dotnet/runtime/blob/c78bf2f522b4ce5a449faf6a38a0752b642a7f79/src/libraries/Common/tests/Tests/System/Text/ValueStringBuilderTests.cs
 public class ValueStringBuilderTests
 {
     [Fact]
