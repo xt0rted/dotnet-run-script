@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3.0.1
+        uses: actions/checkout@v3.0.2
 
       - name: Build version suffix (main)
         if: github.event_name == 'push'
@@ -101,7 +101,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3.0.1
+        uses: actions/checkout@v3.0.2
 
       - name: Set up .NET
         uses: xt0rted/setup-dotnet@v1.1.0
