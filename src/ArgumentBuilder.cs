@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 /// <remarks>
 /// <seealso href="https://github.com/dotnet/sdk/blob/09b31215867d1ffe4955fd5b7cd91eb552d3632c/src/Cli/Microsoft.DotNet.Cli.Utils/ArgumentEscaper.cs"/>
 /// </remarks>
-internal static class ArgumentEscaper
+internal static class ArgumentBuilder
 {
     private const char Backslash = '\\';
     private const char Caret = '^';
@@ -23,19 +23,31 @@ internal static class ArgumentEscaper
     /// <remarks>
     /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
     /// </remarks>
+    /// <param name="command">The base command.</param>
     /// <param name="args">List of arguments to escape.</param>
     /// <returns>
     /// An escaped string of the supplied arguments.
     /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
     /// </returns>
-    public static string EscapeAndConcatenateArgArrayForProcessStart(string[]? args)
+    public static string EscapeAndConcatenateCommandAndArgArrayForProcessStart(
+        string? command,
+        string[]? args)
     {
-        if (args is null)
+        var sb = new ValueStringBuilder(stackalloc char[256]);
+
+        sb.Append(command);
+
+        if (args is not null)
         {
-            return "";
+            for (var i = 0; i < args.Length; i++)
+            {
+                sb.Append(Space);
+
+                EscapeSingleArg(ref sb, args[i]);
+            }
         }
 
-        return EscapeArgArray(args);
+        return sb.ToString();
     }
 
     /// <summary>
@@ -44,19 +56,32 @@ internal static class ArgumentEscaper
     /// <remarks>
     /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
     /// </remarks>
+    /// <param name="command">The base command.</param>
     /// <param name="args">List of arguments to escape.</param>
     /// <returns>
     /// A <c>cmd.exe</c> safe escaped string of the supplied arguments.
     /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
     /// </returns>
-    public static string EscapeAndConcatenateArgArrayForCmdProcessStart(string[]? args)
+    public static string EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(
+        string? command,
+        string[]? args)
     {
-        if (args is null)
+        var sb = new ValueStringBuilder(stackalloc char[256]);
+
+        EscapeArgForCmd(ref sb, command, quoteValue: false);
+
+        if (args is not null)
         {
-            return "";
+            for (var i = 0; i < args.Length; i++)
+            {
+                sb.Append(Caret);
+                sb.Append(Space);
+
+                EscapeArgForCmd(ref sb, args[i], quoteValue: true);
+            }
         }
 
-        return EscapeArgArrayForCmd(args);
+        return sb.ToString();
     }
 
     /// <summary>
@@ -81,50 +106,6 @@ internal static class ArgumentEscaper
                 sb.Append(' ');
                 sb.Append(args[i]);
             }
-        }
-
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Undo the processing which took place to create string[] args in Main, so that the next process will receive the same string[] args.
-    /// </summary>
-    /// <remarks>
-    /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
-    /// </remarks>
-    /// <param name="arguments">List of arguments to escape.</param>
-    /// <returns>An escaped string of the supplied arguments.</returns>
-    private static string EscapeArgArray(string[] arguments)
-    {
-        var sb = new ValueStringBuilder(stackalloc char[256]);
-
-        for (var i = 0; i < arguments.Length; i++)
-        {
-            sb.Append(Space);
-
-            EscapeSingleArg(ref sb, arguments[i]);
-        }
-
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// This prefixes every character with the '^' character to force cmd to interpret the argument string literally.
-    /// </summary>
-    /// <remarks>
-    /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
-    /// </remarks>
-    /// <param name="arguments">List of arguments to escape.</param>
-    /// <returns>A <c>cmd.exe</c> safe escaped string of the supplied arguments.</returns>
-    private static string EscapeArgArrayForCmd(string[] arguments)
-    {
-        var sb = new ValueStringBuilder(stackalloc char[256]);
-
-        for (var i = 0; i < arguments.Length; i++)
-        {
-            sb.Append(Space);
-
-            EscapeArgForCmd(ref sb, arguments[i]);
         }
 
         return sb.ToString();
@@ -197,9 +178,10 @@ internal static class ArgumentEscaper
     /// </remarks>
     /// <param name="sb">The <seealso cref="ValueStringBuilder"/> to append to.</param>
     /// <param name="argument">The argument to escape.</param>
-    private static void EscapeArgForCmd(ref ValueStringBuilder sb, ReadOnlySpan<char> argument)
+    /// <param name="quoteValue">If the value should be wrapped in quotes if it contains whitespace.</param>
+    private static void EscapeArgForCmd(ref ValueStringBuilder sb, ReadOnlySpan<char> argument, bool quoteValue)
     {
-        var quoted = ArgumentContainsWhitespace(argument);
+        var quoted = quoteValue && ArgumentContainsWhitespace(argument);
 
         if (quoted)
         {

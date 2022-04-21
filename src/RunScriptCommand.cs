@@ -101,7 +101,7 @@ public class RunScriptCommand : Command, ICommandHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        writer.Banner(name, ArgumentEscaper.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
+        writer.Banner(name, ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
         writer.LineVerbose("Using shell: {0}", shell);
         writer.BlankLineVerbose();
 
@@ -114,17 +114,13 @@ public class RunScriptCommand : Command, ICommandHandler
             {
                 process.StartInfo.Arguments = string.Concat(
                     "/d /s /c \"",
-                    cmd,
-                    ArgumentEscaper.EscapeAndConcatenateArgArrayForCmdProcessStart(args),
+                    ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(cmd, args),
                     "\"");
             }
             else
             {
                 process.StartInfo.ArgumentList.Add("-c");
-                process.StartInfo.ArgumentList.Add(
-                    string.Concat(
-                        cmd,
-                        ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(args)));
+                process.StartInfo.ArgumentList.Add(ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForProcessStart(cmd, args));
             }
 
             process.Start();
