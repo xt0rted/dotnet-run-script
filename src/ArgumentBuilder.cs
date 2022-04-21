@@ -97,7 +97,7 @@ internal static class ArgumentBuilder
         {
             for (var i = 0; i < args.Length; i++)
             {
-                sb.Append(' ');
+                sb.Append(Space);
                 sb.Append(args[i]);
             }
         }
