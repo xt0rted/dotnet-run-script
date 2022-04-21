@@ -54,8 +54,11 @@ public class RunScriptCommand : Command, ICommandHandler
 
         foreach (var script in _scriptNames.Where(scriptName => _project.Scripts!.ContainsKey(scriptName)))
         {
+            // UnparsedTokens is backed by string[] so if we cast
+            // back to that we get a lot better perf down the line.
+            // Hopefully this doesn't break in the future 🤞
             var args = script == Name
-                ? context.ParseResult.UnparsedTokens
+                ? (string[])context.ParseResult.UnparsedTokens
                 : null;
 
             var result = await RunScriptAsync(
@@ -93,7 +96,7 @@ public class RunScriptCommand : Command, ICommandHandler
         string? cmd,
         string shell,
         bool isCmd,
-        IReadOnlyList<string>? args,
+        string[]? args,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

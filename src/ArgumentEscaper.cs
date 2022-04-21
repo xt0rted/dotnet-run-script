@@ -28,7 +28,7 @@ internal static class ArgumentEscaper
     /// An escaped string of the supplied arguments.
     /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
     /// </returns>
-    public static string EscapeAndConcatenateArgArrayForProcessStart(IReadOnlyList<string>? args)
+    public static string EscapeAndConcatenateArgArrayForProcessStart(string[]? args)
     {
         if (args is null)
         {
@@ -49,7 +49,7 @@ internal static class ArgumentEscaper
     /// A <c>cmd.exe</c> safe escaped string of the supplied arguments.
     /// Note: This value is prefixed with a space if there are any values supplied so the caller doesn't need to add one.
     /// </returns>
-    public static string EscapeAndConcatenateArgArrayForCmdProcessStart(IReadOnlyList<string>? args)
+    public static string EscapeAndConcatenateArgArrayForCmdProcessStart(string[]? args)
     {
         if (args is null)
         {
@@ -68,15 +68,15 @@ internal static class ArgumentEscaper
     /// <returns>A raw concatination of the <paramref name="command"/> and <paramref name="args"/>.</returns>
     public static string ConcatinateCommandAndArgArrayForDisplay(
         string? command,
-        IReadOnlyList<string>? args)
+        string[]? args)
     {
         var sb = new ValueStringBuilder(stackalloc char[256]);
 
         sb.Append(command);
 
-        if (args?.Count > 0)
+        if (args?.Length > 0)
         {
-            for (var i = 0; i < args.Count; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 sb.Append(' ');
                 sb.Append(args[i]);
@@ -94,11 +94,11 @@ internal static class ArgumentEscaper
     /// </remarks>
     /// <param name="arguments">List of arguments to escape.</param>
     /// <returns>An escaped string of the supplied arguments.</returns>
-    private static string EscapeArgArray(IReadOnlyList<string> arguments)
+    private static string EscapeArgArray(string[] arguments)
     {
         var sb = new ValueStringBuilder(stackalloc char[256]);
 
-        for (var i = 0; i < arguments.Count; i++)
+        for (var i = 0; i < arguments.Length; i++)
         {
             sb.Append(Space);
 
@@ -116,11 +116,11 @@ internal static class ArgumentEscaper
     /// </remarks>
     /// <param name="arguments">List of arguments to escape.</param>
     /// <returns>A <c>cmd.exe</c> safe escaped string of the supplied arguments.</returns>
-    private static string EscapeArgArrayForCmd(IReadOnlyList<string> arguments)
+    private static string EscapeArgArrayForCmd(string[] arguments)
     {
         var sb = new ValueStringBuilder(stackalloc char[256]);
 
-        for (var i = 0; i < arguments.Count; i++)
+        for (var i = 0; i < arguments.Length; i++)
         {
             sb.Append(Space);
 
