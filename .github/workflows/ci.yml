@@ -134,7 +134,7 @@ jobs:
           if [ "${{ matrix.shell }}" == "default" ]; then
             dotnet r build
           else
-            dotnet r build --script-shell ${{ matrix.shell }}
+            dotnet r build --script-shell "${{ matrix.shell }}"
           fi
         shell: bash
 
@@ -142,7 +142,7 @@ jobs:
           if [ "${{ matrix.shell }}" == "default" ]; then
             dotnet r test
           else
-            dotnet r test --script-shell ${{ matrix.shell }}
+            dotnet r test --script-shell "${{ matrix.shell }}"
           fi
         shell: bash
 
