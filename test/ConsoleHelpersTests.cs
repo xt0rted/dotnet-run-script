@@ -16,7 +16,7 @@ public class ConsoleHelpersTests
     public void FormatInfoBuilder_should_support_NO_COLOR_env_var(string value)
     {
         // Given
-        var environment = new TestEnvironment(isWindows: true);
+        var environment = new TestEnvironment();
 
         environment.SetEnvironmentVariable("NO_COLOR", value);
 
@@ -41,7 +41,7 @@ public class ConsoleHelpersTests
     public void FormatInfoBuilder_should_support_DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION_env_var(string value, bool expected)
     {
         // Given
-        var environment = new TestEnvironment(isWindows: true);
+        var environment = new TestEnvironment();
 
         environment.SetEnvironmentVariable("DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION", value);
 
