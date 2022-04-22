@@ -4,18 +4,15 @@ using System.Collections.Immutable;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-public class RunScriptCommand : Command, ICommandHandler
+internal class RunScriptCommand : Command, ICommandHandler
 {
     private static readonly Regex _isCmdCheck = new("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase);
 
-    private readonly bool _isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    private readonly string? _comspec = Environment.GetEnvironmentVariable("COMSPEC");
-
     private readonly Project _project;
     private readonly string _workingDirectory;
+    private readonly IEnvironment _environment;
     private readonly IFormatProvider _consoleFormatProvider;
 
     private readonly ImmutableArray<string> _scriptNames;
@@ -25,6 +22,7 @@ public class RunScriptCommand : Command, ICommandHandler
         string? description,
         Project project,
         string workingDirectory,
+        IEnvironment environment,
         IFormatProvider consoleFormatProvider)
         : base(name, description)
     {
@@ -32,6 +30,7 @@ public class RunScriptCommand : Command, ICommandHandler
 
         _project = project ?? throw new ArgumentNullException(nameof(project));
         _workingDirectory = workingDirectory;
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _consoleFormatProvider = consoleFormatProvider ?? throw new ArgumentNullException(nameof(consoleFormatProvider));
 
         _scriptNames = ImmutableArray.Create(new[] { "pre" + Name, Name, "post" + Name });
@@ -81,8 +80,8 @@ public class RunScriptCommand : Command, ICommandHandler
 
     private (string shell, bool isCmd) GetScriptShell(string? shell)
     {
-        shell ??= _isWindows
-            ? _comspec ?? "cmd"
+        shell ??= _environment.IsWindows
+            ? _environment.GetEnvironmentVariable("COMSPEC") ?? "cmd"
             : "sh";
 
         var isCmd = _isCmdCheck.IsMatch(shell);
