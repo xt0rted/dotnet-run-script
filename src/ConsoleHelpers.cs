@@ -14,15 +14,18 @@ internal static class ConsoleHelpers
             SupportsAnsiCodes = ConsoleFormatInfo.CurrentInfo.SupportsAnsiCodes,
         };
 
-        if (consoleFormatProvider.SupportsAnsiCodes)
+        if (environment.GetEnvironmentVariable("NO_COLOR") is not null)
         {
-            consoleFormatProvider.SupportsAnsiCodes = environment.GetEnvironmentVariable("NO_COLOR") is null;
-        }
-        else
-        {
-            var envVar = environment.GetEnvironmentVariable("DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION");
+            consoleFormatProvider.SupportsAnsiCodes = false;
 
-            consoleFormatProvider.SupportsAnsiCodes = envVar is not null && (envVar == "1" || envVar.Equals("true", StringComparison.OrdinalIgnoreCase));
+            return consoleFormatProvider;
+        }
+
+        var envVar = environment.GetEnvironmentVariable("DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION");
+
+        if (envVar is not null)
+        {
+            consoleFormatProvider.SupportsAnsiCodes = envVar == "1" || envVar.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
         return consoleFormatProvider;

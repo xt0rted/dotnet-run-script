@@ -1,15 +1,16 @@
 namespace RunScript;
 
 using System.Collections;
+using System.Runtime.InteropServices;
 
 internal class TestEnvironment : IEnvironment
 {
     private readonly Dictionary<string, string?> _variables = new(StringComparer.OrdinalIgnoreCase);
 
-    public TestEnvironment(bool isWindows)
+    public TestEnvironment(bool? isWindows = null)
     {
         CurrentDirectory = AttributeReader.GetProjectDirectory(GetType().Assembly);
-        IsWindows = isWindows;
+        IsWindows = isWindows ?? RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
     }
 
     public string CurrentDirectory { get; }
