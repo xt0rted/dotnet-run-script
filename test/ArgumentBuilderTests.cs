@@ -4,9 +4,9 @@ namespace RunScript;
 public class ArgumentBuilderTests
 {
     [Theory]
-    [InlineData("cmd", null, "cmd")]
+    [InlineData("cmd", null, "cm d")]
     [InlineData("cm \"d\"", null, "cm \"d\"")]
-    [InlineData("c m d", null, "c m d")]
+    [InlineData("c m d", null, "c md")]
     [InlineData("c m d", new string[0], "c m d")]
     [InlineData("c m d", new[] { "one", "two", "three" }, "c m d \"one\" \"two\" \"three\"")]
     [InlineData("c m d", new[] { "line1\nline2", "word1\tword2" }, "c m d \"line1\nline2\" \"word1\tword2\"")]
