@@ -107,13 +107,9 @@ internal static class ArgumentBuilder
 
     private static void EscapeSingleArg(ref ValueStringBuilder sb, ReadOnlySpan<char> arg)
     {
-        var needsQuotes = arg.Length == 0 || ArgumentContainsWhitespace(arg);
-        var isQuoted = needsQuotes || IsSurroundedWithQuotes(arg);
+        var isQuoted = IsSurroundedWithQuotes(arg);
 
-        if (needsQuotes)
-        {
-            sb.Append(Quote);
-        }
+        sb.Append(Quote);
 
         for (var i = 0; i < arg.Length; ++i)
         {
@@ -157,10 +153,7 @@ internal static class ArgumentBuilder
             }
         }
 
-        if (needsQuotes)
-        {
-            sb.Append(Quote);
-        }
+        sb.Append(Quote);
     }
 
     /// <summary>

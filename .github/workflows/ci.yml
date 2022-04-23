@@ -140,11 +140,18 @@ jobs:
 
       - run: |
           if [ "${{ matrix.shell }}" == "default" ]; then
-            dotnet r test --verbose
+            dotnet r test --verbose -- --logger "trx;LogFilePrefix=${{ matrix.os }}-integration-tests"
           else
-            dotnet r test --verbose --script-shell "${{ matrix.shell }}"
+            dotnet r test --verbose --script-shell "${{ matrix.shell }}" -- --logger "trx;LogFilePrefix=${{ matrix.os }}-integration-tests"
           fi
         shell: bash
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3.0.0
+        if: always()
+        with:
+          name: integration-test-results
+          path: ./.coverage/*.trx
 
   release:
     if: github.event_name == 'push'
