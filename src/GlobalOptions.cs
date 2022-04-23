@@ -11,5 +11,5 @@ public static class GlobalOptions
         ArgumentHelpName = "shell",
     };
 
-    public static readonly Option<bool> Verbose = new("--verbose", "Enable verbose output");
+    public static readonly Option<bool> Verbose = new(new[] { "-v", "--verbose" }, "Enable verbose output");
 }
