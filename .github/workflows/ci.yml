@@ -54,7 +54,7 @@ jobs:
 
       - run: dotnet r build
 
-      - run: dotnet r test
+      - run: dotnet r test -- --logger "trx;LogFilePrefix=${{ matrix.os }}"
 
       - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
 
@@ -140,9 +140,15 @@ jobs:
 
       - run: |
           if [ "${{ matrix.shell }}" == "default" ]; then
-            dotnet r test --verbose -- --logger "trx;LogFilePrefix=${{ matrix.os }}-integration-tests"
+            dotnet r test --verbose -- --logger "trx;LogFilePrefix=${{ matrix.os }}-default"
           else
-            dotnet r test --verbose --script-shell "${{ matrix.shell }}" -- --logger "trx;LogFilePrefix=${{ matrix.os }}-integration-tests"
+            shellName="${{ matrix.shell }}"
+
+            if [[ "$shellName" == *\.exe ]]; then
+              shellName="bash"
+            fi
+
+            dotnet r test --verbose --script-shell "${{ matrix.shell }}" -- --logger "trx;LogFilePrefix=${{ matrix.os }}-$shellName"
           fi
         shell: bash
 
