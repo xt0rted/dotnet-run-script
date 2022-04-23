@@ -31,7 +31,7 @@ Name | Description
 -- | --
 `--if-present` | Don't exit with an error code if the script isn't found
 `--script-shell` | The shell to use when running scripts (cmd, pwsh, sh, etc.)
-`--verbose` | Enable verbose output
+`-v`, `--verbose` | Enable verbose output
 `--version` | Show version information
 `--help` | Show help and usage information
 
