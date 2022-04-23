@@ -132,9 +132,9 @@ jobs:
 
       - run: |
           if [ "${{ matrix.shell }}" == "default" ]; then
-            dotnet r build --verbose
+            dotnet r build -v
           else
-            dotnet r build --verbose --script-shell "${{ matrix.shell }}"
+            dotnet r build -v --script-shell "${{ matrix.shell }}"
           fi
         shell: bash
 
