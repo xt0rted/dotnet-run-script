@@ -30,6 +30,6 @@ jobs:
       - uses: dorny/test-reporter@v1.5.0
         with:
           artifact: integration-test-results
-          name: .NET Tests
+          name: .NET Integration Tests
           path: "*.trx"
           reporter: dotnet-trx
