@@ -27,19 +27,19 @@ public class ArgumentBuilderTests
     }
 
     [Theory]
-    [InlineData("cmd", null, "^c^m^d")]
-    [InlineData("cm \"d\"", null, "^c^m^ ^\"^d^\"")]
-    [InlineData("c m d", null, "^c^ ^m^ ^d")]
-    [InlineData("c m d", new string[0], "^c^ ^m^ ^d")]
-    [InlineData("c m d", new[] { "one", "two", "three" }, "^c^ ^m^ ^d^ ^o^n^e^ ^t^w^o^ ^t^h^r^e^e")]
-    [InlineData("c m d", new[] { "line1\nline2", "word1\tword2" }, "^c^ ^m^ ^d^ ^\"^l^i^n^e^1^\n^l^i^n^e^2^\"^ ^\"^w^o^r^d^1^\t^w^o^r^d^2^\"")]
-    [InlineData("c m d", new[] { "with spaces" }, "^c^ ^m^ ^d^ ^\"^w^i^t^h^ ^s^p^a^c^e^s^\"")]
-    [InlineData("c m d", new[] { @"with\backslash" }, @"^c^ ^m^ ^d^ ^w^i^t^h^\^b^a^c^k^s^l^a^s^h")]
-    [InlineData("c m d", new[] { @"""quotedwith\backslash""" }, @"^c^ ^m^ ^d^ ^""^q^u^o^t^e^d^w^i^t^h^\^b^a^c^k^s^l^a^s^h^""")]
-    [InlineData("c m d", new[] { @"C:\Users\" }, @"^c^ ^m^ ^d^ ^C^:^\^U^s^e^r^s^\")]
-    [InlineData("c m d", new[] { @"C:\Program Files\dotnet\" }, @"^c^ ^m^ ^d^ ^""^C^:^\^P^r^o^g^r^a^m^ ^F^i^l^e^s^\^d^o^t^n^e^t^\^""")]
-    [InlineData("c m d", new[] { @"backslash\""preceedingquote" }, @"^c^ ^m^ ^d^ ^b^a^c^k^s^l^a^s^h^\^""^p^r^e^c^e^e^d^i^n^g^q^u^o^t^e")]
-    [InlineData("c m d", new[] { @""" hello """ }, @"^c^ ^m^ ^d^ ^""^""^ ^h^e^l^l^o^ ^""^""")]
+    [InlineData("cmd", null, "cmd")]
+    [InlineData("cm \"d\"", null, "cm \"d\"")]
+    [InlineData("c m d", null, "c m d")]
+    [InlineData("c m d", new string[0], "c m d")]
+    [InlineData("c m d", new[] { "one", "two", "three" }, "c m d^ ^o^n^e^ ^t^w^o^ ^t^h^r^e^e")]
+    [InlineData("c m d", new[] { "line1\nline2", "word1\tword2" }, "c m d^ ^\"^l^i^n^e^1^\n^l^i^n^e^2^\"^ ^\"^w^o^r^d^1^\t^w^o^r^d^2^\"")]
+    [InlineData("c m d", new[] { "with spaces" }, "c m d^ ^\"^w^i^t^h^ ^s^p^a^c^e^s^\"")]
+    [InlineData("c m d", new[] { @"with\backslash" }, @"c m d^ ^w^i^t^h^\^b^a^c^k^s^l^a^s^h")]
+    [InlineData("c m d", new[] { @"""quotedwith\backslash""" }, @"c m d^ ^""^q^u^o^t^e^d^w^i^t^h^\^b^a^c^k^s^l^a^s^h^""")]
+    [InlineData("c m d", new[] { @"C:\Users\" }, @"c m d^ ^C^:^\^U^s^e^r^s^\")]
+    [InlineData("c m d", new[] { @"C:\Program Files\dotnet\" }, @"c m d^ ^""^C^:^\^P^r^o^g^r^a^m^ ^F^i^l^e^s^\^d^o^t^n^e^t^\^""")]
+    [InlineData("c m d", new[] { @"backslash\""preceedingquote" }, @"c m d^ ^b^a^c^k^s^l^a^s^h^\^""^p^r^e^c^e^e^d^i^n^g^q^u^o^t^e")]
+    [InlineData("c m d", new[] { @""" hello """ }, @"c m d^ ^""^""^ ^h^e^l^l^o^ ^""^""")]
     public void EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(string command, string[] args, string expected)
     {
         // Given / When

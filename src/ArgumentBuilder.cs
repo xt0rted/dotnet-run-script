@@ -62,7 +62,7 @@ internal static class ArgumentBuilder
     {
         var sb = new ValueStringBuilder(stackalloc char[256]);
 
-        EscapeArgForCmd(ref sb, command, quoteValue: false);
+        sb.Append(command);
 
         if (args is not null)
         {
@@ -71,7 +71,7 @@ internal static class ArgumentBuilder
                 sb.Append(Caret);
                 sb.Append(Space);
 
-                EscapeArgForCmd(ref sb, args[i], quoteValue: true);
+                EscapeArgForCmd(ref sb, args[i]);
             }
         }
 
@@ -165,10 +165,9 @@ internal static class ArgumentBuilder
     /// </remarks>
     /// <param name="sb">The <seealso cref="ValueStringBuilder"/> to append to.</param>
     /// <param name="argument">The argument to escape.</param>
-    /// <param name="quoteValue">If the value should be wrapped in quotes if it contains whitespace.</param>
-    private static void EscapeArgForCmd(ref ValueStringBuilder sb, ReadOnlySpan<char> argument, bool quoteValue)
+    private static void EscapeArgForCmd(ref ValueStringBuilder sb, ReadOnlySpan<char> argument)
     {
-        var quoted = quoteValue && ArgumentContainsWhitespace(argument);
+        var quoted = ArgumentContainsWhitespace(argument);
 
         if (quoted)
         {

@@ -159,6 +159,8 @@ jobs:
           name: integration-test-results
           path: ./.coverage/*.trx
 
+      - run: dotnet r integration:ci --verbose -- --logger "trx;LogFilePrefix=ci test"
+
   release:
     if: github.event_name == 'push'
 
