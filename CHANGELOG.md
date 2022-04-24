@@ -1,6 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- fixed: Don't escape the script passed to `cmd.exe`, just the double dash arguments
+
 ## [0.2.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.1.0...v0.2.0) - 2022-04-23
+
+> ℹ️ This version broke conditional script execution (`cmd1 && cmd2`) in `cmd.exe`
 
 - added: Force color output with the `DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION` environment variable.
   - Note: this tool with output color on all platforms including when output is redirected, but the dotnet cli only supports this on Unix platforms currently. This means script results might not be colored in places like GitHub Actions build logs when using the Windows VMs.

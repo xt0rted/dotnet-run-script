@@ -19,6 +19,9 @@
     "test:release": "dotnet r test -- --configuration Release",
     "pack:release": "dotnet r pack -- --configuration Release",
 
+    // integration tests
+    "integration:ci": "dotnet r clean && dotnet r clean:bin && dotnet build && dotnet test --no-build",
+
     // test scripts
     "info": "dotnet r dotnet:version && dotnet r dotnet:info",
     "dotnet:info": "dotnet --info",
