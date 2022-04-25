@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>r</AssemblyName>
     <RootNamespace>RunScript</RootNamespace>
     <OutputType>Exe</OutputType>
     <DebugSymbols>true</DebugSymbols>
