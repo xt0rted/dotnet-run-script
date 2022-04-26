@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v3.0.2
 
       - name: Set up .NET
-        uses: xt0rted/setup-dotnet@v1.2.0
+        uses: xt0rted/setup-dotnet@v1.3.0
         with:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
