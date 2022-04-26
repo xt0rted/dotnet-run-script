@@ -1,6 +1,7 @@
 namespace RunScript;
 
 // https://github.com/dotnet/sdk/blob/09b31215867d1ffe4955fd5b7cd91eb552d3632c/src/Tests/Microsoft.DotNet.Cli.Utils.Tests/ArgumentEscaperTests.cs
+[Trait("category", "unit")]
 public class ArgumentBuilderTests
 {
     [Theory]

@@ -8,6 +8,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
     private readonly IEnvironment _environment;
     private readonly IDictionary<string, string?> _scripts;
     private readonly ProcessContext _processContext;
+    private readonly bool _captureOutput;
     private readonly CancellationToken _cancellationToken;
 
     public CommandGroupRunner(
@@ -15,12 +16,14 @@ internal class CommandGroupRunner : ICommandGroupRunner
         IEnvironment environment,
         IDictionary<string, string?> scripts,
         ProcessContext processContext,
+        bool captureOutput,
         CancellationToken cancellationToken)
     {
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _scripts = scripts ?? throw new ArgumentNullException(nameof(scripts));
         _processContext = processContext ?? throw new ArgumentNullException(nameof(processContext));
+        _captureOutput = captureOutput;
         _cancellationToken = cancellationToken;
     }
 
@@ -28,6 +31,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
         => new CommandRunner(
             _writer,
             _processContext,
+            _captureOutput,
             _cancellationToken);
 
     public async Task<int> RunAsync(string name, string[]? scriptArgs)

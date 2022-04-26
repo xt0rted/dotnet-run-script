@@ -1,0 +1,14 @@
+﻿{
+  Error: ,
+  Out:
+> Using shell: cmd.exe
+
+
+> test
+> echo testing
+
+testing
+
+
+
+}
