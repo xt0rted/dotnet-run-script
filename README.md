@@ -40,6 +40,12 @@ Name | Description
 `--version` | Show version information
 `--help` | Show help and usage information
 
+Arguments passed after the double dash are passed through to the executing script.
+
+```console
+dotnet r build --verbose -- --configuration Release
+```
+
 ### Color output
 
 This tool supports the `DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION` environment variable.
@@ -82,7 +88,7 @@ You can override this with your own command if you wish.
 
 ## Usage
 
-Use `dotnet r <command>` to run the scripts.
+Use `dotnet r [<scripts>...] [options]` to run the scripts.
 Anything you can run from the command line can be used in a script.
 You can also call other scripts to chain them together such as a `ci` script that calls the `build`, `test`, and `package` scripts.
 
@@ -101,12 +107,44 @@ This is an example of a `pre` script that clears the build artifacts folder, and
 }
 ```
 
+### Multiple script execution
+
+Multiple scripts can be called at the same time like so:
+
+```console
+dotnet r build test
+```
+
+This will run the `build` script and if it returns a `0` exit code it will then run the `test` script.
+The `--if-present` option can be used to skip scripts that don't exist.
+
+```json
+{
+  "scripts": {
+    "build": "dotnet build",
+    "test:unit": "dotnet test",
+    "package": "dotnet pack"
+  }
+}
+```
+
+```console
+dotnet r build test:unit test:integration package --if-present
+```
+
+Arguments passed after the double dash are passed through to each executing script.
+In this example both the `--configuration` and `--framework` options will be passed to each of the four scripts when running them.
+
+```console
+dotnet r build test:unit test:integration package -- --configuration Release --framework net6.0
+```
+
 ### Working directory
 
 The working directory is set to the root of the project where the `global.json` is located.
 If you need to get the folder the command was executed from you can do so using the `INIT_CWD` environment variable.
 
-### Common build environments
+## Common build environments
 
 When using this tool on a build server, such as GitHub Actions, you might want to use a generic workflow that calls a common set of scripts such as `build`, `test`, and `package`.
 These might not be defined in all of your projects and if a script that doesn't exist is called an error is returned.
