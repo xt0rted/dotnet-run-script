@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
+[Trait("category", "unit")]
 [UsesVerify]
 public class CommandBuilderTests
 {
@@ -122,6 +123,7 @@ public class CommandBuilderTests
             consoleWriter,
             environment,
             project,
-            "/test/path");
+            "/test/path",
+            captureOutput: true);
     }
 }

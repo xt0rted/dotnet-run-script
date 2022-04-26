@@ -61,7 +61,9 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             writer,
             _environment,
             project,
-            _workingDirectory);
+            _workingDirectory,
+            // For now we just write to the executing shell, later we can opt to write to the log instead
+            captureOutput: false);
 
         builder.SetUpEnvironment(scriptShell);
 

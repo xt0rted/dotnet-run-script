@@ -5,6 +5,7 @@ using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 using System.Threading.Tasks;
 
+[Trait("category", "unit")]
 [UsesVerify]
 public class CommandGroupRunnerTests
 {
@@ -316,6 +317,7 @@ public class CommandGroupRunnerTests
                     environment,
                     scripts,
                     context,
+                    true,
                     default)));
 
         return (console, groupRunner);

@@ -11,12 +11,14 @@ internal class CommandBuilder
     private readonly IEnvironment _environment;
     private readonly Project _project;
     private readonly string _workingDirectory;
+    private readonly bool _captureOutput;
 
     public CommandBuilder(
         IConsoleWriter writer,
         IEnvironment environment,
         Project project,
-        string workingDirectory)
+        string workingDirectory,
+        bool captureOutput)
     {
         if (string.IsNullOrEmpty(workingDirectory)) throw new ArgumentException($"'{nameof(workingDirectory)}' cannot be null or empty.", nameof(workingDirectory));
 
@@ -24,6 +26,7 @@ internal class CommandBuilder
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _project = project ?? throw new ArgumentNullException(nameof(project));
         _workingDirectory = workingDirectory;
+        _captureOutput = captureOutput;
     }
 
     public ProcessContext? ProcessContext { get; private set; }
@@ -44,6 +47,7 @@ internal class CommandBuilder
             _environment,
             _project.Scripts!,
             ProcessContext!,
+            _captureOutput,
             cancellationToken);
 
     /// <summary>

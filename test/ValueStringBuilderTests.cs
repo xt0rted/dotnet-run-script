@@ -5,6 +5,7 @@ namespace RunScript;
 using System.Text;
 
 // https://github.com/dotnet/runtime/blob/c78bf2f522b4ce5a449faf6a38a0752b642a7f79/src/libraries/Common/tests/Tests/System/Text/ValueStringBuilderTests.cs
+[Trait("category", "unit")]
 public class ValueStringBuilderTests
 {
     [Fact]
