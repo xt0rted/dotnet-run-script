@@ -13,42 +13,37 @@ internal sealed class StreamForwarder
 #pragma warning disable IDISP006 // Implement IDisposable
     private StringWriter? _capture;
 #pragma warning restore IDISP006 // Implement IDisposable
-    private Action<string>? _writeLine;
-    private bool _trimTrailingCapturedNewline;
 
     public string? CapturedOutput
     {
         get
         {
-            var capture = _capture?.GetStringBuilder()?.ToString();
-
-            if (_trimTrailingCapturedNewline)
+            if (_capture is null)
             {
-                capture = capture?.TrimEnd('\r', '\n');
+                return null;
             }
 
-            return capture;
+            var capture = _capture
+                .GetStringBuilder()
+                .ToString()
+                .TrimEnd('\r', '\n');
+
+            return capture.Length == 0
+                ? null
+                : capture;
         }
     }
 
-    public StreamForwarder Capture(bool trimTrailingNewline = false)
+    public StreamForwarder Capture()
     {
-        ThrowIfCaptureSet();
+        if (_capture is not null)
+        {
+            throw new InvalidOperationException("Already capturing stream!");
+        }
 
-        _capture?.Dispose();
+#pragma warning disable IDISP003 // Dispose previous before re-assigning
         _capture = new StringWriter();
-        _trimTrailingCapturedNewline = trimTrailingNewline;
-
-        return this;
-    }
-
-    public StreamForwarder ForwardTo(Action<string> writeLine)
-    {
-        ThrowIfNull(writeLine);
-
-        ThrowIfForwarderSet();
-
-        _writeLine = writeLine;
+#pragma warning restore IDISP003 // Dispose previous before re-assigning
 
         return this;
     }
@@ -95,42 +90,8 @@ internal sealed class StreamForwarder
     {
         if (_builder is not null)
         {
-            WriteLine(_builder.ToString());
+            _capture?.WriteLine(_builder.ToString());
             _builder.Clear();
-        }
-    }
-
-    private void WriteLine(string str)
-    {
-        _capture?.WriteLine(str);
-
-        if (_writeLine is not null)
-        {
-            _writeLine(str);
-        }
-    }
-
-    private void ThrowIfNull(object obj)
-    {
-        if (obj is null)
-        {
-            throw new ArgumentNullException(nameof(obj));
-        }
-    }
-
-    private void ThrowIfForwarderSet()
-    {
-        if (_writeLine is not null)
-        {
-            throw new InvalidOperationException("WriteLine forwarder set previously");
-        }
-    }
-
-    private void ThrowIfCaptureSet()
-    {
-        if (_capture is not null)
-        {
-            throw new InvalidOperationException("Already capturing stream!");
         }
     }
 }

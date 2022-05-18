@@ -32,8 +32,8 @@ internal class CommandRunner : ICommandRunner
             process.StartInfo.WorkingDirectory = _processContext.WorkingDirectory;
             process.StartInfo.FileName = _processContext.Shell;
 
-            StreamForwarder? outStream = null;
-            StreamForwarder? errStream = null;
+            var outStream = new StreamForwarder();
+            var errStream = new StreamForwarder();
             Task? taskOut = null;
             Task? taskErr = null;
 
@@ -42,8 +42,8 @@ internal class CommandRunner : ICommandRunner
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
 
-                outStream = new StreamForwarder().Capture();
-                errStream = new StreamForwarder().Capture();
+                outStream.Capture();
+                errStream.Capture();
             }
 
             if (_processContext.IsCmd)
@@ -63,8 +63,8 @@ internal class CommandRunner : ICommandRunner
 
             if (_captureOutput)
             {
-                taskOut = outStream!.BeginReadAsync(process.StandardOutput);
-                taskErr = errStream!.BeginReadAsync(process.StandardError);
+                taskOut = outStream.BeginReadAsync(process.StandardOutput);
+                taskErr = errStream.BeginReadAsync(process.StandardError);
             }
 
             await process.WaitForExitAsync(_cancellationToken);
@@ -74,8 +74,8 @@ internal class CommandRunner : ICommandRunner
                 await taskOut!.WaitAsync(_cancellationToken);
                 await taskErr!.WaitAsync(_cancellationToken);
 
-                _writer.Line(outStream!.CapturedOutput);
-                _writer.Error(errStream!.CapturedOutput);
+                _writer.Raw(outStream.CapturedOutput);
+                _writer.Error(errStream.CapturedOutput);
             }
 
             return process.ExitCode;
