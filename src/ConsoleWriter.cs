@@ -17,13 +17,10 @@ internal class ConsoleWriter : IConsoleWriter
         _verbose = verbose;
     }
 
-    private void WriteLine(AnsiControlCode modifierOn, AnsiControlCode modifierOff, bool verbose, string? message = null, params object?[] args)
-    {
-        if (!_verbose && verbose)
-        {
-            return;
-        }
+    private static AnsiControlCode TextDim { get; } = $"{Ansi.Esc}[2m";
 
+    private void WriteLine(AnsiControlCode modifierOn, AnsiControlCode modifierOff, string? message, params object?[] args)
+    {
         if (message is not null)
         {
             _console.Out.Write(modifierOn.ToString(null, _consoleFormatProvider));
@@ -38,34 +35,51 @@ internal class ConsoleWriter : IConsoleWriter
             }
 
             _console.Out.Write(modifierOff.ToString(null, _consoleFormatProvider));
+            _console.Out.Write(Environment.NewLine);
         }
-
-        _console.Out.Write(Environment.NewLine);
     }
+
+    public void Raw(string? message)
+        => _console.Out.Write(message);
 
     public void VerboseBanner()
         => LineVerbose("Verbose mode is on. This will print more information.");
 
     public void BlankLine()
-        => WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, verbose: false, null);
+        => _console.Out.Write(Environment.NewLine);
 
     public void BlankLineVerbose()
-        => WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, verbose: true, null);
+    {
+        if (_verbose)
+        {
+            _console.Out.Write(Environment.NewLine);
+        }
+    }
 
     public void Line(string? message, params object?[] args)
-        => WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, verbose: false, message, args);
+        => WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, message, args);
 
     public void LineVerbose(string? message = null, params object?[] args)
-        => WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, verbose: true, "> " + message, args);
+    {
+        if (_verbose)
+        {
+            WriteLine(Ansi.Color.Foreground.LightGray, Ansi.Color.Foreground.Default, "> " + message, args);
+        }
+    }
 
     public void SecondaryLine(string? message, params object?[] args)
-        => WriteLine(TextDim, Ansi.Text.BoldOff, verbose: false, message, args);
+        => WriteLine(TextDim, Ansi.Text.BoldOff, message, args);
 
     public void VerboseSecondaryLine(string? message, params object?[] args)
-        => WriteLine(TextDim, Ansi.Text.BoldOff, verbose: true, "> " + message, args);
+    {
+        if (_verbose)
+        {
+            WriteLine(TextDim, Ansi.Text.BoldOff, "> " + message, args);
+        }
+    }
 
     internal void Information(string? message, params object?[] args)
-        => WriteLine(Ansi.Color.Foreground.Cyan, Ansi.Color.Foreground.Default, verbose: false, message, args);
+        => WriteLine(Ansi.Color.Foreground.Cyan, Ansi.Color.Foreground.Default, message, args);
 
     public void Banner(params string?[] messages)
     {
@@ -82,13 +96,18 @@ internal class ConsoleWriter : IConsoleWriter
     }
 
     public void Error(string? message, params object?[] args)
-        => WriteLine(Ansi.Color.Foreground.Red, Ansi.Color.Foreground.Default, verbose: false, message, args);
+        => WriteLine(Ansi.Color.Foreground.Red, Ansi.Color.Foreground.Default, message, args);
 
-    public string ColorText(ConsoleColor color, int value)
+    public string? ColorText(ConsoleColor color, int value)
         => ColorText(color, value.ToString(CultureInfo.CurrentCulture));
 
-    public string ColorText(ConsoleColor color, string value)
+    public string? ColorText(ConsoleColor color, string? value)
     {
+        if (string.IsNullOrEmpty(value))
+        {
+            return null;
+        }
+
         var colorControlCode = color switch
         {
             ConsoleColor.DarkBlue => Ansi.Color.Foreground.Blue,
@@ -114,6 +133,4 @@ internal class ConsoleWriter : IConsoleWriter
             value,
             Ansi.Color.Foreground.Default.ToString(null, _consoleFormatProvider));
     }
-
-    private static AnsiControlCode TextDim { get; } = $"{Ansi.Esc}[2m";
 }
