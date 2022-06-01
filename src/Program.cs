@@ -1,5 +1,3 @@
-#pragma warning disable RCS0054
-
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
