@@ -105,7 +105,7 @@ dotnet_diagnostic.RCS0029.severity = error
 # RCS0030: Add new line before embedded statement
 dotnet_diagnostic.RCS0030.severity = none
 
-# RCS0031: Add new line before enum member
+# RCS0031: Put enum member on its own line
 dotnet_diagnostic.RCS0031.severity = error
 
 # RCS0032: Place new line after/before arrow token
@@ -114,7 +114,7 @@ dotnet_diagnostic.RCS0032.severity = error
 # RCS0033: Add new line before statement
 dotnet_diagnostic.RCS0033.severity = error
 
-# RCS0034: Add new line before type parameter constraint
+# RCS0034: Put type parameter constraint on its own line
 dotnet_diagnostic.RCS0034.severity = error
 
 # RCS0036: Remove blank line between single-line declarations of same kind
@@ -552,7 +552,7 @@ dotnet_diagnostic.RCS1173.severity = error
 # RCS1174: Remove redundant async/await
 dotnet_diagnostic.RCS1174.severity = error
 
-# RCS1175: Unused this parameter
+# RCS1175: Unused 'this' parameter
 dotnet_diagnostic.RCS1175.severity = error
 
 # RCS1176: Use 'var' instead of explicit type (when the type is not obvious)
