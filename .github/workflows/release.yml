@@ -32,7 +32,7 @@ jobs:
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get changelog entry
-        uses: mindsers/changelog-reader-action@v2.0.0
+        uses: mindsers/changelog-reader-action@v2.1.0
         id: changelog_reader
         with:
           version: ${{ steps.tag_name.outputs.current_version }}
