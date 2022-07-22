@@ -1,12 +1,12 @@
 namespace RunScript;
 
 /// <summary>
-/// Execute a script and any pre & post scripts.
+/// Execute a script and any pre &amp; post scripts.
 /// </summary>
 internal interface ICommandGroupRunner
 {
     /// <summary>
-    /// Run the script and it's pre & post scripts.
+    /// Run the script and it's pre &amp; post scripts.
     /// </summary>
     /// <param name="name">The name of the script to run.</param>
     /// <param name="scriptArgs">
