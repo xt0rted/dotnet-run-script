@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 [UsesVerify]
 public class GlobalCommandsTests
 {
+    static GlobalCommandsTests()
+    {
+        VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ConsoleConverter()));
+    }
+
     [Fact]
     public async Task Should_log_all_available_scripts()
     {

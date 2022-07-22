@@ -1,5 +1,7 @@
 ﻿{
-  Error: ,
+  IsErrorRedirected: false,
+  IsInputRedirected: false,
+  IsOutputRedirected: false,
   Out:
 > Using shell: cmd.exe
 

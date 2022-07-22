@@ -9,23 +9,24 @@ using System.Threading.Tasks;
 [UsesVerify]
 public class CommandGroupRunnerTests
 {
+    static CommandGroupRunnerTests()
+    {
+        VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ConsoleConverter()));
+    }
+
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
     public async Task Should_run_a_single_script(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
             new(999),
         };
 
-        var (_, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (_, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("clean", null);
@@ -35,7 +36,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedOnceExactly();
 
-        await Verify(commandRunners, verifySettings);
+        await Verify(commandRunners).UseParameters(isWindows);
     }
 
     [Theory]
@@ -44,9 +45,6 @@ public class CommandGroupRunnerTests
     public async Task Should_run_with_a_pre_script(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -54,8 +52,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (_, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (_, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("build", null);
@@ -65,7 +62,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedTwiceExactly();
 
-        await Verify(commandRunners, verifySettings);
+        await Verify(commandRunners).UseParameters(isWindows);
     }
 
     [Theory]
@@ -74,9 +71,6 @@ public class CommandGroupRunnerTests
     public async Task Should_run_with_a_post_script(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -84,8 +78,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (_, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (_, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("test", null);
@@ -95,7 +88,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedTwiceExactly();
 
-        await Verify(commandRunners, verifySettings);
+        await Verify(commandRunners).UseParameters(isWindows);
     }
 
     [Theory]
@@ -104,9 +97,6 @@ public class CommandGroupRunnerTests
     public async Task Should_run_with_a_pre_and_post_script(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -115,8 +105,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (_, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (_, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("pack", null);
@@ -126,7 +115,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappened(3, Times.Exactly);
 
-        await Verify(commandRunners, verifySettings);
+        await Verify(commandRunners).UseParameters(isWindows);
     }
 
     [Theory]
@@ -135,16 +124,12 @@ public class CommandGroupRunnerTests
     public async Task Should_emit_environment_variable_list_when_env_script_not_defined(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(999),
         };
 
-        var (console, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (console, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("env", null);
@@ -154,7 +139,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustNotHaveHappened();
 
-        await Verify(console, verifySettings);
+        await Verify(console).UseParameters(isWindows);
     }
 
     [Theory]
@@ -163,9 +148,6 @@ public class CommandGroupRunnerTests
     public async Task Should_emit_environment_variable_list_and_pre_and_post_scripts_when_env_script_not_defined(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -174,13 +156,13 @@ public class CommandGroupRunnerTests
         };
 
         var (console, groupRunner) = SetUpTest(
+            commandRunners,
             isWindows,
             scripts =>
             {
                 scripts.Add("preenv", "echo preenv");
                 scripts.Add("postenv", "echo postenv");
             });
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
         var result = await groupRunner.RunAsync("env", null);
@@ -195,8 +177,8 @@ public class CommandGroupRunnerTests
             {
                 console,
                 commandRunners,
-            },
-            verifySettings);
+            })
+            .UseParameters(isWindows);
     }
 
     [Theory]
@@ -205,9 +187,6 @@ public class CommandGroupRunnerTests
     public async Task Should_run_env_script_if_defined(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -215,9 +194,9 @@ public class CommandGroupRunnerTests
         };
 
         var (console, groupRunner) = SetUpTest(
+            commandRunners,
             isWindows,
             scripts => scripts.Add("env", "echo env"));
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         // When
         var result = await groupRunner.RunAsync("env", null);
@@ -232,8 +211,8 @@ public class CommandGroupRunnerTests
             {
                 console,
                 commandRunners,
-            },
-            verifySettings);
+            })
+            .UseParameters(isWindows);
     }
 
     [Theory]
@@ -242,9 +221,6 @@ public class CommandGroupRunnerTests
     public async Task Should_return_first_error_hit(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         TestCommandRunner[] commandRunners =
         {
             new(0),
@@ -253,8 +229,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (_, groupRunner) = SetUpTest(isWindows);
-        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
+        var (_, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("pack", null);
@@ -264,10 +239,13 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustHaveHappenedTwiceExactly();
 
-        await Verify(commandRunners, verifySettings);
+        await Verify(commandRunners).UseParameters(isWindows);
     }
 
-    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(bool isWindows, Action<Dictionary<string, string?>>? scriptSetup = null)
+    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(
+        TestCommandRunner[] commandRunners,
+        bool isWindows,
+        Action<Dictionary<string, string?>>? scriptSetup = null)
     {
         var console = new TestConsole();
         var consoleFormatProvider = new ConsoleFormatInfo
@@ -319,6 +297,8 @@ public class CommandGroupRunnerTests
                     context,
                     true,
                     default)));
+
+        A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
         return (console, groupRunner);
     }

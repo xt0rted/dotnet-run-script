@@ -36,16 +36,13 @@ public class CommandBuilderTests
     public async Task SetUpEnvironment_should_default_to_comspec_env_var_only_on_windows(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         var builder = SetUpTest(isWindows);
 
         // When
         builder.SetUpEnvironment(scriptShellOverride: null);
 
         // Then
-        await Verify(builder.ProcessContext, verifySettings);
+        await Verify(builder.ProcessContext).UseParameters(isWindows);
     }
 
     [Fact]
@@ -67,16 +64,13 @@ public class CommandBuilderTests
     public async Task SetUpEnvironment_should_use_custom_shell(bool isWindows)
     {
         // Given
-        var verifySettings = new VerifySettings();
-        verifySettings.UseParameters(isWindows);
-
         var builder = SetUpTest(isWindows);
 
         // When
         builder.SetUpEnvironment(scriptShellOverride: "pwsh");
 
         // Then
-        await Verify(builder.ProcessContext, verifySettings);
+        await Verify(builder.ProcessContext).UseParameters(isWindows);
     }
 
     [Theory]

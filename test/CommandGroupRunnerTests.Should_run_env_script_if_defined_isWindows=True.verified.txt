@@ -1,7 +1,8 @@
 ﻿{
   console: {
-    Error: ,
-    Out: 
+    IsErrorRedirected: false,
+    IsInputRedirected: false,
+    IsOutputRedirected: false
   },
   commandRunners: [
     {

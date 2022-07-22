@@ -1,7 +1,8 @@
 ﻿{
-  Error: ,
+  IsErrorRedirected: false,
+  IsInputRedirected: false,
+  IsOutputRedirected: false,
   Out:
-
 > env
 
 value1=value 1
