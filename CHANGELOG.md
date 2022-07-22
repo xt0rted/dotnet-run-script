@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- added: Ability to run multiple scripts in a single call (e.g. `dotnet r build test pack`)
+
 ## [0.3.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.2.0...v0.3.0) - 2022-04-24
 
 - fixed: Don't escape the script passed to `cmd.exe`, just the double dash arguments

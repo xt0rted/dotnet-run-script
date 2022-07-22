@@ -1,0 +1,5 @@
+﻿{
+  Shell: C:\WINDOWS\system32\cmd.exe,
+  IsCmd: true,
+  WorkingDirectory: /test/path
+}

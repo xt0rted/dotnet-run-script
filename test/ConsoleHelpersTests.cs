@@ -1,5 +1,6 @@
 namespace RunScript;
 
+[Trait("category", "unit")]
 public class ConsoleHelpersTests
 {
     [Theory]

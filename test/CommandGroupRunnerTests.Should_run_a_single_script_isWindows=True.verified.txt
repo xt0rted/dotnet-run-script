@@ -1,0 +1,7 @@
+﻿[
+  {
+    Name: clean,
+    Cmd: echo clean
+  },
+  {}
+]

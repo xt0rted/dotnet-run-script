@@ -1,0 +1,11 @@
+﻿[
+  {
+    Name: prebuild,
+    Cmd: echo prebuild
+  },
+  {
+    Name: build,
+    Cmd: echo build
+  },
+  {}
+]

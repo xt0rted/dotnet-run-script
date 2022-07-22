@@ -2,7 +2,7 @@ namespace RunScript;
 
 using System.Text.Json;
 
-public class ProjectLoader
+internal class ProjectLoader
 {
     public async Task<(Project, string)> LoadAsync(string executingDirectory)
     {

@@ -1,0 +1,14 @@
+﻿{
+  Error: ,
+  Out:
+> Using shell: pwsh
+
+
+> test
+> echo testing
+
+testing,
+  IsOutputRedirected: false,
+  IsErrorRedirected: false,
+  IsInputRedirected: false
+}

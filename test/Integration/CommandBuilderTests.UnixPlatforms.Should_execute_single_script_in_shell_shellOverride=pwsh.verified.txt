@@ -1,0 +1,11 @@
+﻿{
+  Error: ,
+  Out:
+> Using shell: pwsh
+
+
+> test
+> echo testing
+
+testing
+}

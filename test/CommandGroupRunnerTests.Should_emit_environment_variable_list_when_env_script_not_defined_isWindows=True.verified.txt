@@ -1,0 +1,14 @@
+﻿{
+  Error: ,
+  Out:
+
+> env
+
+value1=value 1
+value2=value 2
+value3=value 3
+,
+  IsOutputRedirected: false,
+  IsErrorRedirected: false,
+  IsInputRedirected: false
+}

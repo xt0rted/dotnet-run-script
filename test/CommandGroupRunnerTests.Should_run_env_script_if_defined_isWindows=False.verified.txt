@@ -1,0 +1,16 @@
+﻿{
+  console: {
+    Error: ,
+    Out: ,
+    IsOutputRedirected: false,
+    IsErrorRedirected: false,
+    IsInputRedirected: false
+  },
+  commandRunners: [
+    {
+      Name: env,
+      Cmd: echo env
+    },
+    {}
+  ]
+}
