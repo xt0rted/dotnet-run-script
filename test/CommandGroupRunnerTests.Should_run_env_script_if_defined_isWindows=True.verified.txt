@@ -1,7 +1,10 @@
 ﻿{
   console: {
     Error: ,
-    Out: 
+    Out: ,
+    IsOutputRedirected: false,
+    IsErrorRedirected: false,
+    IsInputRedirected: false
   },
   commandRunners: [
     {

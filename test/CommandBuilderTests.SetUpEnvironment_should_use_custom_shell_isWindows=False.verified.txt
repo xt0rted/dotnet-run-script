@@ -1,4 +1,5 @@
 ﻿{
   Shell: pwsh,
+  IsCmd: false,
   WorkingDirectory: /test/path
 }
