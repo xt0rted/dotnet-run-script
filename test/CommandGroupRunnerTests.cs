@@ -9,11 +9,6 @@ using System.Threading.Tasks;
 [UsesVerify]
 public class CommandGroupRunnerTests
 {
-    static CommandGroupRunnerTests()
-    {
-        VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ConsoleConverter()));
-    }
-
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

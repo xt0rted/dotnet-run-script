@@ -7,11 +7,6 @@ using System.CommandLine.Rendering;
 
 public static class CommandBuilderTests
 {
-    static CommandBuilderTests()
-    {
-        VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ConsoleConverter()));
-    }
-
     // Passing `bash` works locally, but not on CI due to no WSL so the next best thing is using git bash
     [Trait("category", "integration")]
     [UsesVerify]
