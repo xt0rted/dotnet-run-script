@@ -56,7 +56,7 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ./.coverage/*.trx
+          path: ./coverage/*.trx
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1

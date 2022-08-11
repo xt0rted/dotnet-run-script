@@ -8,7 +8,7 @@ When .NET Core introduced the `dotnet` cli it became easier to do these things, 
 A great example of this is collecting code coverage of unit tests with [Coverlet](https://github.com/coverlet-coverage/coverlet).
 
 ```shell
-> dotnet test --configuration Debug --verbosity minimal --no-build --collect:"XPlat Code Coverage" --results-directory "./.coverage"
+> dotnet test --configuration Debug --verbosity minimal --no-build --collect:"XPlat Code Coverage" --results-directory "./coverage"
 ```
 
 Now this can be configured in your `global.json` like so:
