@@ -30,6 +30,9 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         Handler = this;
     }
 
+    public int Invoke(InvocationContext context)
+        => throw new NotImplementedException();
+
     public async Task<int> InvokeAsync(InvocationContext context)
     {
         if (context is null) throw new ArgumentNullException(nameof(context));
