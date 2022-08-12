@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+> **Note**
+> This version drops support for .NET 5 which is no longer supported, but it will continue to work with .NET 5 SDKs.
+
 ### Added
 
 - Ability to run multiple scripts in a single call (e.g. `dotnet r build test pack`) ([#10](https://github.com/xt0rted/dotnet-run-script/pull/10))
