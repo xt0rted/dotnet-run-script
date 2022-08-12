@@ -15,6 +15,24 @@ env:
   CONFIGURATION: Release
 
 jobs:
+  lint-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3.0.2
+
+      - name: Install Node
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 18
+
+      - uses: xt0rted/markdownlint-problem-matcher@v1.1.0
+
+      - run: npm ci
+
+      - run: npm test
+
   build:
     runs-on: ${{ matrix.os }}
 
@@ -73,7 +91,9 @@ jobs:
           path: ./coverage/*.trx
 
   integration:
-    needs: build
+    needs:
+      - build
+      - lint-markdown
 
     runs-on: ${{ matrix.os }}
 

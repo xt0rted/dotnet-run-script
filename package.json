@@ -1,0 +1,10 @@
+{
+  "name": "dotnet-run-script",
+  "private": true,
+  "scripts": {
+    "test": "markdownlint \"**/*.md\" --ignore node_modules"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.32.1"
+  }
+}
