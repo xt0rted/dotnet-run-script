@@ -34,7 +34,7 @@ Or code coverage can be collected by calling:
 > dotnet r test:coverage
 ```
 
-### What this isn't
+## What this isn't
 
 This tool is not a replacement for a more robust build tool like [Cake](https://cakebuild.net/) or [Fake](https://fake.build/).
 Instead it's meant to be used as a way to more easily call them by defining a common set of commands like `clean`, `build`, `test`, `package`, or `publish` that can be added to all of your projects without the user knowing, or caring, how they work or what they do.

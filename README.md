@@ -27,7 +27,7 @@ dotnet tool install run-script
 
 ## Keeping current
 
-Tools like [Dependabot](https://github.com/apps/dependabot) (https://github.com/github/feedback/discussions/13825) and [Renovate](https://github.com/marketplace/renovate) don't currently support updating dotnet local tools.
+Tools like [Dependabot](https://github.com/github/feedback/discussions/13825) and [Renovate](https://github.com/marketplace/renovate) don't currently support updating dotnet local tools.
 One way to automate this is to use a [GitHub Actions workflow](https://github.com/xt0rted/dotnet-tool-update-test) to check for updates and create PRs when new versions are available, which is what this repo does.
 
 ## Options
