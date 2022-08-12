@@ -70,7 +70,7 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ./.coverage/*.trx
+          path: ./coverage/*.trx
 
   integration:
     needs: build
@@ -157,7 +157,7 @@ jobs:
         if: always()
         with:
           name: integration-test-results
-          path: ./.coverage/*.trx
+          path: ./coverage/*.trx
 
       - run: dotnet r integration:ci --verbose -- --logger "trx;LogFilePrefix=ci test"
 

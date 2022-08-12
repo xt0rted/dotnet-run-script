@@ -5,16 +5,16 @@
   //"scriptShell": "pwsh",
   "scripts": {
     // project scripts
-    "clean": "dotnet rimraf artifacts .coverage",
+    "clean": "dotnet rimraf artifacts coverage",
     "clean:bin": "dotnet rimraf **/bin **/obj",
     "prebuild": "dotnet r clean",
     "build": "dotnet build",
-    "test": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./.coverage\"",
+    "test": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
     "test:31": "dotnet r test -- --framework netcoreapp3.1",
     "test:5": "dotnet r test -- --framework net5.0",
     "test:6": "dotnet r test -- --framework net6.0",
 
-    "testbase": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./.coverage\"",
+    "testbase": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
     "test:unit": "dotnet r testbase -- --filter \"category=unit\"",
     "test:int": "dotnet r testbase -- --filter \"category=integration\"",
 
