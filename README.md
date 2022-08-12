@@ -21,7 +21,8 @@ dotnet new tool-manifest
 dotnet tool install run-script
 ```
 
-> ⚠️ It's not recommended to install this tool globally.
+> **Warning**
+> Installing this tool globally is not recommended.
 > PowerShell defines the alias `r` for the `Invoke-History` command which prevents this from being called.
 > You'll also run into issues calling this from your scripts since global tools don't use the `dotnet` prefix.
 
@@ -79,9 +80,10 @@ In your project's `global.json` add a `scripts` object:
 }
 ```
 
-ℹ️ The shell used depends on the OS.
-On Windows `CMD` is used, on Linux, macOS, and WSL `sh` is used.
-This can be overridden by setting the `scriptShell` property or by passing the `--script-shell` option with the name of the shell to use.
+> **Note**
+> The shell used depends on the OS.
+> On Windows `CMD` is used, on Linux, macOS, and WSL `sh` is used.
+> This can be overridden by setting the `scriptShell` property or by passing the `--script-shell` option with the name of the shell to use.
 
 The `env` command is a special built-in command that lists all available environment variables.
 You can override this with your own command if you wish.
