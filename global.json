@@ -25,10 +25,10 @@
     "pack:release": "dotnet r pack -- --configuration Release",
 
     // integration tests
-    "integration:ci": "dotnet r clean && dotnet r clean:bin && dotnet build && dotnet test --no-build",
+    "integration:ci": "dotnet r clean clean:bin && dotnet build && dotnet test --no-build",
 
     // test scripts
-    "info": "dotnet r dotnet:version && dotnet r dotnet:info",
+    "info": "dotnet r dotnet:version dotnet:info",
     "dotnet:info": "dotnet --info",
     "dotnet:version": "dotnet --version",
     "prestuff": "pwsh -c echo \"`u{001b}[34mpre-stuff`u{001b}[0m\"",
