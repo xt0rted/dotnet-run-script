@@ -161,6 +161,8 @@ jobs:
 
       - run: dotnet r integration:ci --verbose -- --logger "trx;LogFilePrefix=ci test"
 
+      - run: dotnet r clean:bin build test --verbose
+
   release:
     if: github.event_name == 'push'
 

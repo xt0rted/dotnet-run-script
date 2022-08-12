@@ -1,0 +1,12 @@
+﻿[
+  {
+    Name: prepack,
+    Cmd: echo pack
+  },
+  {
+    Name: pack,
+    Cmd: echo pack
+  },
+  {},
+  {}
+]

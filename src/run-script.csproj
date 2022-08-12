@@ -25,6 +25,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="System.CommandLine" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="Tests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>

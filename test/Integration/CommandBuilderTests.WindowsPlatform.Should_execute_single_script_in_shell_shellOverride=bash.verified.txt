@@ -1,0 +1,13 @@
+﻿{
+  IsErrorRedirected: false,
+  IsInputRedirected: false,
+  IsOutputRedirected: false,
+  Out:
+> Using shell: C:\Program Files\Git\bin\bash.exe
+
+
+> test
+> echo testing
+
+testing
+}

@@ -7,9 +7,9 @@ internal class TestEnvironment : IEnvironment
 {
     private readonly Dictionary<string, string?> _variables = new(StringComparer.OrdinalIgnoreCase);
 
-    public TestEnvironment(bool? isWindows = null)
+    public TestEnvironment(string? currentDirectory = null, bool? isWindows = null)
     {
-        CurrentDirectory = AttributeReader.GetProjectDirectory(GetType().Assembly);
+        CurrentDirectory = currentDirectory ?? AttributeReader.GetProjectDirectory(GetType().Assembly);
         IsWindows = isWindows ?? RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
     }
 

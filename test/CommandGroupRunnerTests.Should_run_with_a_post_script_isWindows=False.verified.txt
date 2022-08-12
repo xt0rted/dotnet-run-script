@@ -1,0 +1,11 @@
+﻿[
+  {
+    Name: test,
+    Cmd: echo test
+  },
+  {
+    Name: posttest,
+    Cmd: echo posttest
+  },
+  {}
+]
