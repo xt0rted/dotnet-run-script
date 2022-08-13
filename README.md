@@ -141,6 +141,13 @@ In this example both the `--configuration` and `--framework` options will be pas
 dotnet r build test:unit test:integration package -- --configuration Release --framework net6.0
 ```
 
+### Globbing or wildcard support
+
+Multiple scripts can be run at the same time using globbing.
+This means `dotnet r test:*` will match `test:unit` and `test:integration` and run them in series in the order they're listed in the `global.json` file.
+
+Globbing is handled by the [DotNet.Glob](https://github.com/dazinator/DotNet.Glob) library and currently supports all of its patterns and wildcards.
+
 ### Working directory
 
 The working directory is set to the root of the project where the `global.json` is located.
