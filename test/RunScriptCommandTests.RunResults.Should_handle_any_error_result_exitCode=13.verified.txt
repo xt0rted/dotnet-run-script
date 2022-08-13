@@ -1,0 +1,8 @@
+﻿{
+  IsErrorRedirected: false,
+  IsInputRedirected: false,
+  IsOutputRedirected: false,
+  Out:
+ERROR: "test" exited with 13
+
+}

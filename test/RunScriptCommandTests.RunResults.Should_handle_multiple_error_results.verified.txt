@@ -1,0 +1,9 @@
+﻿{
+  IsErrorRedirected: false,
+  IsInputRedirected: false,
+  IsOutputRedirected: false,
+  Out:
+ERROR: "build" exited with 13
+ERROR: "test" exited with 99
+
+}

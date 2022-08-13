@@ -8,6 +8,7 @@
 ### Added
 
 - Ability to run multiple scripts in a single call (e.g. `dotnet r build test pack`) ([#10](https://github.com/xt0rted/dotnet-run-script/pull/10))
+- Support for globbing in script names (e.g `dotnet r test:*` will match `test:unit` and `test:integration`) ([#79](https://github.com/xt0rted/dotnet-run-script/pull/79))
 
 ### Updated
 
@@ -22,7 +23,8 @@
 
 ## [0.2.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.1.0...v0.2.0) - 2022-04-23
 
-> ℹ️ This version broke conditional script execution (`cmd1 && cmd2`) in `cmd.exe`
+> **Note**
+> This version broke conditional script execution (`cmd1 && cmd2`) in `cmd.exe`
 
 ### Added
 

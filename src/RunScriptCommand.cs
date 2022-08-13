@@ -2,6 +2,8 @@ namespace RunScript;
 
 using System.CommandLine.Invocation;
 
+using DotNet.Globbing;
+
 internal class RunScriptCommand : RootCommand, ICommandHandler
 {
     private readonly IEnvironment _environment;
@@ -77,32 +79,29 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             return 0;
         }
 
-        // The `env` script is special so if it's not explicitly declared we act like it was
-        var scriptsToRun = scripts
-            .Select(script => (name: script, exists: project.Scripts!.ContainsKey(script) || script == "env"))
-            .ToList();
+        var scriptsToRun = FindScripts(project.Scripts!, scripts);
 
         // When `--if-present` isn't specified and a script wasn't found in the config then we show an error and stop
-        if (scriptsToRun.Any(s => !s.exists) && !ifPresent)
+        if (scriptsToRun.Any(s => !s.Exists) && !ifPresent)
         {
             writer.Error(
                 "Script not found: {0}",
                 string.Join(
                     ", ",
                     scriptsToRun
-                        .Where(script => !script.exists)
-                        .Select(script => script.name)));
+                        .Where(script => !script.Exists)
+                        .Select(script => script.Name)));
 
             return 1;
         }
 
-        var runResults = new List<(string scriptName, int exitCode)>();
+        var runResults = new List<RunResult>();
 
-        foreach (var (scriptName, scriptExists) in scriptsToRun)
+        foreach (var script in scriptsToRun)
         {
-            if (!scriptExists)
+            if (!script.Exists)
             {
-                writer.Banner($"Skipping script {scriptName}");
+                writer.Banner($"Skipping script {script.Name}");
 
                 continue;
             }
@@ -115,10 +114,10 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
             var scriptRunner = builder.CreateGroupRunner(context.GetCancellationToken());
 
             var result = await scriptRunner.RunAsync(
-                scriptName,
+                script.Name,
                 scriptArgs);
 
-            runResults.Add((scriptName, result));
+            runResults.Add(new(script.Name, result));
 
             if (result != 0)
             {
@@ -129,24 +128,70 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         return RunResults(writer, runResults);
     }
 
-    private static int RunResults(IConsoleWriter writer, List<(string scriptName, int exitCode)> results)
+    internal static List<ScriptResult> FindScripts(
+        IDictionary<string, string?> projectScripts,
+        string[] scripts)
+    {
+        var results = new List<ScriptResult>();
+
+        foreach (var script in scripts)
+        {
+            // The `env` script is special so if it's not explicitly declared we act like it was
+            if (projectScripts.ContainsKey(script) || string.Equals(script, "env", StringComparison.OrdinalIgnoreCase))
+            {
+                results.Add(new(script, true));
+
+                continue;
+            }
+
+            var hadMatch = false;
+            var matcher = Glob.Parse(
+                script,
+                new GlobOptions
+                {
+                    Evaluation =
+                    {
+                        CaseInsensitive = true,
+                    }
+                });
+
+            foreach (var projectScript in projectScripts.Keys)
+            {
+                if (matcher.IsMatch(projectScript.AsSpan()))
+                {
+                    hadMatch = true;
+
+                    results.Add(new(projectScript, true));
+                }
+            }
+
+            if (!hadMatch)
+            {
+                results.Add(new(script, false));
+            }
+        }
+
+        return results;
+    }
+
+    internal static int RunResults(IConsoleWriter writer, List<RunResult> results)
     {
         // If only 1 script ran we don't need a report of the results
         if (results.Count == 1)
         {
-            return results[0].exitCode;
+            return results[0].ExitCode;
         }
 
         var hadError = false;
 
-        foreach (var (scriptName, exitCode) in results.Where(r => r.exitCode != 0))
+        foreach (var result in results.Where(r => r.ExitCode != 0))
         {
             hadError = true;
 
             writer.Line(
                 "ERROR: \"{0}\" exited with {1}",
-                writer.ColorText(ConsoleColor.Blue, scriptName),
-                writer.ColorText(ConsoleColor.Green, exitCode));
+                writer.ColorText(ConsoleColor.Blue, result.Name),
+                writer.ColorText(ConsoleColor.Green, result.ExitCode));
         }
 
         return hadError ? 1 : 0;
