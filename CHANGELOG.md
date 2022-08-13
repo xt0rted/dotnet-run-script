@@ -9,8 +9,9 @@
 
 ### Added
 
-- Ability to run multiple scripts in a single call (e.g. `dotnet r build test pack`) ([#10][])
-- Support for globbing in script names (e.g `dotnet r test:*` will match `test:unit` and `test:integration`) ([#79][])
+- Ability to run multiple scripts in a single call (e.g. `dotnet r build test pack`) ([#10](https://github.com/xt0rted/dotnet-run-script/pull/10))
+- Support for globbing in script names (e.g `dotnet r test:*` will match `test:unit` and `test:integration`) ([#79](https://github.com/xt0rted/dotnet-run-script/pull/79
+))
 
 ### Updated
 
@@ -55,6 +56,3 @@
 - Built-in `env` command to list available environment variables
 - Flow parameters after `--` to the running script
 - Skip commands that aren't found with the `--if-present` parameter
-
-[#10]: https://github.com/xt0rted/dotnet-run-script/pull/10
-[#79]: https://github.com/xt0rted/dotnet-run-script/pull/79
