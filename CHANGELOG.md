@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.4.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.3.0...v0.4.0) - 2022-08-12
+
 > **Note**
 > This version drops support for .NET 5 which is no longer supported, but it will continue to work with .NET 5 SDKs.
 
