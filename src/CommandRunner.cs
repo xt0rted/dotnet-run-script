@@ -32,6 +32,8 @@ internal class CommandRunner : ICommandRunner
             process.StartInfo.WorkingDirectory = _processContext.WorkingDirectory;
             process.StartInfo.FileName = _processContext.Shell;
 
+            process.StartInfo.Environment[EnvironmentVariables.RunScriptChildProcess] = "true";
+
             var outStream = new StreamForwarder();
             var errStream = new StreamForwarder();
             Task? taskOut = null;

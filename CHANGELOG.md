@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- A new environment variable called `DOTNET_R_CHILDPROCESS` which is set to `true` when executing a script. Use this to check if you're running inside `dotnet r` or not.
+- Support for [GitHub Actions log groups](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#grouping-log-lines)
+
 ## [0.4.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.3.0...v0.4.0) - 2022-08-12
 
 > **Note**
