@@ -4,6 +4,8 @@ using System.CommandLine.Invocation;
 
 using DotNet.Globbing;
 
+using RunScript.Logging;
+
 internal class RunScriptCommand : RootCommand, ICommandHandler
 {
     private readonly IEnvironment _environment;
@@ -99,29 +101,32 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
         foreach (var script in scriptsToRun)
         {
-            if (!script.Exists)
+            using (var logGroup = writer.Group(_environment, script.Name))
             {
-                writer.Banner($"Skipping script {script.Name}");
+                if (!script.Exists)
+                {
+                    writer.Banner($"Skipping script {script.Name}");
 
-                continue;
-            }
+                    continue;
+                }
 
-            // UnparsedTokens is backed by string[] so if we cast
-            // back to that we get a lot better perf down the line.
-            // Hopefully this doesn't break in the future 🤞
-            var scriptArgs = (string[])context.ParseResult.UnparsedTokens;
+                // UnparsedTokens is backed by string[] so if we cast
+                // back to that we get a lot better perf down the line.
+                // Hopefully this doesn't break in the future 🤞
+                var scriptArgs = (string[])context.ParseResult.UnparsedTokens;
 
-            var scriptRunner = builder.CreateGroupRunner(context.GetCancellationToken());
+                var scriptRunner = builder.CreateGroupRunner(context.GetCancellationToken());
 
-            var result = await scriptRunner.RunAsync(
-                script.Name,
-                scriptArgs);
+                var result = await scriptRunner.RunAsync(
+                    script.Name,
+                    scriptArgs);
 
-            runResults.Add(new(script.Name, result));
+                runResults.Add(new(script.Name, result));
 
-            if (result != 0)
-            {
-                break;
+                if (result != 0)
+                {
+                    break;
+                }
             }
         }
 
