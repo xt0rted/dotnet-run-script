@@ -20,7 +20,6 @@ jobs:
       - name: Get version from tag
         id: tag_name
         run: echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
-        shell: bash
 
       - name: Check out repository
         uses: actions/checkout@v3.1.0
@@ -60,11 +59,22 @@ jobs:
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
+        id: release_updater
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body: ${{ steps.changelog_reader.outputs.changes }}
           files: ./artifacts/*.nupkg
+
+      - name: Create discussion for release
+        run: |
+          gh api \
+            --method PATCH \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/releases/${{ steps.release_updater.outputs.id }} \
+            -f discussion_category_name='Announcements'
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Publish to GPR
         run: |
