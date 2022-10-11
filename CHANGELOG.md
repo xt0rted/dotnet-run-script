@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.5.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.4.0...v0.5.0) - 2022-10-11
+
 ### Added
 
 - New environment variable called `DOTNET_R_CHILDPROCESS` which is set to `true` when executing a script. Use this to check if you're running inside `dotnet r` or not. ([#87](https://github.com/xt0rted/dotnet-run-script/pull/87))
