@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 18
 
-      - uses: xt0rted/markdownlint-problem-matcher@v1.1.0
+      - uses: xt0rted/markdownlint-problem-matcher@v2.0.0
 
       - run: npm ci
 
