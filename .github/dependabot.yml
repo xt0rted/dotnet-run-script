@@ -13,6 +13,13 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 99
 
+  - package-ecosystem: "npm"
+    directory: "/"
+    versioning-strategy: "increase"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 99
+
   - package-ecosystem: "nuget"
     directory: "/"
     registries: "*"
