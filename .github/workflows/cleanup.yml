@@ -22,7 +22,7 @@ jobs:
           _version="$(jq -r '.tools."${{ env.package_name }}".version' ./.config/dotnet-tools.json)"
           _version="${_version//'.'/'\.'}"
           _version="^${_version}\$"
-          echo "::set-output name=version::${_version}"
+          echo "version=${_version}" >> $GITHUB_OUTPUT
 
       # Keep the last 13 versions as well as the version used by the project itself
       - uses: actions/delete-package-versions@v3.0.0
