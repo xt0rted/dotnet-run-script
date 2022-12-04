@@ -151,7 +151,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
             var hadMatch = false;
             var matcher = Glob.Parse(
-                script,
+                SwapColonAndSlash(script),
                 new GlobOptions
                 {
                     Evaluation =
@@ -162,7 +162,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
             foreach (var projectScript in projectScripts.Keys)
             {
-                if (matcher.IsMatch(projectScript.AsSpan()))
+                if (matcher.IsMatch(SwapColonAndSlash(projectScript).AsSpan()))
                 {
                     hadMatch = true;
 
@@ -200,5 +200,28 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         }
 
         return hadError ? 1 : 0;
+    }
+
+    internal static string SwapColonAndSlash(string scriptName)
+    {
+        var result = new char[scriptName.Length];
+
+        for (var i = 0; i < scriptName.Length; i++)
+        {
+            if (scriptName[i] == ':')
+            {
+                result[i] = '/';
+            }
+            else if (scriptName[i] == '/')
+            {
+                result[i] = ':';
+            }
+            else
+            {
+                result[i] = scriptName[i];
+            }
+        }
+
+        return new string(result);
     }
 }
