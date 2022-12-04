@@ -2,10 +2,15 @@
 
 ## Unreleased
 
+> **Note**
+> This version contains a number of breaking changes in how script names are resolved in order to bring the behavior more in line with both NPM and `npm-run-all`.
+
 - Adjusted globbing so `:` acts like a path separator ([#131](https://github.com/xt0rted/dotnet-run-script/pull/131))
   - `foo:*` will match `foo:bar` but not `foo:bar:baz`
   - `foo:*:baz` will match `foo:bar:baz`
   - `foo:**` will match `foo:bar` and `foo:bar:baz`
+- Script names are no longer case insensitive which matches NPM's behavior ([#130](https://github.com/xt0rted/dotnet-run-script/pull/130))
+- Scripts are now stored in a `KeyedCollection` instead of a `Dictionary` which should guarantee they're executed in the order they're loaded from the `global.json` ([#130](https://github.com/xt0rted/dotnet-run-script/pull/130))
 
 ## [0.5.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.4.0...v0.5.0) - 2022-10-11
 

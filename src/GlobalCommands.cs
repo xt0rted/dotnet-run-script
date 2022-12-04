@@ -7,15 +7,15 @@ internal static class GlobalCommands
     /// </summary>
     /// <param name="writer">The console logger instance to use.</param>
     /// <param name="scripts">The project's scripts.</param>
-    public static void PrintAvailableScripts(IConsoleWriter writer, IDictionary<string, string?> scripts)
+    public static void PrintAvailableScripts(IConsoleWriter writer, ScriptCollection scripts)
     {
         writer.Line("Available via `{0}`:", writer.ColorText(ConsoleColor.Blue, "dotnet r"));
         writer.BlankLine();
 
-        foreach (var script in scripts.Keys)
+        foreach (var (name, script) in scripts)
         {
-            writer.Line("  {0}", script);
-            writer.SecondaryLine("    {0}", scripts[script]);
+            writer.Line("  {0}", name);
+            writer.SecondaryLine("    {0}", script);
             writer.BlankLine();
         }
     }

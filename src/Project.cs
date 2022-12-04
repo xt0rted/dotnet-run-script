@@ -2,12 +2,11 @@ namespace RunScript;
 
 using System.Text.Json.Serialization;
 
-using RunScript.Serialization;
-
 public class Project
 {
+    [JsonPropertyName("scriptShell")]
     public string? ScriptShell { get; set; }
 
-    [JsonConverter(typeof(CaseInsensitiveDictionaryConverter<string?>))]
-    public Dictionary<string, string?>? Scripts { get; set; }
+    [JsonPropertyName("scripts")]
+    public ScriptCollection? Scripts { get; set; }
 }

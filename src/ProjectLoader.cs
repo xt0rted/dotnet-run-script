@@ -57,10 +57,9 @@ internal class ProjectLoader
             return JsonSerializer.Deserialize<Project>(
                 json,
                 new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        ReadCommentHandling = JsonCommentHandling.Skip,
-                    });
+                {
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                });
         }
         catch
         {

@@ -20,7 +20,7 @@ public class GlobalCommandsTests
         };
         var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
 
-        var scripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+        var scripts = new ScriptCollection
         {
             { "clean", "echo clean" },
             { "prebuild", "echo prebuild" },
