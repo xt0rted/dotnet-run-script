@@ -142,7 +142,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         foreach (var script in scripts)
         {
             // The `env` script is special so if it's not explicitly declared we act like it was
-            if (projectScripts.Contains(script) || string.Equals(script, "env", StringComparison.Ordinal))
+            if (projectScripts.Contains(script) || script == "env")
             {
                 results.Add(new(script, true));
 
