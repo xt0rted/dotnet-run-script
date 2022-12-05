@@ -8,6 +8,11 @@ using RunScript.Serialization;
 [JsonConverter(typeof(ScriptCollectionConverter))]
 public class ScriptCollection : KeyedCollection<string, ScriptMapping>
 {
+    public ScriptCollection()
+        : base(StringComparer.Ordinal)
+    {
+    }
+
     protected override string GetKeyForItem(ScriptMapping item)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));
