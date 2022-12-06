@@ -8,6 +8,7 @@ roslynator_accessor_braces_style = single_line_when_expression_is_on_single_line
 roslynator_array_creation_type_style = implicit
 roslynator_arrow_token_new_line = before
 roslynator_binary_operator_new_line = after
+roslynator_blank_line_after_file_scoped_namespace_declaration = true
 roslynator_blank_line_between_closing_brace_and_switch_section = false
 roslynator_blank_line_between_single_line_accessors = false
 roslynator_blank_line_between_using_directives = separate_groups
@@ -170,6 +171,9 @@ dotnet_diagnostic.RCS0055.severity = error
 
 # RCS0056: A line is too long
 dotnet_diagnostic.RCS0056.severity = none
+
+# RCS0060: Add/remove line after file scoped namespace declaration
+dotnet_diagnostic.RCS0060.severity = error
 
 # RCS1001: Add braces (when expression spans over multiple lines)
 dotnet_diagnostic.RCS1001.severity = error
