@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Adjusted globbing so `:` acts like a path separator ([#131](https://github.com/xt0rted/dotnet-run-script/pull/131))
+  - `foo:*` will match `foo:bar` but not `foo:bar:baz`
+  - `foo:*:baz` will match `foo:bar:baz`
+  - `foo:**` will match `foo:bar` and `foo:bar:baz`
+
 ## [0.5.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.4.0...v0.5.0) - 2022-10-11
 
 ### Added

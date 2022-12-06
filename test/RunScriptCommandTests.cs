@@ -23,6 +23,19 @@ public static class RunScriptCommandTests
                 { "prepack", "echo pack" },
                 { "pack", "echo pack" },
                 { "postpack", "echo pack" },
+                { "foo", "foo" },
+                { "foo:foo", "foo:foo" },
+                { "foo:bar", "foo:bar" },
+                { "foo:baz", "foo:baz" },
+                { "foo:foo:foo", "foo:foo:foo" },
+                { "foo:foo:bar", "foo:foo:bar" },
+                { "foo:foo:baz", "foo:foo:baz" },
+                { "foo:bar:foo", "foo:bar:foo" },
+                { "foo:bar:bar", "foo:bar:bar" },
+                { "foo:bar:baz", "foo:bar:baz" },
+                { "foo:baz:foo", "foo:baz:foo" },
+                { "foo:baz:bar", "foo:baz:bar" },
+                { "foo:baz:baz", "foo:baz:baz" },
             };
         }
 
@@ -58,6 +71,7 @@ public static class RunScriptCommandTests
             // Given
             var scripts = new[]
             {
+                "foo*",
                 "pre*",
                 "magic*",
             };
@@ -71,9 +85,91 @@ public static class RunScriptCommandTests
             result.ShouldBe(
                 new List<ScriptResult>
                 {
+                    new("foo", true),
                     new("prebuild", true),
                     new("prepack", true),
                     new("magic*", false),
+                });
+        }
+
+        [Fact]
+        public void Should_match_only_1_segment()
+        {
+            // Given
+            var scripts = new[]
+            {
+                "foo:*"
+            };
+
+            // When
+            var result = RunScriptCommand.FindScripts(
+                _projectScripts,
+                scripts);
+
+            // Then
+            result.ShouldBe(
+                new List<ScriptResult>
+                {
+                    new("foo:foo", true),
+                    new("foo:bar", true),
+                    new("foo:baz", true),
+                });
+        }
+
+        [Fact]
+        public void Should_match_only_1_trailing_segment()
+        {
+            // Given
+            var scripts = new[]
+            {
+                "foo:bar:*"
+            };
+
+            // When
+            var result = RunScriptCommand.FindScripts(
+                _projectScripts,
+                scripts);
+
+            // Then
+            result.ShouldBe(
+                new List<ScriptResult>
+                {
+                    new("foo:bar:foo", true),
+                    new("foo:bar:bar", true),
+                    new("foo:bar:baz", true),
+                });
+        }
+
+        [Fact]
+        public void Should_match_multiple_segments()
+        {
+            // Given
+            var scripts = new[]
+            {
+                "foo:**"
+            };
+
+            // When
+            var result = RunScriptCommand.FindScripts(
+                _projectScripts,
+                scripts);
+
+            // Then
+            result.ShouldBe(
+                new List<ScriptResult>
+                {
+                    new("foo:foo", true),
+                    new("foo:bar", true),
+                    new("foo:baz", true),
+                    new("foo:foo:foo", true),
+                    new("foo:foo:bar", true),
+                    new("foo:foo:baz", true),
+                    new("foo:bar:foo", true),
+                    new("foo:bar:bar", true),
+                    new("foo:bar:baz", true),
+                    new("foo:baz:foo", true),
+                    new("foo:baz:bar", true),
+                    new("foo:baz:baz", true),
                 });
         }
     }
