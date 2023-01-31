@@ -68,6 +68,15 @@ jobs:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up .NET
+        uses: xt0rted/setup-dotnet@v1.5.0
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          colored-output: false
+          strip-comments-from-global-json: false
+          dotnet-version: |
+            3.1.x
+
       - run: dotnet tool restore
 
       - run: dotnet r build
@@ -128,6 +137,15 @@ jobs:
         with:
           source-url: https://nuget.pkg.github.com/xt0rted/index.json
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up .NET
+        uses: xt0rted/setup-dotnet@v1.5.0
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          colored-output: false
+          strip-comments-from-global-json: false
+          dotnet-version: |
+            3.1.x
 
       - name: Download nupkg
         uses: actions/download-artifact@v3.0.1
