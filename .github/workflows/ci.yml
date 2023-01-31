@@ -148,7 +148,7 @@ jobs:
             3.1.x
 
       - name: Download nupkg
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: nupkg
           path: .nuget
@@ -215,7 +215,7 @@ jobs:
 
     steps:
       - name: Download nupkg
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: nupkg
 
