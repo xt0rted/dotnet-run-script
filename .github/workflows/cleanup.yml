@@ -28,6 +28,7 @@ jobs:
       - uses: actions/delete-package-versions@v4.0.0
         with:
           package-name: ${{ env.package_name }}
+          package-type: nuget
           delete-only-pre-release-versions: true
           min-versions-to-keep: 13
           ignore-versions: ${{ steps.project.outputs.version }}
