@@ -25,7 +25,7 @@ jobs:
           echo "version=${_version}" >> $GITHUB_OUTPUT
 
       # Keep the last 13 versions as well as the version used by the project itself
-      - uses: actions/delete-package-versions@v4.0.0
+      - uses: actions/delete-package-versions@v4.1.0
         with:
           package-name: ${{ env.package_name }}
           package-type: nuget
