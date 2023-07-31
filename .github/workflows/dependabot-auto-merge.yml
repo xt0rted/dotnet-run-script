@@ -12,3 +12,22 @@ jobs:
     secrets:
       GITHUB_APP_ID: ${{ secrets.DEPENDAMERGE_APP_ID }}
       GITHUB_APP_PRIVATE_KEY: ${{ secrets.DEPENDAMERGE_PRIVATE_KEY }}
+    with:
+      allowed-groups: |
+        {
+          "github_actions": [
+            "github-actions",
+            "my-actions",
+          ],
+          "nuget": [
+            "analyzers",
+            "testing",
+          ],
+        }
+      allowed-packages: |
+        {
+          "nuget": [
+            "rimraf",
+            "run-script",
+          ],
+        }
