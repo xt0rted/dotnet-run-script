@@ -139,7 +139,6 @@ jobs:
 
       - name: Set up .NET
         uses: xt0rted/setup-dotnet@v1.5.0
-        if: matrix.os == 'ubuntu-latest'
         with:
           colored-output: false
           strip-comments-from-global-json: false
