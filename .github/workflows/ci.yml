@@ -85,14 +85,14 @@ jobs:
       - run: dotnet r pack -- --version-suffix ${{ env.VERSION_SUFFIX }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         if: matrix.os == 'ubuntu-latest'
         with:
           name: nupkg
           path: ./artifacts/*.nupkg
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         if: always()
         with:
           name: test-results
@@ -189,7 +189,7 @@ jobs:
         shell: bash
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         if: always()
         with:
           name: integration-test-results
