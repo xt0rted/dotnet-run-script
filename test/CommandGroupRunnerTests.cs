@@ -240,7 +240,7 @@ public class CommandGroupRunnerTests
     private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(
         TestCommandRunner[] commandRunners,
         bool isWindows,
-        Action<Dictionary<string, string?>>? scriptSetup = null)
+        Action<ScriptCollection>? scriptSetup = null)
     {
         var console = new TestConsole();
         var consoleFormatProvider = new ConsoleFormatInfo
@@ -249,7 +249,7 @@ public class CommandGroupRunnerTests
         };
         var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
 
-        var scripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+        var scripts = new ScriptCollection
         {
             // clean
             { "clean", "echo clean" },

@@ -6,7 +6,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
 {
     private readonly IConsoleWriter _writer;
     private readonly IEnvironment _environment;
-    private readonly IDictionary<string, string?> _scripts;
+    private readonly ScriptCollection _scripts;
     private readonly ProcessContext _processContext;
     private readonly bool _captureOutput;
     private readonly CancellationToken _cancellationToken;
@@ -14,7 +14,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
     public CommandGroupRunner(
         IConsoleWriter writer,
         IEnvironment environment,
-        IDictionary<string, string?> scripts,
+        ScriptCollection scripts,
         ProcessContext processContext,
         bool captureOutput,
         CancellationToken cancellationToken)
@@ -38,10 +38,10 @@ internal class CommandGroupRunner : ICommandGroupRunner
     {
         var scriptNames = ImmutableArray.Create(new[] { "pre" + name, name, "post" + name });
 
-        foreach (var subScript in scriptNames.Where(scriptName => _scripts.ContainsKey(scriptName) || scriptName == "env"))
+        foreach (var subScript in scriptNames.Where(scriptName => _scripts.Contains(scriptName) || scriptName == "env"))
         {
             // At this point we should have done enough checks to make sure the only not found script is `env`
-            if (!_scripts.ContainsKey(subScript))
+            if (!_scripts.Contains(subScript))
             {
                 GlobalCommands.PrintEnvironmentVariables(_writer, _environment);
 
@@ -56,7 +56,7 @@ internal class CommandGroupRunner : ICommandGroupRunner
 
             var result = await command.RunAsync(
                 subScript,
-                _scripts[subScript]!,
+                _scripts[subScript].Script,
                 args);
 
             if (result != 0)

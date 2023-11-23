@@ -8,5 +8,6 @@ public static class ModuleInitializer
     public static void Init()
     {
         VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ConsoleConverter()));
+        VerifierSettings.AddExtraSettings(settings => settings.Converters.Add(new ScriptCollectionConverter()));
     }
 }

@@ -53,7 +53,7 @@ public static class CommandBuilderTests
 
         var project = new Project
         {
-            Scripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+            Scripts = new ScriptCollection
             {
                 { "test", "echo testing" },
             },

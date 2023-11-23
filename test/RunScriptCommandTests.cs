@@ -9,11 +9,11 @@ public static class RunScriptCommandTests
     [Trait("category", "unit")]
     public class FindScripts
     {
-        private readonly Dictionary<string, string?> _projectScripts;
+        private readonly ScriptCollection _projectScripts;
 
         public FindScripts()
         {
-            _projectScripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+            _projectScripts = new ScriptCollection
             {
                 { "clean", "echo clean" },
                 { "prebuild", "echo prebuild" },

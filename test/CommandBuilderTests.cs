@@ -101,7 +101,7 @@ public class CommandBuilderTests
 
         var project = new Project
         {
-            Scripts = new Dictionary<string, string?>(),
+            Scripts = new ScriptCollection(),
         };
 
         var environment = new TestEnvironment(

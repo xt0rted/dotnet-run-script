@@ -85,7 +85,7 @@ public class ProjectLoaderTests
     }
 
     [Fact]
-    public async Task Should_treat_script_names_as_lowercase()
+    public async Task Should_not_treat_script_names_as_always_lowercase()
     {
         // Given
         var testPath = TestPath("script-names");
@@ -95,8 +95,6 @@ public class ProjectLoaderTests
         var (project, _) = await projectLoader.LoadAsync(testPath);
 
         // Then
-        project.Scripts?.Comparer.ShouldBe(StringComparer.OrdinalIgnoreCase);
-
         await Verify(project);
     }
 

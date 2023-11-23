@@ -134,7 +134,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
     }
 
     internal static List<ScriptResult> FindScripts(
-        IDictionary<string, string?> projectScripts,
+        ScriptCollection projectScripts,
         string[] scripts)
     {
         var results = new List<ScriptResult>();
@@ -142,7 +142,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         foreach (var script in scripts)
         {
             // The `env` script is special so if it's not explicitly declared we act like it was
-            if (projectScripts.ContainsKey(script) || string.Equals(script, "env", StringComparison.OrdinalIgnoreCase))
+            if (projectScripts.Contains(script) || script == "env")
             {
                 results.Add(new(script, true));
 
@@ -160,7 +160,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
                     }
                 });
 
-            foreach (var projectScript in projectScripts.Keys)
+            foreach (var (projectScript, _) in projectScripts)
             {
                 if (matcher.IsMatch(SwapColonAndSlash(projectScript).AsSpan()))
                 {
