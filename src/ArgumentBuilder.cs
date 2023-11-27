@@ -1,3 +1,6 @@
+#pragma warning disable IDISP001 // Dispose created
+#pragma warning disable IDISP003 // Dispose previous before re-assigning
+
 namespace RunScript;
 
 using System.Runtime.CompilerServices;

@@ -1,3 +1,4 @@
+#pragma warning disable IDISP008 // Don't assign member with injected and created disposables
 #pragma warning disable RCS1162 // Avoid chain of assignments.
 
 namespace RunScript;
