@@ -5,25 +5,27 @@
   //"scriptShell": "pwsh",
   "scripts": {
     // project scripts
-    "clean": "dotnet rimraf artifacts coverage",
+    "clean": "dotnet r clean:*",
+    "clean:artifacts": "dotnet rimraf artifacts",
     "clean:bin": "dotnet rimraf **/bin **/obj",
-    "prebuild": "dotnet r clean",
+
     "build": "dotnet build",
-    "test": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
+
+    "test": "dotnet test",
     "test:6": "dotnet r test -- --framework net6.0",
 
-    "testbase": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
-    "test:unit": "dotnet r testbase -- --filter \"category=unit\"",
-    "test:int": "dotnet r testbase -- --filter \"category=integration\"",
+    "test:unit": "dotnet r test -- --filter \"category=unit\"",
+    "test:int": "dotnet r test -- --filter \"category=integration\"",
 
-    "pack": "dotnet pack --no-build --output \"./artifacts\"",
+    "prepack": "dotnet r clean:artifacts",
+    "pack": "dotnet pack --output \"./artifacts\"",
 
     "build:release": "dotnet r build -- --configuration Release",
     "test:release": "dotnet r test -- --configuration Release",
     "pack:release": "dotnet r pack -- --configuration Release",
 
     // integration tests
-    "integration:ci": "dotnet r clean clean:bin && dotnet build && dotnet test --no-build",
+    "integration:ci": "dotnet r clean build && dotnet test --no-build",
 
     // test scripts
     "info": "dotnet r dotnet:version dotnet:info",

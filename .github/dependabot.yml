@@ -42,9 +42,9 @@ updates:
           - "System.CommandLine.*"
       testing:
         patterns:
-          - "coverlet.collector"
           - "FakeItEasy"
           - "FakeItEasy.*"
+          - "GitHubActionsTestLogger"
           - "Microsoft.NET.Test.Sdk"
           - "Shouldly"
           - "Verify.Xunit"
