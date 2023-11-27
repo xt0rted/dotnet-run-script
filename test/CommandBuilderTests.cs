@@ -18,7 +18,7 @@ public class CommandBuilderTests
     public void IsCmdCheck_should_match_cmd_variations(string shell)
     {
         // Given / When / Then
-        CommandBuilder.IsCmdCheck.IsMatch(shell).ShouldBeTrue();
+        CommandBuilder.IsCmdCheck().IsMatch(shell).ShouldBeTrue();
     }
 
     [Theory]
@@ -27,7 +27,7 @@ public class CommandBuilderTests
     public void IsCmdCheck_should_not_match_non_cmd_variations(string shell)
     {
         // Given / When / Then
-        CommandBuilder.IsCmdCheck.IsMatch(shell).ShouldBeFalse();
+        CommandBuilder.IsCmdCheck().IsMatch(shell).ShouldBeFalse();
     }
 
     [Theory]

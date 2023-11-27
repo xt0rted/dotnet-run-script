@@ -559,9 +559,6 @@ dotnet_diagnostic.RCS1174.severity = error
 # RCS1175: Unused 'this' parameter
 dotnet_diagnostic.RCS1175.severity = error
 
-# RCS1176: Use 'var' instead of explicit type (when the type is not obvious)
-dotnet_diagnostic.RCS1176.severity = error
-
 # RCS1177: Use 'var' instead of explicit type (in foreach)
 dotnet_diagnostic.RCS1177.severity = error
 
@@ -777,6 +774,9 @@ dotnet_diagnostic.RCS1253.severity = error
 
 # RCS1254: Normalize format of enum flag value
 dotnet_diagnostic.RCS1254.severity = error
+
+# RCS1264: Use 'var' or explicit type
+dotnet_diagnostic.RCS1264.severity = error
 
 # RCS9001: Use pattern matching
 dotnet_diagnostic.RCS9001.severity = error

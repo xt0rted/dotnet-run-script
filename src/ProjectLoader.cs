@@ -2,11 +2,18 @@ namespace RunScript;
 
 using System.Text.Json;
 
-internal class ProjectLoader
+internal static class ProjectLoader
 {
-    public async Task<(Project, string)> LoadAsync(string executingDirectory)
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+    };
+
+    public static async Task<(Project, string)> LoadAsync(string executingDirectory)
     {
         var jsonPath = CheckFolderForFile(executingDirectory, "global.json");
+
         if (jsonPath is null)
         {
             throw new RunScriptException("No global.json found in folder path");
@@ -18,6 +25,7 @@ internal class ProjectLoader
             : executingDirectory;
 
         var project = await LoadGlobalJsonAsync(jsonPath);
+
         if (project is null)
         {
             throw new RunScriptException("Error parsing global.json");
@@ -31,15 +39,17 @@ internal class ProjectLoader
         return (project, workingDirectory);
     }
 
-    private string? CheckFolderForFile(string path, string file)
+    private static string? CheckFolderForFile(string path, string file)
     {
         var filePath = Path.Combine(path, file);
+
         if (File.Exists(filePath))
         {
             return filePath;
         }
 
         var parentPath = Directory.GetParent(path)?.FullName;
+
         if (parentPath is null)
         {
             return null;
@@ -56,11 +66,7 @@ internal class ProjectLoader
         {
             return JsonSerializer.Deserialize<Project>(
                 json,
-                new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        ReadCommentHandling = JsonCommentHandling.Skip,
-                    });
+                _jsonOptions);
         }
         catch
         {

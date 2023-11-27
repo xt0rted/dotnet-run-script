@@ -138,7 +138,7 @@ Arguments passed after the double dash are passed through to each executing scri
 In this example both the `--configuration` and `--framework` options will be passed to each of the four scripts when running them.
 
 ```console
-dotnet r build test:unit test:integration package -- --configuration Release --framework net6.0
+dotnet r build test:unit test:integration package -- --configuration Release --framework net8.0
 ```
 
 ### Globbing or wildcard support

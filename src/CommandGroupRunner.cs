@@ -36,7 +36,11 @@ internal class CommandGroupRunner : ICommandGroupRunner
 
     public async Task<int> RunAsync(string name, string[]? scriptArgs)
     {
-        var scriptNames = ImmutableArray.Create(new[] { "pre" + name, name, "post" + name });
+        var scriptNames = ImmutableArray.Create([
+            "pre" + name,
+            name,
+            "post" + name,
+        ]);
 
         foreach (var subScript in scriptNames.Where(scriptName => _scripts.ContainsKey(scriptName) || scriptName == "env"))
         {
