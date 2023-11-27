@@ -39,14 +39,14 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
     public async Task<int> InvokeAsync(InvocationContext context)
     {
-        if (context is null) throw new ArgumentNullException(nameof(context));
+        ArgumentNullException.ThrowIfNull(context);
 
         var ifPresent = context.ParseResult.GetValueForOption(GlobalOptions.IfPresent);
         var scriptShell = context.ParseResult.GetValueForOption(GlobalOptions.ScriptShell);
         var verbose = context.ParseResult.GetValueForOption(GlobalOptions.Verbose);
         var scripts = context.ParseResult.GetValueForArgument(GlobalArguments.Scripts);
 
-        IConsoleWriter writer = new ConsoleWriter(context.Console, _consoleFormatProvider, verbose);
+        var writer = new ConsoleWriter(context.Console, _consoleFormatProvider, verbose);
 
         writer.VerboseBanner();
 
@@ -55,7 +55,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
         {
             _environment.SetEnvironmentVariable("INIT_CWD", _workingDirectory);
 
-            (project, _workingDirectory) = await new ProjectLoader().LoadAsync(_workingDirectory);
+            (project, _workingDirectory) = await ProjectLoader.LoadAsync(_workingDirectory);
         }
         catch (Exception ex)
         {
@@ -157,7 +157,7 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
                     Evaluation =
                     {
                         CaseInsensitive = true,
-                    }
+                    },
                 });
 
             foreach (var projectScript in projectScripts.Keys)

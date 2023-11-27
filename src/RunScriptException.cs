@@ -17,9 +17,4 @@ public class RunScriptException : Exception
         : base(message, innerException)
     {
     }
-
-    protected RunScriptException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-    }
 }

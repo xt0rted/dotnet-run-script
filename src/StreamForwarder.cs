@@ -5,7 +5,7 @@ using System.Text;
 // https://github.com/dotnet/sdk/blob/a758a468b71e15303198506a8de1040649aa0f35/src/Cli/Microsoft.DotNet.Cli.Utils/StreamForwarder.cs
 internal sealed class StreamForwarder
 {
-    private static readonly char[] _ignoreCharacters = { '\r' };
+    private static readonly char[] _ignoreCharacters = ['\r'];
 
     private const char FlushBuilderCharacter = '\n';
 
@@ -53,7 +53,7 @@ internal sealed class StreamForwarder
 
     public void Read(TextReader reader)
     {
-        if (reader is null) throw new ArgumentNullException(nameof(reader));
+        ArgumentNullException.ThrowIfNull(reader);
 
         const int bufferSize = 1;
 

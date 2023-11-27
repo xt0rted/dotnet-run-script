@@ -1,3 +1,6 @@
+#pragma warning disable IDISP001 // Dispose created
+#pragma warning disable IDISP003 // Dispose previous before re-assigning
+
 namespace RunScript;
 
 using System.Runtime.CompilerServices;
@@ -79,13 +82,13 @@ internal static class ArgumentBuilder
     }
 
     /// <summary>
-    /// Concatinates the command and arguments without any escaping.
+    /// Concatenates the command and arguments without any escaping.
     /// This is meant to be used for display only and not for passing to a new process.
     /// </summary>
     /// <param name="command">The base command.</param>
     /// <param name="args">List of optional arguments.</param>
-    /// <returns>A raw concatination of the <paramref name="command"/> and <paramref name="args"/>.</returns>
-    public static string ConcatinateCommandAndArgArrayForDisplay(
+    /// <returns>A raw concatenation of the <paramref name="command"/> and <paramref name="args"/>.</returns>
+    public static string ConcatenateCommandAndArgArrayForDisplay(
         string? command,
         string[]? args)
     {
