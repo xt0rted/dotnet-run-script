@@ -40,22 +40,15 @@ jobs:
 
       - run: dotnet r build
 
-      - run: dotnet r test
+      - run: dotnet r test -- --no-build --logger GitHubActions
 
-      - run: dotnet r pack
+      - run: dotnet r pack -- --no-build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.3
         with:
           name: nupkg
           path: ./artifacts/*.nupkg
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3.1.3
-        if: always()
-        with:
-          name: test-results
-          path: ./coverage/*.trx
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
@@ -87,3 +80,11 @@ jobs:
           dotnet nuget push "./artifacts/*.nupkg" \
             --api-key ${{ secrets.NUGET_TOKEN }} \
             --source https://api.nuget.org/v3/index.json
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: verify-test-results
+          path: |
+            **/*.received.*
