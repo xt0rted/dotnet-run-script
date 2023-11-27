@@ -3,7 +3,7 @@ namespace RunScript;
 internal static class GlobalCommands
 {
     /// <summary>
-    /// The help command that lists all the scripts availble in the <g>global.json</g>.
+    /// The help command that lists all the scripts available in the <g>global.json</g>.
     /// </summary>
     /// <param name="writer">The console logger instance to use.</param>
     /// <param name="scripts">The project's scripts.</param>
@@ -28,7 +28,7 @@ internal static class GlobalCommands
     /// <exception cref="ArgumentNullException"></exception>
     public static void PrintEnvironmentVariables(IConsoleWriter writer, IEnvironment environment)
     {
-        if (environment is null) throw new ArgumentNullException(nameof(environment));
+        ArgumentNullException.ThrowIfNull(environment);
 
         writer.Banner("env");
 

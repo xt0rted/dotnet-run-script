@@ -7,11 +7,8 @@ public class ProjectLoaderTests
     [Fact]
     public void Should_throw_if_no_globaljson_found_in_tree()
     {
-        // Given
-        var projectLoader = new ProjectLoader();
-
-        // When
-        var action = () => projectLoader.LoadAsync(Path.GetTempPath());
+        // Given / When
+        var action = () => ProjectLoader.LoadAsync(Path.GetTempPath());
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
@@ -23,10 +20,9 @@ public class ProjectLoaderTests
     {
         // Given
         var testPath = TestPath("malformed");
-        var projectLoader = new ProjectLoader();
 
         // When
-        var action = () => projectLoader.LoadAsync(testPath);
+        var action = () => ProjectLoader.LoadAsync(testPath);
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
@@ -38,10 +34,9 @@ public class ProjectLoaderTests
     {
         // Given
         var testPath = TestPath("no-scripts");
-        var projectLoader = new ProjectLoader();
 
         // When
-        var action = () => projectLoader.LoadAsync(testPath);
+        var action = () => ProjectLoader.LoadAsync(testPath);
 
         // Then
         var ex = action.ShouldThrow<RunScriptException>();
@@ -53,10 +48,9 @@ public class ProjectLoaderTests
     {
         // Given
         var testPath = TestPath("dir1");
-        var projectLoader = new ProjectLoader();
 
         // When
-        var (project, workingDirectory) = await projectLoader.LoadAsync(testPath);
+        var (project, workingDirectory) = await ProjectLoader.LoadAsync(testPath);
 
         // Then
         project.ShouldNotBeNull();
@@ -71,10 +65,9 @@ public class ProjectLoaderTests
     {
         // Given
         var testPath = TestPath("dir1", "dir2", "dir3");
-        var projectLoader = new ProjectLoader();
 
         // When
-        var (project, workingDirectory) = await projectLoader.LoadAsync(testPath);
+        var (project, workingDirectory) = await ProjectLoader.LoadAsync(testPath);
 
         // Then
         project.ShouldNotBeNull();
@@ -89,10 +82,9 @@ public class ProjectLoaderTests
     {
         // Given
         var testPath = TestPath("script-names");
-        var projectLoader = new ProjectLoader();
 
         // When
-        var (project, _) = await projectLoader.LoadAsync(testPath);
+        var (project, _) = await ProjectLoader.LoadAsync(testPath);
 
         // Then
         project.Scripts?.Comparer.ShouldBe(StringComparer.OrdinalIgnoreCase);

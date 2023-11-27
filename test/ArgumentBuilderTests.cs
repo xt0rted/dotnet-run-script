@@ -65,7 +65,7 @@ public class ArgumentBuilderTests
     public void ConcatinateCommandAndArgArrayForDisplay(string[] args, string expected)
     {
         // Given / When
-        var result = ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay("c m d", args);
+        var result = ArgumentBuilder.ConcatenateCommandAndArgArrayForDisplay("c m d", args);
 
         // Then
         result.ShouldBe(expected);

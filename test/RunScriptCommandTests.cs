@@ -56,13 +56,11 @@ public static class RunScriptCommandTests
                 scripts);
 
             // Then
-            result.ShouldBe(
-                new List<ScriptResult>
-                {
-                    new("build", true),
-                    new("test", true),
-                    new("magic", false),
-                });
+            result.ShouldBe([
+                new("build", true),
+                new("test", true),
+                new("magic", false),
+            ]);
         }
 
         [Fact]
@@ -82,14 +80,12 @@ public static class RunScriptCommandTests
                 scripts);
 
             // Then
-            result.ShouldBe(
-                new List<ScriptResult>
-                {
-                    new("foo", true),
-                    new("prebuild", true),
-                    new("prepack", true),
-                    new("magic*", false),
-                });
+            result.ShouldBe([
+                new("foo", true),
+                new("prebuild", true),
+                new("prepack", true),
+                new("magic*", false),
+            ]);
         }
 
         [Fact]
@@ -107,13 +103,11 @@ public static class RunScriptCommandTests
                 scripts);
 
             // Then
-            result.ShouldBe(
-                new List<ScriptResult>
-                {
-                    new("foo:foo", true),
-                    new("foo:bar", true),
-                    new("foo:baz", true),
-                });
+            result.ShouldBe([
+                new("foo:foo", true),
+                new("foo:bar", true),
+                new("foo:baz", true),
+            ]);
         }
 
         [Fact]
@@ -131,13 +125,11 @@ public static class RunScriptCommandTests
                 scripts);
 
             // Then
-            result.ShouldBe(
-                new List<ScriptResult>
-                {
-                    new("foo:bar:foo", true),
-                    new("foo:bar:bar", true),
-                    new("foo:bar:baz", true),
-                });
+            result.ShouldBe([
+                new("foo:bar:foo", true),
+                new("foo:bar:bar", true),
+                new("foo:bar:baz", true),
+            ]);
         }
 
         [Fact]
@@ -155,22 +147,20 @@ public static class RunScriptCommandTests
                 scripts);
 
             // Then
-            result.ShouldBe(
-                new List<ScriptResult>
-                {
-                    new("foo:foo", true),
-                    new("foo:bar", true),
-                    new("foo:baz", true),
-                    new("foo:foo:foo", true),
-                    new("foo:foo:bar", true),
-                    new("foo:foo:baz", true),
-                    new("foo:bar:foo", true),
-                    new("foo:bar:bar", true),
-                    new("foo:bar:baz", true),
-                    new("foo:baz:foo", true),
-                    new("foo:baz:bar", true),
-                    new("foo:baz:baz", true),
-                });
+            result.ShouldBe([
+                new("foo:foo", true),
+                new("foo:bar", true),
+                new("foo:baz", true),
+                new("foo:foo:foo", true),
+                new("foo:foo:bar", true),
+                new("foo:foo:baz", true),
+                new("foo:bar:foo", true),
+                new("foo:bar:bar", true),
+                new("foo:bar:baz", true),
+                new("foo:baz:foo", true),
+                new("foo:baz:bar", true),
+                new("foo:baz:baz", true),
+            ]);
         }
     }
 

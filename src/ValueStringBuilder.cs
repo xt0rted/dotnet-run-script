@@ -24,7 +24,7 @@ internal ref struct ValueStringBuilder
         _pos = 0;
     }
 
-    public int Length => _pos;
+    public readonly int Length => _pos;
 
     public override string ToString()
     {
