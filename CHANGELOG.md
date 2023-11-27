@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+> [!NOTE]
+> This version drops support for .NET Core 3.1 which is no longer supported
+
 - Adjusted globbing so `:` acts like a path separator ([#131](https://github.com/xt0rted/dotnet-run-script/pull/131))
   - `foo:*` will match `foo:bar` but not `foo:bar:baz`
   - `foo:*:baz` will match `foo:bar:baz`

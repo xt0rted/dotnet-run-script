@@ -10,7 +10,6 @@
     "prebuild": "dotnet r clean",
     "build": "dotnet build",
     "test": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
-    "test:31": "dotnet r test -- --framework netcoreapp3.1",
     "test:6": "dotnet r test -- --framework net6.0",
 
     "testbase": "dotnet test --no-build --logger \"trx;LogFilePrefix=tests\" --results-directory \"./coverage\"",
