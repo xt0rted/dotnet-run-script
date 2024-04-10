@@ -1,7 +1,6 @@
 namespace RunScript;
 
 [Trait("category", "unit")]
-[UsesVerify]
 public class ProjectLoaderTests
 {
     [Fact]

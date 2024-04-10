@@ -4,7 +4,6 @@ using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
 [Trait("category", "unit")]
-[UsesVerify]
 public class GitHubActionsLogGroupTests
 {
     [Fact]
