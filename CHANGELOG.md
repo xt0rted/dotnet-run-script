@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.6.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.5.0...v0.6.0) - 2024-04-10
+
 - Dropped support for .NET Core 3.1
 - Dropped Support for .NET 6
 - Added support for .NET 8
