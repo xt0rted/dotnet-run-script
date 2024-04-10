@@ -6,7 +6,6 @@ using System.CommandLine.Rendering;
 using System.Threading.Tasks;
 
 [Trait("category", "unit")]
-[UsesVerify]
 public class CommandGroupRunnerTests
 {
     [Theory]

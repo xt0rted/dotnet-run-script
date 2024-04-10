@@ -165,7 +165,6 @@ public static class RunScriptCommandTests
     }
 
     [Trait("category", "unit")]
-    [UsesVerify]
     public class RunResults
     {
         [Theory]
