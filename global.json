@@ -1,8 +1,7 @@
 {
   "sdk": {
-    "version": "6.0.420"
+    "version": "8.0.203"
   },
-  //"scriptShell": "pwsh",
   "scripts": {
     // project scripts
     "clean": "dotnet r clean:*",
@@ -12,7 +11,6 @@
     "build": "dotnet build",
 
     "test": "dotnet test",
-    "test:6": "dotnet r test -- --framework net6.0",
 
     "test:unit": "dotnet r test -- --filter \"category=unit\"",
     "test:int": "dotnet r test -- --filter \"category=integration\"",

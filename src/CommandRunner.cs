@@ -25,7 +25,7 @@ internal class CommandRunner : ICommandRunner
     {
         _cancellationToken.ThrowIfCancellationRequested();
 
-        _writer.Banner(name, ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay(cmd, args));
+        _writer.Banner(name, ArgumentBuilder.ConcatenateCommandAndArgArrayForDisplay(cmd, args));
 
         using (var process = new Process())
         {
@@ -36,6 +36,7 @@ internal class CommandRunner : ICommandRunner
 
             var outStream = new StreamForwarder();
             var errStream = new StreamForwarder();
+
             Task? taskOut = null;
             Task? taskErr = null;
 

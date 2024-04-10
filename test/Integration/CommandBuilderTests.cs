@@ -17,7 +17,7 @@ public static class CommandBuilderTests
         [InlineData("cmd.exe")]
         [InlineData("pwsh")]
         [InlineData(@"C:\Program Files\Git\bin\bash.exe")]
-        public async Task Should_execute_single_script_in_shell(string shellOverride)
+        public async Task Should_execute_single_script_in_shell(string? shellOverride)
         {
             await CommandBuilderTests.Should_execute_single_script_in_shell(
                 isWindows: true,
@@ -32,7 +32,7 @@ public static class CommandBuilderTests
         [UnixTheory]
         [InlineData(null)]
         [InlineData("pwsh")]
-        public async Task Should_execute_single_script_in_shell(string shellOverride)
+        public async Task Should_execute_single_script_in_shell(string? shellOverride)
         {
             await CommandBuilderTests.Should_execute_single_script_in_shell(
                 isWindows: false,
@@ -40,7 +40,7 @@ public static class CommandBuilderTests
         }
     }
 
-    private static async Task Should_execute_single_script_in_shell(bool isWindows, string shellOverride)
+    private static async Task Should_execute_single_script_in_shell(bool isWindows, string? shellOverride)
     {
         var console = new TestConsole();
         var consoleFormatProvider = new ConsoleFormatInfo

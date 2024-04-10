@@ -18,7 +18,7 @@ public class ArgumentBuilderTests
     [InlineData("c m d", new[] { @"C:\Program Files\dotnet\" }, @"c m d ""C:\Program Files\dotnet\""")]
     [InlineData("c m d", new[] { @"backslash\""preceedingquote" }, @"c m d ""backslash\\\""preceedingquote""")]
     [InlineData("c m d", new[] { @""" hello """ }, @"c m d ""\"" hello \""""")]
-    public void EscapeAndConcatenateCommandAndArgArrayForProcessStart(string command, string[] args, string expected)
+    public void EscapeAndConcatenateCommandAndArgArrayForProcessStart(string command, string[]? args, string expected)
     {
         // Given / When
         var result = ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForProcessStart(command, args);
@@ -41,7 +41,7 @@ public class ArgumentBuilderTests
     [InlineData("c m d", new[] { @"C:\Program Files\dotnet\" }, @"c m d^ ^""^C^:^\^P^r^o^g^r^a^m^ ^F^i^l^e^s^\^d^o^t^n^e^t^\^""")]
     [InlineData("c m d", new[] { @"backslash\""preceedingquote" }, @"c m d^ ^b^a^c^k^s^l^a^s^h^\^""^p^r^e^c^e^e^d^i^n^g^q^u^o^t^e")]
     [InlineData("c m d", new[] { @""" hello """ }, @"c m d^ ^""^""^ ^h^e^l^l^o^ ^""^""")]
-    public void EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(string command, string[] args, string expected)
+    public void EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(string command, string[]? args, string expected)
     {
         // Given / When
         var result = ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(command, args);
@@ -62,10 +62,10 @@ public class ArgumentBuilderTests
     [InlineData(new[] { @"C:\Program Files\dotnet\" }, @"c m d C:\Program Files\dotnet\")]
     [InlineData(new[] { @"backslash\""preceedingquote" }, @"c m d backslash\""preceedingquote")]
     [InlineData(new[] { @""" hello """ }, @"c m d "" hello """)]
-    public void ConcatinateCommandAndArgArrayForDisplay(string[] args, string expected)
+    public void ConcatinateCommandAndArgArrayForDisplay(string[]? args, string expected)
     {
         // Given / When
-        var result = ArgumentBuilder.ConcatinateCommandAndArgArrayForDisplay("c m d", args);
+        var result = ArgumentBuilder.ConcatenateCommandAndArgArrayForDisplay("c m d", args);
 
         // Then
         result.ShouldBe(expected);

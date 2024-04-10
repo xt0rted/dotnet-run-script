@@ -2,11 +2,8 @@ namespace RunScript;
 
 using System.Text.RegularExpressions;
 
-internal class CommandBuilder
+internal partial class CommandBuilder
 {
-    // This is the same regex used by npm's run-script library
-    public static readonly Regex IsCmdCheck = new("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase);
-
     private readonly IConsoleWriter _writer;
     private readonly IEnvironment _environment;
     private readonly Project _project;
@@ -30,6 +27,10 @@ internal class CommandBuilder
     }
 
     public ProcessContext? ProcessContext { get; private set; }
+
+    // This is the same regex used by npm's run-script library
+    [GeneratedRegex("(?:^|\\\\)cmd(?:\\.exe)?$", RegexOptions.IgnoreCase)]
+    public static partial Regex IsCmdCheck();
 
     public void SetUpEnvironment(string? scriptShellOverride)
     {
@@ -61,7 +62,7 @@ internal class CommandBuilder
             ? _environment.GetEnvironmentVariable("COMSPEC") ?? "cmd"
             : "sh";
 
-        var isCmd = IsCmdCheck.IsMatch(shell);
+        var isCmd = IsCmdCheck().IsMatch(shell);
 
         return (shell, isCmd);
     }
