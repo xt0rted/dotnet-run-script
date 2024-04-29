@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Install Node
         uses: actions/setup-node@v4.0.2
@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Build version suffix (main)
         if: github.event_name == 'push'
@@ -122,7 +122,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Set up .NET
         uses: xt0rted/setup-dotnet@v1.5.0
@@ -131,7 +131,7 @@ jobs:
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download nupkg
-        uses: actions/download-artifact@v4.1.6
+        uses: actions/download-artifact@v4.1.7
         with:
           name: nupkg
           path: .nuget
@@ -199,7 +199,7 @@ jobs:
 
     steps:
       - name: Download nupkg
-        uses: actions/download-artifact@v4.1.6
+        uses: actions/download-artifact@v4.1.7
         with:
           name: nupkg
 
