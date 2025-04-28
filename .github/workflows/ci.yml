@@ -131,7 +131,7 @@ jobs:
           nuget_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download nupkg
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v4.3.0
         with:
           name: nupkg
           path: .nuget
@@ -199,7 +199,7 @@ jobs:
 
     steps:
       - name: Download nupkg
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v4.3.0
         with:
           name: nupkg
 
