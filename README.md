@@ -73,6 +73,9 @@ In your project's `global.json` add a `scripts` object:
   },
   "scriptShell": "pwsh", // Optional
   "scripts": {
+    "clean": "dotnet r clean:*",
+    "clean:artifacts": "dotnet rimraf artifacts", // dotnet tool install rimraf
+    "clean:bin": "dotnet rimraf **/bin **/obj",
     "build": "dotnet build --configuration Release",
     "test": "dotnet test --configuration Release",
     "ci": "dotnet r build && dotnet r test",
