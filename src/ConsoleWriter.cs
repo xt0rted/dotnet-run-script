@@ -1,19 +1,22 @@
 namespace RunScript;
 
+using System;
 using System.CommandLine.Rendering;
 using System.Globalization;
 
 internal class ConsoleWriter : IConsoleWriter
 {
-    private readonly IConsole _console;
-    private readonly IFormatProvider? _consoleFormatProvider;
-
+    private readonly TextWriter _output;
+    private readonly IFormatProvider _consoleFormatProvider;
     private readonly bool _verbose;
 
-    public ConsoleWriter(IConsole console, IFormatProvider consoleFormatProvider, bool verbose)
+    public ConsoleWriter(TextWriter output, IFormatProvider consoleFormatProvider, bool verbose)
     {
-        _console = console ?? throw new ArgumentNullException(nameof(console));
-        _consoleFormatProvider = consoleFormatProvider ?? throw new ArgumentNullException(nameof(consoleFormatProvider));
+        ArgumentNullException.ThrowIfNull(output);
+        ArgumentNullException.ThrowIfNull(consoleFormatProvider);
+
+        _output = output;
+        _consoleFormatProvider = consoleFormatProvider;
         _verbose = verbose;
     }
 
@@ -23,36 +26,36 @@ internal class ConsoleWriter : IConsoleWriter
     {
         if (message is not null)
         {
-            _console.Out.Write(modifierOn.ToString(null, _consoleFormatProvider));
+            _output.Write(modifierOn.ToString(null, _consoleFormatProvider));
 
             if (args?.Length > 0)
             {
-                _console.Out.Write(string.Format(CultureInfo.CurrentCulture, message, args));
+                _output.Write(string.Format(CultureInfo.CurrentCulture, message, args));
             }
             else
             {
-                _console.Out.Write(message);
+                _output.Write(message);
             }
 
-            _console.Out.Write(modifierOff.ToString(null, _consoleFormatProvider));
-            _console.Out.Write(Environment.NewLine);
+            _output.Write(modifierOff.ToString(null, _consoleFormatProvider));
+            _output.Write(Environment.NewLine);
         }
     }
 
     public void Raw(string? message)
-        => _console.Out.Write(message);
+        => _output.Write(message);
 
     public void VerboseBanner()
         => LineVerbose("Verbose mode is on. This will print more information.");
 
     public void BlankLine()
-        => _console.Out.Write(Environment.NewLine);
+        => _output.Write(Environment.NewLine);
 
     public void BlankLineVerbose()
     {
         if (_verbose)
         {
-            _console.Out.Write(Environment.NewLine);
+            _output.Write(Environment.NewLine);
         }
     }
 

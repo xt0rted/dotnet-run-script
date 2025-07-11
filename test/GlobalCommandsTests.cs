@@ -1,7 +1,6 @@
 namespace RunScript;
 
 using System.Collections.Generic;
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 using System.Threading.Tasks;
 
@@ -12,12 +11,12 @@ public class GlobalCommandsTests
     public async Task Should_log_all_available_scripts()
     {
         // Given
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: true);
 
         var scripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
@@ -35,19 +34,19 @@ public class GlobalCommandsTests
         GlobalCommands.PrintAvailableScripts(consoleWriter, scripts);
 
         // Then
-        await Verify(console);
+        await Verify(output);
     }
 
     [Fact]
     public async Task Should_log_all_available_environment_variables()
     {
         // Given
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: true);
 
         var environment = new TestEnvironment("/test/path", isWindows: true);
 
@@ -61,6 +60,6 @@ public class GlobalCommandsTests
         GlobalCommands.PrintEnvironmentVariables(consoleWriter, environment);
 
         // Then
-        await Verify(console);
+        await Verify(output);
     }
 }

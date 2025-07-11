@@ -1,13 +1,7 @@
-﻿{
-  IsErrorRedirected: false,
-  IsInputRedirected: false,
-  IsOutputRedirected: false,
-  Out:
-> Using shell: pwsh
+﻿> Using shell: pwsh
 
 
 > test
 > echo testing
 
 testing
-}
