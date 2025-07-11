@@ -2,7 +2,6 @@ namespace RunScript.Integration;
 
 using System;
 using System.Collections.Generic;
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
 public static class CommandBuilderTests
@@ -40,12 +39,12 @@ public static class CommandBuilderTests
 
     private static async Task Should_execute_single_script_in_shell(bool isWindows, string? shellOverride)
     {
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: true);
 
         var environment = new TestEnvironment(isWindows: isWindows);
 
@@ -75,7 +74,7 @@ public static class CommandBuilderTests
             name: "test",
             scriptArgs: null);
 
-        await Verify(console).UseParameters(ShellName(shellOverride));
+        await Verify(output).UseParameters(ShellName(shellOverride));
 
         result.ShouldBe(0);
     }

@@ -1,7 +1,6 @@
 namespace RunScript;
 
 using System.Collections.Generic;
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
 [Trait("category", "unit")]
@@ -91,12 +90,12 @@ public class CommandBuilderTests
 
     private static CommandBuilder SetUpTest(bool isWindows, string? comSpec = DefaultComSpec)
     {
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: true);
 
         var project = new Project
         {

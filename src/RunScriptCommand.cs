@@ -1,12 +1,10 @@
 namespace RunScript;
 
-using System.CommandLine.Invocation;
-
 using DotNet.Globbing;
 
 using RunScript.Logging;
 
-internal class RunScriptCommand : RootCommand, ICommandHandler
+internal class RunScriptCommand : RootCommand
 {
     private readonly IEnvironment _environment;
     private readonly IFormatProvider _consoleFormatProvider;
@@ -25,28 +23,25 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
 
         _workingDirectory = workingDirectory;
 
-        AddArgument(GlobalArguments.Scripts);
+        Arguments.Add(GlobalArguments.Scripts);
 
-        AddOption(GlobalOptions.IfPresent);
-        AddOption(GlobalOptions.ScriptShell);
-        AddOption(GlobalOptions.Verbose);
+        Options.Add(GlobalOptions.IfPresent);
+        Options.Add(GlobalOptions.ScriptShell);
+        Options.Add(GlobalOptions.Verbose);
 
-        Handler = this;
+        SetAction(InvokeAsync);
     }
 
-    public int Invoke(InvocationContext context)
-        => throw new NotImplementedException();
-
-    public async Task<int> InvokeAsync(InvocationContext context)
+    internal async Task<int> InvokeAsync(ParseResult parseResult, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(parseResult);
 
-        var ifPresent = context.ParseResult.GetValueForOption(GlobalOptions.IfPresent);
-        var scriptShell = context.ParseResult.GetValueForOption(GlobalOptions.ScriptShell);
-        var verbose = context.ParseResult.GetValueForOption(GlobalOptions.Verbose);
-        var scripts = context.ParseResult.GetValueForArgument(GlobalArguments.Scripts);
+        var ifPresent = parseResult.GetValue(GlobalOptions.IfPresent);
+        var scriptShell = parseResult.GetValue(GlobalOptions.ScriptShell);
+        var verbose = parseResult.GetValue(GlobalOptions.Verbose);
+        var scripts = parseResult.GetRequiredValue(GlobalArguments.Scripts);
 
-        var writer = new ConsoleWriter(context.Console, _consoleFormatProvider, verbose);
+        var writer = new ConsoleWriter(parseResult.Configuration.Output, _consoleFormatProvider, verbose);
 
         writer.VerboseBanner();
 
@@ -113,9 +108,9 @@ internal class RunScriptCommand : RootCommand, ICommandHandler
                 // UnparsedTokens is backed by string[] so if we cast
                 // back to that we get a lot better perf down the line.
                 // Hopefully this doesn't break in the future 🤞
-                var scriptArgs = (string[])context.ParseResult.UnparsedTokens;
+                var scriptArgs = (string[])parseResult.UnmatchedTokens;
 
-                var scriptRunner = builder.CreateGroupRunner(context.GetCancellationToken());
+                var scriptRunner = builder.CreateGroupRunner(cancellationToken);
 
                 var result = await scriptRunner.RunAsync(
                     script.Name,

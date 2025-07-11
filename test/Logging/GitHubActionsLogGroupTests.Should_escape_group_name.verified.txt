@@ -1,9 +1,4 @@
-﻿{
-  IsErrorRedirected: false,
-  IsInputRedirected: false,
-  IsOutputRedirected: false,
-  Out:
-::group::dotnet r plain
+﻿::group::dotnet r plain
 ::endgroup::
 ::group::dotnet r percent: %2525
 ::endgroup::
@@ -13,5 +8,3 @@
 ::endgroup::
 ::group::dotnet r everything: %25%0D%0A
 ::endgroup::
-
-}

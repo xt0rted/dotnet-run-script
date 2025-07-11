@@ -1,9 +1,4 @@
-﻿{
-  IsErrorRedirected: false,
-  IsInputRedirected: false,
-  IsOutputRedirected: false,
-  Out:
-Available via `dotnet r`:
+﻿Available via `dotnet r`:
 
   clean
     echo clean
@@ -29,5 +24,3 @@ Available via `dotnet r`:
   postpack
     echo pack
 
-
-}

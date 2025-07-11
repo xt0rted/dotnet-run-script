@@ -399,3 +399,5 @@ FodyWeavers.xsd
 
 # Verify snapshots
 *.received.*
+
+launchSettings.json

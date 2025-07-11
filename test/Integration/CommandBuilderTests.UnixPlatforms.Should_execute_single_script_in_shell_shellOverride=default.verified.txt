@@ -1,13 +1,7 @@
-﻿{
-  IsErrorRedirected: false,
-  IsInputRedirected: false,
-  IsOutputRedirected: false,
-  Out:
-> Using shell: sh
+﻿> Using shell: sh
 
 
 > test
 > echo testing
 
 testing
-}

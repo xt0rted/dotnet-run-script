@@ -1,6 +1,5 @@
 namespace RunScript.Logging;
 
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
 [Trait("category", "unit")]
@@ -10,12 +9,12 @@ public class GitHubActionsLogGroupTests
     public async Task Should_escape_group_name()
     {
         // Given
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: false);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: false);
 
         // When
         createGroup("plain");
@@ -25,7 +24,7 @@ public class GitHubActionsLogGroupTests
         createGroup("everything: %\r\n");
 
         // Then
-        await Verify(console);
+        await Verify(output);
 
         void createGroup(string groupName)
         {

@@ -1,7 +1,6 @@
 namespace RunScript;
 
 using System.Collections.Generic;
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 
 public static class RunScriptCommandTests
@@ -174,7 +173,7 @@ public static class RunScriptCommandTests
         public async Task Should_handle_single_result(int exitCode)
         {
             // Given
-            var (console, writer) = SetUpTest();
+            var (output, writer) = SetUpTest();
             var results = new List<RunResult>
             {
                 new("build", exitCode),
@@ -188,14 +187,14 @@ public static class RunScriptCommandTests
             // Then
             result.ShouldBe(exitCode);
 
-            await Verify(console).UseParameters(exitCode);
+            await Verify(output).UseParameters(exitCode);
         }
 
         [Fact]
         public async Task Should_handle_multiple_success_results()
         {
             // Given
-            var (console, writer) = SetUpTest();
+            var (output, writer) = SetUpTest();
             var results = new List<RunResult>
             {
                 new("build", 0),
@@ -210,14 +209,14 @@ public static class RunScriptCommandTests
             // Then
             result.ShouldBe(0);
 
-            await Verify(console);
+            await Verify(output);
         }
 
         [Fact]
         public async Task Should_handle_multiple_error_results()
         {
             // Given
-            var (console, writer) = SetUpTest();
+            var (output, writer) = SetUpTest();
             var results = new List<RunResult>
             {
                 new("build", 13),
@@ -232,7 +231,7 @@ public static class RunScriptCommandTests
             // Then
             result.ShouldBe(1);
 
-            await Verify(console);
+            await Verify(output);
         }
 
         [Theory]
@@ -241,7 +240,7 @@ public static class RunScriptCommandTests
         public async Task Should_handle_any_error_result(int exitCode)
         {
             // Given
-            var (console, writer) = SetUpTest();
+            var (output, writer) = SetUpTest();
             var results = new List<RunResult>
             {
                 new("build", 0),
@@ -256,21 +255,21 @@ public static class RunScriptCommandTests
             // Then
             result.ShouldBe(1);
 
-            await Verify(console).UseParameters(exitCode);
+            await Verify(output).UseParameters(exitCode);
         }
 
-        private static (TestConsole console, IConsoleWriter writer) SetUpTest()
+        private static (StringWriter output, IConsoleWriter writer) SetUpTest()
         {
-            var console = new TestConsole();
+            var output = new StringWriter();
             var consoleWriter = new ConsoleWriter(
-                console,
+                output,
                 new ConsoleFormatInfo
                 {
                     SupportsAnsiCodes = false,
                 },
                 verbose: true);
 
-            return (console, consoleWriter);
+            return (output, consoleWriter);
         }
     }
 }

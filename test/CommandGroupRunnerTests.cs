@@ -1,7 +1,6 @@
 namespace RunScript;
 
 using System.Collections.Generic;
-using System.CommandLine.IO;
 using System.CommandLine.Rendering;
 using System.Threading.Tasks;
 
@@ -123,7 +122,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (console, groupRunner) = SetUpTest(commandRunners, isWindows);
+        var (output, groupRunner) = SetUpTest(commandRunners, isWindows);
 
         // When
         var result = await groupRunner.RunAsync("env", null);
@@ -133,7 +132,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).MustNotHaveHappened();
 
-        await Verify(console).UseParameters(isWindows);
+        await Verify(output).UseParameters(isWindows);
     }
 
     [Theory]
@@ -149,7 +148,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (console, groupRunner) = SetUpTest(
+        var (output, groupRunner) = SetUpTest(
             commandRunners,
             isWindows,
             scripts =>
@@ -169,7 +168,7 @@ public class CommandGroupRunnerTests
         await Verify(
             new
             {
-                console,
+                output,
                 commandRunners,
             })
             .UseParameters(isWindows);
@@ -187,7 +186,7 @@ public class CommandGroupRunnerTests
             new(999),
         };
 
-        var (console, groupRunner) = SetUpTest(
+        var (output, groupRunner) = SetUpTest(
             commandRunners,
             isWindows,
             scripts => scripts.Add("env", "echo env"));
@@ -203,7 +202,7 @@ public class CommandGroupRunnerTests
         await Verify(
             new
             {
-                console,
+                output,
                 commandRunners,
             })
             .UseParameters(isWindows);
@@ -236,17 +235,17 @@ public class CommandGroupRunnerTests
         await Verify(commandRunners).UseParameters(isWindows);
     }
 
-    private static (TestConsole console, CommandGroupRunner groupRunner) SetUpTest(
+    private static (StringWriter output, CommandGroupRunner groupRunner) SetUpTest(
         TestCommandRunner[] commandRunners,
         bool isWindows,
         Action<Dictionary<string, string?>>? scriptSetup = null)
     {
-        var console = new TestConsole();
+        var output = new StringWriter();
         var consoleFormatProvider = new ConsoleFormatInfo
         {
             SupportsAnsiCodes = false,
         };
-        var consoleWriter = new ConsoleWriter(console, consoleFormatProvider, verbose: true);
+        var consoleWriter = new ConsoleWriter(output, consoleFormatProvider, verbose: true);
 
         var scripts = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
@@ -294,7 +293,7 @@ public class CommandGroupRunnerTests
 
         A.CallTo(() => groupRunner.BuildCommand()).ReturnsNextFromSequence(commandRunners);
 
-        return (console, groupRunner);
+        return (output, groupRunner);
     }
 
     private class TestCommandRunner : ICommandRunner

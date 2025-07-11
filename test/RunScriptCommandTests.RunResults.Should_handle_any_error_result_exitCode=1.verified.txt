@@ -1,8 +1,1 @@
-﻿{
-  IsErrorRedirected: false,
-  IsInputRedirected: false,
-  IsOutputRedirected: false,
-  Out:
-ERROR: "test" exited with 1
-
-}
+﻿ERROR: "test" exited with 1
