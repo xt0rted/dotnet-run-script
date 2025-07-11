@@ -42,9 +42,16 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-latest
-          - ubuntu-latest
-          - windows-latest
+          - macos-13
+          - macos-14
+          - macos-15
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - windows-11-arm
+          - windows-2022
+          - windows-2025
 
     permissions:
       contents: read
@@ -79,7 +86,7 @@ jobs:
       - run: dotnet r pack -- --no-build --version-suffix ${{ env.VERSION_SUFFIX }}
 
       - name: Upload artifacts
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
         uses: actions/upload-artifact@v4.6.2
         with:
           name: nupkg
@@ -104,18 +111,33 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-latest
-          - ubuntu-latest
-          - windows-latest
+          - macos-13
+          - macos-14
+          - macos-15
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - windows-11-arm
+          - windows-2022
+          - windows-2025
         shell:
           - default
           - bash
           - pwsh
         exclude:
-          - os: windows-latest
+          - os: windows-11-arm
+            shell: bash
+          - os: windows-2022
+            shell: bash
+          - os: windows-2025
             shell: bash
         include:
-          - os: windows-latest
+          - os: windows-11-arm
+            shell: C:\Program Files\Git\bin\bash.exe
+          - os: windows-2022
+            shell: C:\Program Files\Git\bin\bash.exe
+          - os: windows-2025
             shell: C:\Program Files\Git\bin\bash.exe
 
     permissions:
