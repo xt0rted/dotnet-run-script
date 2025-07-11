@@ -46,7 +46,10 @@ jobs:
           - macos-14
           - macos-15
           - ubuntu-22.04
+          - ubuntu-22.04-arm
           - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - windows-11-arm
           - windows-2022
           - windows-2025
 
@@ -112,7 +115,10 @@ jobs:
           - macos-14
           - macos-15
           - ubuntu-22.04
+          - ubuntu-22.04-arm
           - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - windows-11-arm
           - windows-2022
           - windows-2025
         shell:
@@ -120,11 +126,15 @@ jobs:
           - bash
           - pwsh
         exclude:
+          - os: windows-11-arm
+            shell: bash
           - os: windows-2022
             shell: bash
           - os: windows-2025
             shell: bash
         include:
+          - os: windows-11-arm
+            shell: C:\Program Files\Git\bin\bash.exe
           - os: windows-2022
             shell: C:\Program Files\Git\bin\bash.exe
           - os: windows-2025
