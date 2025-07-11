@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -25,7 +27,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4.4.0
         with:
-          node-version: 21
+          node-version-file: .nvmrc
 
       - uses: xt0rted/markdownlint-problem-matcher@v3.0.0
 
