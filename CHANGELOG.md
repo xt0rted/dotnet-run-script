@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Build and test on each platform version available
+  - macOS 13
+  - macOS 14
+  - macOS 15
+  - Ubuntu 22.04
+  - Ubuntu 24.04
+  - Windows 2022
+  - Windows 2025
 ## [0.6.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.5.0...v0.6.0) - 2024-04-10
 
 - Dropped support for .NET Core 3.1
