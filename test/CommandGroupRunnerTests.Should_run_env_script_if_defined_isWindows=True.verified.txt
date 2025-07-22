@@ -1,9 +1,5 @@
 ﻿{
-  console: {
-    IsErrorRedirected: false,
-    IsInputRedirected: false,
-    IsOutputRedirected: false
-  },
+  output: ,
   commandRunners: [
     {
       Name: env,

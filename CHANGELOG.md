@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+### Added
+
 - Build and test on each platform version available
   - macOS 13
   - macOS 14
@@ -14,6 +16,11 @@
   - Ubuntu 22.04
   - Ubuntu 24.04
   - Windows 11
+
+### Updated
+
+- Bumped  `System.CommandLine` from 2.0.0-beta4.22272.1 to 2.0.0-beta5.25306.1
+- Bumped  `System.CommandLine.Rendering` from 0.4.0-alpha.22272.1 to 0.4.0-alpha.25306.1
 
 ## [0.6.0](https://github.com/xt0rted/dotnet-run-script/compare/v0.5.0...v0.6.0) - 2024-04-10
 
