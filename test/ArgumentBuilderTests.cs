@@ -28,6 +28,29 @@ public class ArgumentBuilderTests
     }
 
     [Theory]
+    [InlineData("pwsh", null, "pwsh")]
+    [InlineData("pws \"h\"", null, "pws \"h\"")]
+    [InlineData("p w s h", null, "p w s h")]
+    [InlineData("pwsh", new string[0], "pwsh")]
+    [InlineData("pwsh", new[] { "one", "two", "three" }, "pwsh one two three")]
+    [InlineData("pwsh", new[] { "line1\nline2", "word1\tword2" }, "pwsh line1\nline2 word1\tword2")]
+    [InlineData("pwsh", new[] { "with spaces" }, "pwsh with spaces")]
+    [InlineData("pwsh", new[] { @"with\backslash" }, @"pwsh with\backslash")]
+    [InlineData("pwsh", new[] { @"""quotedwith\backslash""" }, @"pwsh ""quotedwith\backslash""" )]
+    [InlineData("pwsh", new[] { @"C:\Users\" }, @"pwsh C:\Users\")]
+    [InlineData("pwsh", new[] { @"C:\Program Files\dotnet\" }, @"pwsh C:\Program Files\dotnet\")]
+    [InlineData("pwsh", new[] { @"backslash\""preceedingquote" }, @"pwsh backslash\""preceedingquote")]
+    [InlineData("pwsh", new[] { @""" hello """ }, @"pwsh "" hello """)]
+    public void ConcatenateCommandAndArgArrayForPwshProcessStart(string command, string[]? args, string expected)
+    {
+        // Given / When
+        var result = ArgumentBuilder.ConcatenateCommandAndArgArrayForPwshProcessStart(command, args);
+
+        // Then
+        result.ShouldBe(expected);
+    }
+
+    [Theory]
     [InlineData("cmd", null, "cmd")]
     [InlineData("cm \"d\"", null, "cm \"d\"")]
     [InlineData("c m d", null, "c m d")]
