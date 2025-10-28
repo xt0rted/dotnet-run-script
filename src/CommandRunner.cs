@@ -56,6 +56,11 @@ internal class CommandRunner : ICommandRunner
                     ArgumentBuilder.EscapeAndConcatenateCommandAndArgArrayForCmdProcessStart(cmd, args),
                     "\"");
             }
+            else if (_processContext.Shell.Equals("pwsh", StringComparison.OrdinalIgnoreCase))
+            {
+                process.StartInfo.ArgumentList.Add("-c");
+                process.StartInfo.ArgumentList.Add(ArgumentBuilder.ConcatenateCommandAndArgArrayForPwshProcessStart(cmd, args));
+            }
             else
             {
                 process.StartInfo.ArgumentList.Add("-c");

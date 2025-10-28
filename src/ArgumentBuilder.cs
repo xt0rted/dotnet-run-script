@@ -54,6 +54,35 @@ internal static class ArgumentBuilder
     /// Undo the processing which took place to create string[] args in Main, so that the next process will receive the same string[] args.
     /// </summary>
     /// <remarks>
+    /// Note that pwsh does not require any special escaping of arguments. We can simply concatenate the list of strings with a space between each.
+    /// </remarks>
+    /// <param name="command">The base command.</param>
+    /// <param name="args">List of arguments to escape.</param>
+    /// <returns>An escaped string of the <paramref name="command"/> and <paramref name="args"/>.</returns>
+    public static string ConcatenateCommandAndArgArrayForPwshProcessStart(
+        string? command,
+        string[]? args)
+    {
+        var sb = new ValueStringBuilder(stackalloc char[256]);
+
+        sb.Append(command);
+
+        if (args is not null)
+        {
+            for (var i = 0; i < args.Length; i++)
+            {
+                sb.Append(Space);
+                sb.Append(args[i]);
+            }
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Undo the processing which took place to create string[] args in Main, so that the next process will receive the same string[] args.
+    /// </summary>
+    /// <remarks>
     /// See here for more info: <seealso href="https://docs.microsoft.com/archive/blogs/twistylittlepassagesallalike/everyone-quotes-command-line-arguments-the-wrong-way"/>.
     /// </remarks>
     /// <param name="command">The base command.</param>
